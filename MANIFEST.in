@@ -1,0 +1,6 @@
+include *.md
+include *.txt
+include LICENSE
+include tox.ini
+recursive-include pymonzo *.py
+recursive-include requirements *.txt
