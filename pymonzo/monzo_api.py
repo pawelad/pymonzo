@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -93,7 +94,7 @@ class MonzoAPI(object):
 
     def transactions(self, account_id=None, reverse=True, limit=None):
         """
-        Returns a list of transactions on the user’s account.
+        Returns a list of transactions on the user's account.
 
         Official docs:
             https://monzo.com/docs/#list-transactions
