@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 try:
     import pypandoc
     description = pypandoc.convert('README.md', 'rst', 'markdown')
-except (IOError, ImportError):
+except (OSError, ImportError):
     description = ''
 
 
