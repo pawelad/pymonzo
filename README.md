@@ -55,7 +55,7 @@ and point out any mistakes.
 ## Authors
 Developed and maintained by [Paweł Adamczak][pawelad].
 
-Released under [MIT License][[license]].
+Released under [MIT License][license].
 
 
 [travis]: https://travis-ci.org/pawelad/pymonzo
@@ -63,6 +63,6 @@ Released under [MIT License][[license]].
 [license]: https://github.com/pawelad/pymonzo/blob/master/LICENSE
 [monzo]: https://monzo.com/
 [monzo docs inroduction]: https://monzo.com/docs/#introduction
-[github add issue]: https://github.com/pawelad/pymonzo
+[github add issue]: https://github.com/pawelad/pymonzo/issues/new
 [github]: https://github.com/pawelad/pymonzo
 [pawelad]: https://github.com/pawelad
