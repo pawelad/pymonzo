@@ -7,7 +7,7 @@ import requests
 
 
 API_URL = 'https://api.monzo.com/'
-ENV_VAR = 'MONZO_ACCESS_TOKEN'
+MONZO_ACCESS_TOKEN = 'MONZO_ACCESS_TOKEN'
 
 
 class MonzoAPI(object):
@@ -17,13 +17,13 @@ class MonzoAPI(object):
     Official docs:
         https://monzo.com/docs/
     """
-    def __init__(self, access_token=None):
+    def __init__(self, access_token=None, default_account_id=None):
         # If no access token is provided, try to get it
         # from environment variable
-        if not access_token and os.environ.get(ENV_VAR):
-            access_token = os.environ.get(ENV_VAR)
-        elif not access_token and not os.environ.get(ENV_VAR):
-            raise ValueError("No access token provided.")
+        if not access_token and os.environ.get(MONZO_ACCESS_TOKEN):
+            access_token = os.environ.get(MONZO_ACCESS_TOKEN)
+        elif not access_token and not os.environ.get(MONZO_ACCESS_TOKEN):
+            raise ValueError("No access token provided")
         self._access_token = access_token
 
         # Init requests session and add auth header
@@ -32,9 +32,17 @@ class MonzoAPI(object):
             'Authorization': 'Bearer {0}'.format(self._access_token),
         })
 
-        # Check the number of accounts, set the account id if there's only one
-        if len(self.accounts()) == 1:
-            self._account_id = self.accounts()[0]['id']
+        # Make sure that the access token is correct
+        if ('authenticated' not in self.whoami() or
+                not self.whoami()['authenticated']):
+            raise ValueError("Incorrect access token")
+
+        # Set the account id if it wasn't provided
+        # and there's only one available
+        if not default_account_id and len(self.accounts()) == 1:
+            self.default_account_id = self.accounts()[0]['id']
+        else:
+            self.default_account_id = default_account_id
 
     def whoami(self):
         """
@@ -69,10 +77,10 @@ class MonzoAPI(object):
         Official docs:
             https://monzo.com/docs/#read-balance
         """
-        if not account_id and not self._account_id:
-            ValueError("You need to pass the account ID")
-        elif not account_id and self._account_id:
-            account_id = self._account_id
+        if not account_id and not self.default_account_id:
+            raise ValueError("You need to pass the account ID")
+        elif not account_id and self.default_account_id:
+            account_id = self.default_account_id
 
         endpoint = '/balance'
         url = urljoin(API_URL, endpoint)
@@ -83,17 +91,17 @@ class MonzoAPI(object):
 
         return response.json()
 
-    def transactions(self, account_id=None, reverse=True, limit=5):
+    def transactions(self, account_id=None, reverse=True, limit=None):
         """
         Returns a list of transactions on the user’s account.
 
         Official docs:
             https://monzo.com/docs/#list-transactions
         """
-        if not account_id and not self._account_id:
-            ValueError("You need to pass the account ID")
-        elif not account_id and self._account_id:
-            account_id = self._account_id
+        if not account_id and not self.default_account_id:
+            raise ValueError("You need to pass the account ID")
+        elif not account_id and self.default_account_id:
+            account_id = self.default_account_id
 
         endpoint = '/transactions'
         url = urljoin(API_URL, endpoint)
@@ -111,7 +119,10 @@ class MonzoAPI(object):
         if reverse:
             transactions.reverse()
 
-        return transactions[limit]
+        if limit:
+            return transactions[:limit]
+        else:
+            return transactions
 
     def transaction(self, transaction_id, expand_merchant=False):
         """
@@ -122,9 +133,11 @@ class MonzoAPI(object):
         """
         endpoint = '/transactions/{}'.format(transaction_id)
         url = urljoin(API_URL, endpoint)
-        data = {
-            'expand[]': 'merchant' if expand_merchant else '',
-        }
+
+        data = dict()
+        if expand_merchant:
+            data.update({'expand[]': 'merchant' if expand_merchant else ''})
+
         response = self.session.get(url, params=data)
 
         return response.json()['transaction']
