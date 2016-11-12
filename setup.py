@@ -3,8 +3,6 @@ from __future__ import print_function
 
 from setuptools import setup, find_packages
 
-import pymonzo
-
 
 # Convert description from markdown to reStructuredText
 try:
@@ -19,7 +17,7 @@ setup(
     url='https://github.com/pawelad/pymonzo',
     download_url='https://github.com/pawelad/pymonzo/releases/latest',
     bugtrack_url='https://github.com/pawelad/pymonzo/issues',
-    version=pymonzo.__version__,
+    version='0.1.0',
     license='MIT License',
     author='Paweł Adamczak',
     author_email='pawel.ad@gmail.com',
