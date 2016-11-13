@@ -32,7 +32,7 @@ $ pip install pymonzo
 There's no documentation as of now, but the code is commented and
 *should* be pretty straightforward to use.
 
-But feel free to ask me via [mail](mailto:pawel.adamczak@sidnet.info) or 
+But feel free to ask me via [email](mailto:pawel.adamczak@sidnet.info) or 
 [GitHub issues][github add issue] if anything is unclear.
 
 ## Tests
