@@ -20,4 +20,6 @@ script:
   - tox
 
 after_success:
-  - coveralls
+    - if [[ $ENV == python=3.5* ]]; then
+          coveralls;
+      fi
