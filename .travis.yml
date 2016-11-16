@@ -18,6 +18,7 @@ install:
 script:
   - tox
   - coverage run --source pymonzo -m py.test
+  - coverage report -m
 
 after_success:
   - coveralls
