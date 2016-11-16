@@ -13,11 +13,11 @@ matrix:
           env: TOXENV=py35
 
 install:
-  - pip install tox
-  - pip install coveralls
+  - pip install -r requirements/dev.txt
 
 script:
   - tox
+  - coverage run --source pymonzo -m py.test
 
 after_success:
   - coveralls
