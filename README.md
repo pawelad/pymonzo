@@ -11,15 +11,15 @@ it directly from your Python project.
 
 ## Installation
 From PyPI:
-```shell
+```
 $ pip install pymonzo
 ```
 
 ## Usage
-To use the library you have to provide it with you Monzo access token. You can
-either do that by exporting it as an environment variable
-(`$ export MONZO_ACCESS_TOKEN="YOUR_ACTUAL_ACCESS_TOKEN"`) or by passing it
-explicitly to `MonzoAPI()` class.
+To use the script you have to provide it with you Monzo
+[access token][monzo developer playground]. You can either do that by exporting
+it as an environment variable (`$ export MONZO_ACCESS_TOKEN='...'`) or by
+passing it explicitly to `MonzoAPI()` class.
 
 ## Roadmap
 The library currently does not implement feed items, webhooks and attachments
@@ -28,7 +28,7 @@ current needs and they could be completely different in the future - per
 [docs][monzo docs inroduction]:
 > The Monzo API is under active development. Breaking changes should be expected.
 
-I want to implement all API functionality as soon as it comes out of beta and
+I plan to implement all API functionality as soon as it comes out of beta and
 stabilizes.
 
 The major addition I do want to add before that is better authentication
