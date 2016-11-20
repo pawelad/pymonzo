@@ -59,7 +59,7 @@ setup(
     extras_require={
         'testing': ['pytest'],
     },
-    keywords='icon font export font awesome octicons',
+    keywords='monzo api',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
