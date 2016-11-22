@@ -58,11 +58,6 @@ def test_init_default_account_id(monzo_api):
     """Test default account ID initializing in MonzoAPI"""
     assert monzo_api.default_account_id == monzo_api.accounts()[0]['id']
 
-    # Passing default account ID explicitly
-    account_id = monzo_api.accounts()[0]['id']
-    monzo_api = MonzoAPI(default_account_id=account_id)
-    assert monzo_api.default_account_id == account_id
-
 
 def test_whoami(monzo_api):
     """Test MonzoAPI.whoami() method"""

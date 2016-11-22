@@ -18,7 +18,9 @@ class MonzoAPI(object):
     Official docs:
         https://monzo.com/docs/
     """
-    def __init__(self, access_token=None, default_account_id=None):
+    default_account_id = None
+
+    def __init__(self, access_token=None):
         # If no access token is provided, try to get it
         # from environment variable
         if not access_token and os.environ.get(MONZO_ACCESS_TOKEN):
@@ -38,12 +40,9 @@ class MonzoAPI(object):
                 not self.whoami()['authenticated']):
             raise ValueError("Incorrect access token")
 
-        # Set the account id if it wasn't provided
-        # and there's only one available
-        if not default_account_id and len(self.accounts()) == 1:
+        # Set the default account ID if there is only one available
+        if len(self.accounts()) == 1:
             self.default_account_id = self.accounts()[0]['id']
-        else:
-            self.default_account_id = default_account_id
 
     def whoami(self):
         """
