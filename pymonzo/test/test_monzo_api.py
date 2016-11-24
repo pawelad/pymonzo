@@ -2,12 +2,12 @@
 from __future__ import unicode_literals
 
 import os
-from uuid import uuid4
 
 import pytest
+from requests_oauthlib import OAuth2Session
 
 from pymonzo import MonzoAPI
-from pymonzo.monzo_api import MONZO_ACCESS_TOKEN
+from pymonzo.monzo_api import MONZO_ACCESS_CODE_ENV
 
 
 # Fixtures
@@ -18,40 +18,32 @@ def monzo_api():
 
 
 # Tests
-def test_init_access_token(monkeypatch):
-    """Test access token initializing in MonzoAPI"""
-    # Get access token from environment variable
-    assert MonzoAPI(access_token=None)
-
-    # Pass access token explicitly
-    access_token = os.environ['MONZO_ACCESS_TOKEN']
+@pytest.mark.parametrize('access_token', [
+    None,
+    os.environ[MONZO_ACCESS_CODE_ENV],
+])
+def test_init_access_token(access_token):
+    """MonzoAPI initializing with provided access token"""
     monzo_api = MonzoAPI(access_token=access_token)
+
     assert monzo_api
-    assert monzo_api._access_token == access_token
+    assert monzo_api._token['access_token'] == os.environ[MONZO_ACCESS_CODE_ENV]
+    assert monzo_api._token['token_type'] == 'Bearer'
 
-    # Incorrect access token
+
+def test_init_no_access_token(monkeypatch):
+    """Test MonzoAPI initializing with no access token"""
     with pytest.raises(ValueError):
         monkeypatch.undo()
-        monkeypatch.delenv(MONZO_ACCESS_TOKEN, raising=False)
-        MonzoAPI(access_token=str(uuid4()))
-
-    # Incorrect access token from environment variable
-    with pytest.raises(ValueError):
-        monkeypatch.undo()
-        monkeypatch.setenv(MONZO_ACCESS_TOKEN, str(uuid4()))
-        MonzoAPI()
-
-    # No access token
-    with pytest.raises(ValueError):
-        monkeypatch.undo()
-        monkeypatch.delenv(MONZO_ACCESS_TOKEN, raising=False)
+        monkeypatch.delenv(MONZO_ACCESS_CODE_ENV, raising=False)
         MonzoAPI()
 
 
 def test_init_session(monzo_api):
-    """Test default account ID initializing in MonzoAPI"""
+    """Test requests session initializing in MonzoAPI"""
     assert monzo_api.session
-    assert 'Authorization' in monzo_api.session.headers
+    assert monzo_api.session.token
+    assert isinstance(monzo_api.session, OAuth2Session)
 
 
 def test_init_default_account_id(monzo_api):

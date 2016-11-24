@@ -2,47 +2,91 @@
 from __future__ import unicode_literals
 
 import os
-from six.moves.urllib.parse import urljoin
 
-import requests
+from requests_oauthlib import OAuth2Session
+from six.moves.urllib.parse import urljoin
 
 
 API_URL = 'https://api.monzo.com/'
-MONZO_ACCESS_TOKEN = 'MONZO_ACCESS_TOKEN'
+PYMONZO_REDIRECT_URI = 'https://github.com/pawelad/pymonzo'
+MONZO_CLIENT_ID_ENV = 'MONZO_CLIENT_ID'
+MONZO_CLIENT_SECRET_ENV = 'MONZO_CLIENT_SECRET'
+MONZO_AUTH_CODE_ENV = 'MONZO_AUTH_CODE'
+MONZO_ACCESS_CODE_ENV = 'MONZO_ACCESS_CODE'
 
 
 class MonzoAPI(object):
     """
-    Wrapper for Monzo public API
+    Wrapper for Monzo API.
 
     Official docs:
         https://monzo.com/docs/
     """
     default_account_id = None
 
-    def __init__(self, access_token=None):
-        # If no access token is provided, try to get it
-        # from environment variable
-        if not access_token and os.environ.get(MONZO_ACCESS_TOKEN):
-            access_token = os.environ.get(MONZO_ACCESS_TOKEN)
-        elif not access_token and not os.environ.get(MONZO_ACCESS_TOKEN):
-            raise ValueError("No access token provided")
-        self._access_token = access_token
+    def __init__(self, client_id=None, client_secret=None, auth_code=None,
+                 access_token=None):
+        # If no values are passed, try to get them from environment variables
+        self._client_id = (
+            client_id or os.environ.get(MONZO_CLIENT_ID_ENV)
+        )
+        self._client_secret = (
+            client_secret or os.environ.get(MONZO_CLIENT_SECRET_ENV)
+        )
+        self._auth_code = (
+            auth_code or os.environ.get(MONZO_AUTH_CODE_ENV)
+        )
+        self._access_token = (
+            access_token or os.environ.get(MONZO_ACCESS_CODE_ENV)
+        )
 
-        # Init requests session and add auth header
-        self.session = requests.Session()
-        self.session.headers.update({
-            'Authorization': 'Bearer {0}'.format(self._access_token),
-        })
+        # Either explicit 'access_token' or all of 'client_id', 'client_secret'
+        # and 'auth_code' must be set to authenticate with the API
+        if self._access_token:
+            self._token = {
+                'access_token': self._access_token,
+                'token_type': 'Bearer',
+            }
+        elif all([self._client_id, self._client_secret, self._auth_code]):
+            self._token = self._get_oauth_token()
+        else:
+            raise ValueError(
+                "You need to pass (or set as environment variables) either "
+                "explicit 'access_token' or all of 'client_id', "
+                "'client_secret' and 'auth_code'"
+            )
 
-        # Make sure that the access token is correct
-        if ('authenticated' not in self.whoami() or
-                not self.whoami()['authenticated']):
-            raise ValueError("Incorrect access token")
+        # Create a session with newly acquired token
+        self.session = OAuth2Session(
+            client_id=client_id, token=self._token,
+        )
 
         # Set the default account ID if there is only one available
         if len(self.accounts()) == 1:
             self.default_account_id = self.accounts()[0]['id']
+
+    def _get_oauth_token(self):
+        """
+        Get Monzo access token via OAuth2 `authorization_code` grant type.
+
+        Official docs:
+            https://monzo.com/docs/#acquire-an-access-token
+        """
+        endpoint = '/oauth2/token'
+        url = urljoin(API_URL, endpoint)
+
+        oauth = OAuth2Session(
+            client_id=self._client_id,
+            redirect_uri=PYMONZO_REDIRECT_URI,
+        )
+
+        token = oauth.fetch_token(
+            token_url=url,
+            code=self._auth_code,
+            client_secret=self._client_secret,
+        )
+
+        return token
 
     def whoami(self):
         """
