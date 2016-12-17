@@ -38,8 +38,10 @@ class MonzoAPI(object):
         or have the token already saved on the disk from previous OAuth 2
         authorization.
 
-        :param access_token: your Monzo access token, probably taken form their
-                             API Playground
+        We then create an OAuth authorised session and get the default
+        account ID if there's only one available.
+
+        :param access_token: your Monzo access token
         :type access_token: str
         :param client_id: your Monzo client ID
         :type client_id: str
@@ -95,7 +97,15 @@ class MonzoAPI(object):
 
         # Create a session with newly acquired token
         self.session = OAuth2Session(
-            client_id=client_id, token=self._token,
+            client_id=client_id,
+            token=self._token,
+            auto_refresh_url=urljoin(API_URL, '/oauth2/token'),
+            auto_refresh_kwargs={
+                'grant_type': 'refresh_token',
+                'client_id': self._client_id,
+                'client_secret': self._client_secret,
+            },
+            token_updater=self._save_token_on_disk,
         )
 
         # Set the default account ID if there is only one available
@@ -127,13 +137,6 @@ class MonzoAPI(object):
             token_url=url,
             code=self._auth_code,
             client_secret=self._client_secret,
-            auto_refresh_url=url,
-            auto_refresh_kwargs={
-                'grant_type': 'refresh_token',
-                'client_id': self._client_id,
-                'client_secret': self._client_secret,
-            },
-            token_updater=self._save_token_on_disk,
         )
 
         self._save_token_on_disk(token)
