@@ -27,16 +27,40 @@ def test_init_access_token(access_token):
     monzo_api = MonzoAPI(access_token=access_token)
 
     assert monzo_api
-    assert monzo_api._token['access_token'] == os.environ[MONZO_ACCESS_CODE_ENV]
+    assert monzo_api._token['access_token'] == os.environ.get(
+        MONZO_ACCESS_CODE_ENV
+    )
     assert monzo_api._token['token_type'] == 'Bearer'
 
 
-def test_init_no_access_token(monkeypatch):
+def test_init_no_data(monkeypatch):
     """Test initialization with no `access_token`"""
+    monkeypatch.delenv(MONZO_ACCESS_CODE_ENV, raising=False)
+
     with pytest.raises(ValueError):
-        monkeypatch.undo()
-        monkeypatch.delenv(MONZO_ACCESS_CODE_ENV, raising=False)
         MonzoAPI()
+
+
+def test_init_authorization_code(mocker, monkeypatch):
+    """
+    Test initialization with `client_id`, `client_secret` and `auth_code`
+    """
+    mocked_get_oauth_token = mocker.patch.object(MonzoAPI, '_get_oauth_token')
+    mocked_get_oauth_token.return_value = {
+        'access_token': os.environ.get(MONZO_ACCESS_CODE_ENV),
+        'token_type': 'Bearer',
+    }
+
+    monkeypatch.delenv(MONZO_ACCESS_CODE_ENV, raising=False)
+
+    MonzoAPI(
+        client_id='MONZO_CLIENT_ID',
+        client_secret='MONZO_CLIENT_SECRET_ENV',
+        auth_code='MONZO_AUTH_CODE_ENV',
+    )
+
+    assert mocked_get_oauth_token.called
+    assert mocked_get_oauth_token.call_count == 1
 
 
 def test_init_session(monzo_api):
