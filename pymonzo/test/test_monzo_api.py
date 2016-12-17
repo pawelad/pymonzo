@@ -7,6 +7,9 @@ import pytest
 from requests_oauthlib import OAuth2Session
 
 from pymonzo import MonzoAPI
+from pymonzo.api_objects import (
+    MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
+)
 from pymonzo.monzo_api import MONZO_ACCESS_CODE_ENV
 
 
@@ -65,29 +68,39 @@ def test_init_authorization_code(mocker, monkeypatch):
 
 def test_init_session(monzo):
     """Test session initialization"""
-    assert monzo.session
-    assert monzo.session.token
-    assert isinstance(monzo.session, OAuth2Session)
+    assert monzo._session
+    assert monzo._session.token
+    assert isinstance(monzo._session, OAuth2Session)
 
 
 def test_init_default_account_id(monzo):
     """Test setting the default account ID on initialization"""
-    assert monzo.default_account_id == monzo.accounts()[0]['id']
+    assert monzo.default_account_id == monzo.accounts()[0].id
 
 
 def test_whoami(monzo):
     """Test `whoami()` method"""
-    assert monzo.whoami()
+    whoami = monzo.whoami()
+
+    assert whoami
+    assert isinstance(whoami, dict)
 
 
 def test_accounts(monzo):
     """Test `accounts()` method"""
-    assert monzo.accounts()
+    accounts = monzo.accounts()
+
+    assert accounts
+    assert isinstance(accounts, list)
+    assert all([isinstance(i, MonzoAccount) for i in accounts])
 
 
 def test_balance(monzo):
     """Test `balance()` method"""
-    assert monzo.balance()
+    balance = monzo.balance()
+
+    assert balance
+    assert isinstance(balance, MonzoBalance)
 
     # No account ID provided
     with pytest.raises(ValueError):
@@ -98,13 +111,21 @@ def test_balance(monzo):
 def test_transactions(monzo):
     """Test `transactions()` method"""
     transactions = monzo.transactions()
+
     assert transactions
+    assert isinstance(transactions, list)
+    assert all([isinstance(t, MonzoTransaction) for t in transactions])
 
     # Limit results
     assert len(monzo.transactions(limit=5)) == 5
 
-    # No easy way to test reverse so lets just make sure it does _something_
+    # Reverse results
     transactions_reverse = monzo.transactions(reverse=True)
+
+    assert transactions_reverse
+    assert isinstance(transactions_reverse, list)
+    assert all([isinstance(t, MonzoTransaction) for t in transactions_reverse])
+    # No easy way to test reverse so lets just make sure it does _something_
     assert transactions is not transactions_reverse
 
     # No account ID provided
@@ -115,15 +136,25 @@ def test_transactions(monzo):
 
 def test_transaction(monzo):
     """Test `transaction()` method"""
-    transaction_id = monzo.transactions(limit=1)[0]['id']
+    transaction_id = monzo.transactions(limit=1)[0].id
 
     transaction = monzo.transaction(transaction_id=transaction_id)
-    assert transaction
 
+    assert transaction
+    assert isinstance(transaction, MonzoTransaction)
+    assert isinstance(transaction.merchant, str)
+
+    # Expand merchant
     transaction_expand_merchant = monzo.transaction(
-        transaction_id=transaction_id, expand_merchant=True,
+        transaction_id=transaction_id,
+        expand_merchant=True,
     )
+
     assert transaction_expand_merchant
+    assert isinstance(transaction_expand_merchant, MonzoTransaction)
+    # Depends on what the latest transaction is, and if it has a merchant
+    if transaction_expand_merchant.merchant:
+        assert isinstance(transaction_expand_merchant.merchant, MonzoMerchant)
 
     # No easy way to test reverse so lets just make sure it does _something_
     assert transaction is not transaction_expand_merchant

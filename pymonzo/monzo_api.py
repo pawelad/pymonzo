@@ -4,8 +4,12 @@ from __future__ import unicode_literals
 import os
 import shelve
 
+import requests
 from requests_oauthlib import OAuth2Session
 from six.moves.urllib.parse import urljoin
+
+from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
+from pymonzo.exceptions import MonzoAPIException
 
 
 API_URL = 'https://api.monzo.com/'
@@ -96,7 +100,7 @@ class MonzoAPI(object):
             )
 
         # Create a session with newly acquired token
-        self.session = OAuth2Session(
+        self._session = OAuth2Session(
             client_id=client_id,
             token=self._token,
             auto_refresh_url=urljoin(API_URL, '/oauth2/token'),
@@ -110,7 +114,7 @@ class MonzoAPI(object):
 
         # Set the default account ID if there is only one available
         if len(self.accounts()) == 1:
-            self.default_account_id = self.accounts()[0]['id']
+            self.default_account_id = self.accounts()[0].id
 
     @staticmethod
     def _save_token_on_disk(token):
@@ -143,16 +147,44 @@ class MonzoAPI(object):
 
         return token
 
+    def _get_response(self, method, endpoint, params=None):
+        """
+        Helper method for wading API requests, mainly for catching errors
+        in one place.
+
+        :param method: valid HTTP method
+        :type method: str
+        :param endpoint: API endpoint
+        :type endpoint: str
+        :param params: extra parameters passed with the request
+        :type params: dict
+        :returns: API response
+        :rtype: Response
+        """
+        url = urljoin(API_URL, endpoint)
+        response = getattr(self._session, method)(url, params=params)
+
+        if response.status_code != requests.codes.ok:
+            raise MonzoAPIException(
+                "Something wrong happened: {}".format(response.json())
+            )
+
+        return response
+
     def whoami(self):
         """
         Get information about the access token.
 
         Official docs:
             https://monzo.com/docs/#authenticating-requests
+
+        :returns: access token details
+        :rtype: dict
         """
         endpoint = '/ping/whoami'
-        url = urljoin(API_URL, endpoint)
-        response = self.session.get(url)
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+        )
 
         return response.json()
 
@@ -162,12 +194,18 @@ class MonzoAPI(object):
 
         Official docs:
             https://monzo.com/docs/#list-accounts
+
+        :returns: list of Monzo accounts
+        :rtype: list of MonzoAccount
         """
         endpoint = '/accounts'
-        url = urljoin(API_URL, endpoint)
-        response = self.session.get(url)
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+        )
 
-        return response.json()['accounts']
+        accounts = response.json()['accounts']
+
+        return [MonzoAccount(data=account) for account in accounts]
 
     def balance(self, account_id=None):
         """
@@ -178,6 +216,9 @@ class MonzoAPI(object):
 
         :param account_id: Monzo account ID
         :type account_id: str
+        :raises: ValueError
+        :returns: Monzo balance instance
+        :rtype: MonzoBalance
         """
         if not account_id and not self.default_account_id:
             raise ValueError("You need to pass account ID")
@@ -185,13 +226,14 @@ class MonzoAPI(object):
             account_id = self.default_account_id
 
         endpoint = '/balance'
-        url = urljoin(API_URL, endpoint)
-        data = {
-            'account_id': account_id,
-        }
-        response = self.session.get(url, params=data)
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+            params={
+                'account_id': account_id,
+            },
+        )
 
-        return response.json()
+        return MonzoBalance(data=response.json())
 
     def transactions(self, account_id=None, reverse=True, limit=None):
         """
@@ -205,7 +247,9 @@ class MonzoAPI(object):
         :param reverse: whether transactions should be in in descending order
         :type reverse: bool
         :param limit: how many transactions should be returned; None for all
-        :type limit: int or None
+        :type limit: int
+        :returns: list of Monzo transactions
+        :rtype: list of MonzoTransaction
         """
         if not account_id and not self.default_account_id:
             raise ValueError("You need to pass account ID")
@@ -213,11 +257,12 @@ class MonzoAPI(object):
             account_id = self.default_account_id
 
         endpoint = '/transactions'
-        url = urljoin(API_URL, endpoint)
-        data = {
-            'account_id': account_id,
-        }
-        response = self.session.get(url, params=data)
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+            params={
+                'account_id': account_id,
+            },
+        )
 
         # The API does not allow reversing the list or limiting it, so to do
         # the basic query of 'get the latest transaction' we need to always get
@@ -228,9 +273,9 @@ class MonzoAPI(object):
             transactions.reverse()
 
         if limit:
-            return transactions[:limit]
-        else:
-            return transactions
+            transactions = transactions[:limit]
+
+        return [MonzoTransaction(data=t) for t in transactions]
 
     def transaction(self, transaction_id, expand_merchant=False):
         """
@@ -243,14 +288,17 @@ class MonzoAPI(object):
         :type transaction_id: str
         :param expand_merchant: whether merchant data should be included
         :type expand_merchant: bool
+        :returns: Monzo transaction details
+        :rtype: MonzoTransaction
         """
         endpoint = '/transactions/{}'.format(transaction_id)
-        url = urljoin(API_URL, endpoint)
 
         data = dict()
         if expand_merchant:
             data['expand[]'] = 'merchant'
 
-        response = self.session.get(url, params=data)
+        response = self._get_response(
+            method='get', endpoint=endpoint, params=data,
+        )
 
-        return response.json()['transaction']
+        return MonzoTransaction(data=response.json()['transaction'])
