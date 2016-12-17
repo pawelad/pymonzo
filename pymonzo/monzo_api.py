@@ -110,6 +110,13 @@ class MonzoAPI(object):
             token_url=url,
             code=self._auth_code,
             client_secret=self._client_secret,
+            auto_refresh_url=url,
+            auto_refresh_kwargs={
+                'grant_type': 'refresh_token',
+                'client_id': self._client_id,
+                'client_secret': self._client_secret,
+            },
+            token_updater=self._save_token_on_disk,
         )
 
         self._save_token_on_disk(token)
