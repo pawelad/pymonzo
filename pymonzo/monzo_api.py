@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import os
+import shelve
 
 from requests_oauthlib import OAuth2Session
 from six.moves.urllib.parse import urljoin
@@ -9,10 +10,14 @@ from six.moves.urllib.parse import urljoin
 
 API_URL = 'https://api.monzo.com/'
 PYMONZO_REDIRECT_URI = 'https://github.com/pawelad/pymonzo'
+
+MONZO_ACCESS_CODE_ENV = 'MONZO_ACCESS_CODE'
+MONZO_AUTH_CODE_ENV = 'MONZO_AUTH_CODE'
 MONZO_CLIENT_ID_ENV = 'MONZO_CLIENT_ID'
 MONZO_CLIENT_SECRET_ENV = 'MONZO_CLIENT_SECRET'
-MONZO_AUTH_CODE_ENV = 'MONZO_AUTH_CODE'
-MONZO_ACCESS_CODE_ENV = 'MONZO_ACCESS_CODE'
+
+TOKEN_FILE_NAME = '.pymonzo-token'
+TOKEN_FILE_PATH = os.path.join(os.path.expanduser('~'), TOKEN_FILE_NAME)
 
 
 class MonzoAPI(object):
@@ -24,9 +29,12 @@ class MonzoAPI(object):
     """
     default_account_id = None
 
-    def __init__(self, client_id=None, client_secret=None, auth_code=None,
-                 access_token=None):
+    def __init__(self, access_token=None, client_id=None, client_secret=None,
+                 auth_code=None):
         # If no values are passed, try to get them from environment variables
+        self._access_token = (
+            access_token or os.environ.get(MONZO_ACCESS_CODE_ENV)
+        )
         self._client_id = (
             client_id or os.environ.get(MONZO_CLIENT_ID_ENV)
         )
@@ -36,17 +44,29 @@ class MonzoAPI(object):
         self._auth_code = (
             auth_code or os.environ.get(MONZO_AUTH_CODE_ENV)
         )
-        self._access_token = (
-            access_token or os.environ.get(MONZO_ACCESS_CODE_ENV)
-        )
 
-        # Either explicit 'access_token' or all of 'client_id', 'client_secret'
-        # and 'auth_code' must be set to authenticate with the API
-        if self._access_token:
+        # We try to get the access token from:
+        # a) explicitly passed 'access_token'
+        if access_token:
             self._token = {
                 'access_token': self._access_token,
                 'token_type': 'Bearer',
             }
+        # b) explicitly passed 'client_id', 'client_secret' and 'auth_code'
+        elif all([client_id, client_secret, auth_code]):
+            self._token = self._get_oauth_token()
+        # c) token file saved on the disk
+        elif os.path.isfile(TOKEN_FILE_PATH):
+            with shelve.open(TOKEN_FILE_PATH) as f:
+                self._token = f['token']
+        # d) 'access_token' saved as a environment variable
+        elif self._access_token:
+            self._token = {
+                'access_token': self._access_token,
+                'token_type': 'Bearer',
+            }
+        # e) 'client_id', 'client_secret' and 'auth_code' saved as
+        # environment variables
         elif all([self._client_id, self._client_secret, self._auth_code]):
             self._token = self._get_oauth_token()
         else:
@@ -64,6 +84,12 @@ class MonzoAPI(object):
         # Set the default account ID if there is only one available
         if len(self.accounts()) == 1:
             self.default_account_id = self.accounts()[0]['id']
+
+    @staticmethod
+    def _save_token_on_disk(token):
+        """Helper function that saves passed token on disk"""
+        with shelve.open(TOKEN_FILE_PATH) as f:
+            f['token'] = token
 
     def _get_oauth_token(self):
         """
@@ -85,6 +111,8 @@ class MonzoAPI(object):
             code=self._auth_code,
             client_secret=self._client_secret,
         )
+
+        self._save_token_on_disk(token)
 
         return token
 
