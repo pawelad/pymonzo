@@ -12,7 +12,7 @@ from pymonzo.monzo_api import MONZO_ACCESS_CODE_ENV
 
 # Fixtures
 @pytest.fixture(scope='function')
-def monzo_api():
+def monzo():
     """Create a `MonzoAPI` instance"""
     return MonzoAPI()
 
@@ -24,13 +24,13 @@ def monzo_api():
 ])
 def test_init_access_token(access_token):
     """Test initialization with provided `access_token`"""
-    monzo_api = MonzoAPI(access_token=access_token)
+    monzo = MonzoAPI(access_token=access_token)
 
-    assert monzo_api
-    assert monzo_api._token['access_token'] == os.environ.get(
+    assert monzo
+    assert monzo._token['access_token'] == os.environ.get(
         MONZO_ACCESS_CODE_ENV
     )
-    assert monzo_api._token['token_type'] == 'Bearer'
+    assert monzo._token['token_type'] == 'Bearer'
 
 
 def test_init_no_data(monkeypatch):
@@ -63,64 +63,64 @@ def test_init_authorization_code(mocker, monkeypatch):
     assert mocked_get_oauth_token.call_count == 1
 
 
-def test_init_session(monzo_api):
+def test_init_session(monzo):
     """Test session initialization"""
-    assert monzo_api.session
-    assert monzo_api.session.token
-    assert isinstance(monzo_api.session, OAuth2Session)
+    assert monzo.session
+    assert monzo.session.token
+    assert isinstance(monzo.session, OAuth2Session)
 
 
-def test_init_default_account_id(monzo_api):
+def test_init_default_account_id(monzo):
     """Test setting the default account ID on initialization"""
-    assert monzo_api.default_account_id == monzo_api.accounts()[0]['id']
+    assert monzo.default_account_id == monzo.accounts()[0]['id']
 
 
-def test_whoami(monzo_api):
+def test_whoami(monzo):
     """Test `whoami()` method"""
-    assert monzo_api.whoami()
+    assert monzo.whoami()
 
 
-def test_accounts(monzo_api):
+def test_accounts(monzo):
     """Test `accounts()` method"""
-    assert monzo_api.accounts()
+    assert monzo.accounts()
 
 
-def test_balance(monzo_api):
+def test_balance(monzo):
     """Test `balance()` method"""
-    assert monzo_api.balance()
+    assert monzo.balance()
 
     # No account ID provided
     with pytest.raises(ValueError):
-        monzo_api.default_account_id = None
-        monzo_api.balance()
+        monzo.default_account_id = None
+        monzo.balance()
 
 
-def test_transactions(monzo_api):
+def test_transactions(monzo):
     """Test `transactions()` method"""
-    transactions = monzo_api.transactions()
+    transactions = monzo.transactions()
     assert transactions
 
     # Limit results
-    assert len(monzo_api.transactions(limit=5)) == 5
+    assert len(monzo.transactions(limit=5)) == 5
 
     # No easy way to test reverse so lets just make sure it does _something_
-    transactions_reverse = monzo_api.transactions(reverse=True)
+    transactions_reverse = monzo.transactions(reverse=True)
     assert transactions is not transactions_reverse
 
     # No account ID provided
     with pytest.raises(ValueError):
-        monzo_api.default_account_id = None
-        monzo_api.transactions()
+        monzo.default_account_id = None
+        monzo.transactions()
 
 
-def test_transaction(monzo_api):
+def test_transaction(monzo):
     """Test `transaction()` method"""
-    transaction_id = monzo_api.transactions(limit=1)[0]['id']
+    transaction_id = monzo.transactions(limit=1)[0]['id']
 
-    transaction = monzo_api.transaction(transaction_id=transaction_id)
+    transaction = monzo.transaction(transaction_id=transaction_id)
     assert transaction
 
-    transaction_expand_merchant = monzo_api.transaction(
+    transaction_expand_merchant = monzo.transaction(
         transaction_id=transaction_id, expand_merchant=True,
     )
     assert transaction_expand_merchant
