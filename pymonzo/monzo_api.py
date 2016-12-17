@@ -22,7 +22,7 @@ TOKEN_FILE_PATH = os.path.join(os.path.expanduser('~'), TOKEN_FILE_NAME)
 
 class MonzoAPI(object):
     """
-    Wrapper for Monzo API.
+    Base class that smartly wraps official Monzo API.
 
     Official docs:
         https://monzo.com/docs/
@@ -31,6 +31,23 @@ class MonzoAPI(object):
 
     def __init__(self, access_token=None, client_id=None, client_secret=None,
                  auth_code=None):
+        """
+        We need Monzo access token to work with the API, which we try to get
+        in multiple ways detailed below. Basically you need to either pass
+        it directly, pass your client ID, client secret and OAuth 2 auth code
+        or have the token already saved on the disk from previous OAuth 2
+        authorization.
+
+        :param access_token: your Monzo access token, probably taken form their
+                             API Playground
+        :type access_token: str
+        :param client_id: your Monzo client ID
+        :type client_id: str
+        :param client_secret: your Monzo client secret
+        :type client_secret: str
+        :param auth_code: your Monzo OAuth 2 auth code
+        :type auth_code: str
+        """
         # If no values are passed, try to get them from environment variables
         self._access_token = (
             access_token or os.environ.get(MONZO_ACCESS_CODE_ENV)
@@ -125,7 +142,7 @@ class MonzoAPI(object):
 
     def whoami(self):
         """
-        Get information about an access token
+        Get information about the access token.
 
         Official docs:
             https://monzo.com/docs/#authenticating-requests
@@ -155,9 +172,12 @@ class MonzoAPI(object):
 
         Official docs:
             https://monzo.com/docs/#read-balance
+
+        :param account_id: Monzo account ID
+        :type account_id: str
         """
         if not account_id and not self.default_account_id:
-            raise ValueError("You need to pass the account ID")
+            raise ValueError("You need to pass account ID")
         elif not account_id and self.default_account_id:
             account_id = self.default_account_id
 
@@ -176,9 +196,16 @@ class MonzoAPI(object):
 
         Official docs:
             https://monzo.com/docs/#list-transactions
+
+        :param account_id: Monzo account ID
+        :type account_id: str
+        :param reverse: whether transactions should be in in descending order
+        :type reverse: bool
+        :param limit: how many transactions should be returned; None for all
+        :type limit: int or None
         """
         if not account_id and not self.default_account_id:
-            raise ValueError("You need to pass the account ID")
+            raise ValueError("You need to pass account ID")
         elif not account_id and self.default_account_id:
             account_id = self.default_account_id
 
@@ -189,10 +216,9 @@ class MonzoAPI(object):
         }
         response = self.session.get(url, params=data)
 
-        # The API does not allow reversing the list and getting the latest
-        # transactions first. To allow a basic query of 'the latest transaction'
-        # we need to always get all transactions (i.e. not use the 'limit'
-        # parameter) and do the reversing and slicing in Python
+        # The API does not allow reversing the list or limiting it, so to do
+        # the basic query of 'get the latest transaction' we need to always get
+        # all transactions and do the reversing and slicing in Python
         # I send Monzo an email, we'll se how they'll respond
         transactions = response.json()['transactions']
         if reverse:
@@ -209,13 +235,18 @@ class MonzoAPI(object):
 
         Official docs:
             https://monzo.com/docs/#retrieve-transaction
+
+        :param transaction_id: Monzo transaction ID
+        :type transaction_id: str
+        :param expand_merchant: whether merchant data should be included
+        :type expand_merchant: bool
         """
         endpoint = '/transactions/{}'.format(transaction_id)
         url = urljoin(API_URL, endpoint)
 
         data = dict()
         if expand_merchant:
-            data.update({'expand[]': 'merchant' if expand_merchant else ''})
+            data['expand[]'] = 'merchant'
 
         response = self.session.get(url, params=data)
 
