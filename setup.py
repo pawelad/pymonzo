@@ -53,7 +53,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'requests>=2.11.1',
+        'requests>=2.12.4',
+        'requests-oauthlib>=0.7.0',
         'six>=1.10.0',
     ],
     extras_require={
