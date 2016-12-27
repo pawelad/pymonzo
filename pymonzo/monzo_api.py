@@ -15,7 +15,7 @@ from pymonzo.exceptions import MonzoAPIException
 API_URL = 'https://api.monzo.com/'
 PYMONZO_REDIRECT_URI = 'https://github.com/pawelad/pymonzo'
 
-MONZO_ACCESS_CODE_ENV = 'MONZO_ACCESS_CODE'
+MONZO_ACCESS_TOKEN_ENV = 'MONZO_ACCESS_TOKEN'
 MONZO_AUTH_CODE_ENV = 'MONZO_AUTH_CODE'
 MONZO_CLIENT_ID_ENV = 'MONZO_CLIENT_ID'
 MONZO_CLIENT_SECRET_ENV = 'MONZO_CLIENT_SECRET'
@@ -56,7 +56,7 @@ class MonzoAPI(object):
         """
         # If no values are passed, try to get them from environment variables
         self._access_token = (
-            access_token or os.environ.get(MONZO_ACCESS_CODE_ENV)
+            access_token or os.environ.get(MONZO_ACCESS_TOKEN_ENV)
         )
         self._client_id = (
             client_id or os.environ.get(MONZO_CLIENT_ID_ENV)

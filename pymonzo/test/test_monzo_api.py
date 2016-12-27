@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import os
+from uuid import uuid4
 
 import pytest
 from requests_oauthlib import OAuth2Session
@@ -10,7 +11,8 @@ from pymonzo import MonzoAPI
 from pymonzo.api_objects import (
     MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
 )
-from pymonzo.monzo_api import MONZO_ACCESS_CODE_ENV
+from pymonzo.exceptions import MonzoAPIException
+from pymonzo.monzo_api import MONZO_ACCESS_TOKEN_ENV
 
 
 # Fixtures
@@ -23,7 +25,7 @@ def monzo():
 # Tests
 @pytest.mark.parametrize('access_token', [
     None,
-    os.environ.get(MONZO_ACCESS_CODE_ENV),
+    os.environ.get(MONZO_ACCESS_TOKEN_ENV),
 ])
 def test_init_access_token(access_token):
     """Test initialization with provided `access_token`"""
@@ -31,14 +33,14 @@ def test_init_access_token(access_token):
 
     assert monzo
     assert monzo._token['access_token'] == os.environ.get(
-        MONZO_ACCESS_CODE_ENV
+        MONZO_ACCESS_TOKEN_ENV
     )
     assert monzo._token['token_type'] == 'Bearer'
 
 
 def test_init_no_data(monkeypatch):
     """Test initialization with no `access_token`"""
-    monkeypatch.delenv(MONZO_ACCESS_CODE_ENV, raising=False)
+    monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
 
     with pytest.raises(ValueError):
         MonzoAPI()
@@ -50,16 +52,16 @@ def test_init_authorization_code(mocker, monkeypatch):
     """
     mocked_get_oauth_token = mocker.patch.object(MonzoAPI, '_get_oauth_token')
     mocked_get_oauth_token.return_value = {
-        'access_token': os.environ.get(MONZO_ACCESS_CODE_ENV),
+        'access_token': os.environ.get(MONZO_ACCESS_TOKEN_ENV),
         'token_type': 'Bearer',
     }
 
-    monkeypatch.delenv(MONZO_ACCESS_CODE_ENV, raising=False)
+    monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
 
     MonzoAPI(
-        client_id='MONZO_CLIENT_ID',
-        client_secret='MONZO_CLIENT_SECRET_ENV',
-        auth_code='MONZO_AUTH_CODE_ENV',
+        client_id=str(uuid4),
+        client_secret=str(uuid4),
+        auth_code=str(uuid4),
     )
 
     assert mocked_get_oauth_token.called
@@ -76,6 +78,12 @@ def test_init_session(monzo):
 def test_init_default_account_id(monzo):
     """Test setting the default account ID on initialization"""
     assert monzo.default_account_id == monzo.accounts()[0].id
+
+
+def test_raising_exception():
+    """Test API error caching and exception raising"""
+    with pytest.raises(MonzoAPIException):
+        MonzoAPI(access_token=str(uuid4))
 
 
 def test_whoami(monzo):
