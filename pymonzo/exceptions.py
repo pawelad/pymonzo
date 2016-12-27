@@ -2,6 +2,11 @@
 from __future__ import unicode_literals
 
 
-class MonzoAPIException(Exception):
+class PyMonzoException(Exception):
+    """Base pymonzo exception"""
+    pass
+
+
+class MonzoAPIException(PyMonzoException):
     """Base Monzo API response exception"""
     pass
