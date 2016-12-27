@@ -48,7 +48,9 @@ setup(
     author_email='pawel.ad@gmail.com',
     maintainer='Paweł Adamczak',
     maintainer_email='pawel.ad@gmail.com',
-    description='Python wrapper for Mondo public API',
+    description='An - dare I say it - awesome Python library that smartly '
+                'wraps Monzo public API and allows you to use it directly in '
+                'your Python project.',
     long_description=description,
     packages=find_packages(),
     include_package_data=True,
@@ -73,6 +75,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )

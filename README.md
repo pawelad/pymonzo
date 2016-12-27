@@ -5,8 +5,8 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pymonzo.svg)][pypi]
 [![License](https://img.shields.io/github/license/pawelad/pymonzo.svg)][license]
 
-An awesome Python library that smartly wraps [Monzo][monzo] public API and
-allows you to use it directly in your Python project.
+An - dare I say it - awesome Python library that smartly wraps [Monzo][monzo]
+public API and allows you to use it directly in your Python project.
 
 It creates a layer of abstraction and returns Python objects instead of just
 passing the received JSONs. It also deals with authentication and allows using
