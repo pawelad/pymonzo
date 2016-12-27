@@ -22,8 +22,15 @@ class MonzoObject(object, with_metaclass(ABCMeta)):
         :param data: JSON data from appropriate Monzo API request
         :type data: dict
         """
-        if not all(k in data for k in self._required_keys):
-            raise ValueError("Passed data doesn't have all required keys")
+        missing_keys = [
+            k for k in self._required_keys
+            if k not in data
+        ]
+        if missing_keys:
+            raise ValueError(
+                "Passed data doesn't have all required keys "
+                "(missing keys: {})".format(','.join(missing_keys))
+            )
 
         self._data = data
 
@@ -78,9 +85,8 @@ class MonzoTransaction(MonzoObject):
     Class representation of Monzo transaction
     """
     _required_keys = [
-        'account_balance', 'amount', 'created', 'currency',
-        'description', 'id', 'merchant', 'metadata', 'notes',
-        'is_load', 'category',
+        'account_balance', 'amount', 'created', 'currency', 'description',
+        'id', 'merchant', 'metadata', 'notes', 'is_load',
     ]
 
     def __init__(self, data):
