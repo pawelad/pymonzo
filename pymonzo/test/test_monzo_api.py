@@ -5,6 +5,7 @@ import os
 from uuid import uuid4
 
 import pytest
+import six
 from requests_oauthlib import OAuth2Session
 
 from pymonzo import MonzoAPI
@@ -150,7 +151,7 @@ def test_transaction(monzo):
 
     assert transaction
     assert isinstance(transaction, MonzoTransaction)
-    assert isinstance(transaction.merchant, str)
+    assert isinstance(transaction.merchant, six.text_type)
 
     # Expand merchant
     transaction_expand_merchant = monzo.transaction(

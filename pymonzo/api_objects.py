@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 from abc import ABCMeta
 
 import dateutil.parser
-from six import with_metaclass
+import six
 
 
-class MonzoObject(object, with_metaclass(ABCMeta)):
+class MonzoObject(object, six.with_metaclass(ABCMeta)):
     """
     Base abstract class for Monzo API objects
     """
@@ -107,7 +107,8 @@ class MonzoTransaction(MonzoObject):
             self.settled = dateutil.parser.parse(data.pop('settled'))
 
         # Merchant field can contain either merchant ID or the whole object
-        if data.get('merchant') and not isinstance(data['merchant'], str):
+        if (data.get('merchant') and
+                not isinstance(data['merchant'], six.text_type)):
             self.merchant = MonzoMerchant(data=data.pop('merchant'))
 
         # Map the rest of the fields automatically
