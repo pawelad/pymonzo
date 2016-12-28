@@ -105,12 +105,15 @@ class MonzoAPI(object):
             token=self._token,
             auto_refresh_url=urljoin(API_URL, '/oauth2/token'),
             auto_refresh_kwargs={
-                'grant_type': 'refresh_token',
                 'client_id': self._client_id,
                 'client_secret': self._client_secret,
             },
             token_updater=self._save_token_on_disk,
         )
+
+        # Make sure that we're authenticated
+        if not self.whoami().get('authenticated'):
+            raise MonzoAPIException("You're not authenticated")
 
         # Set the default account ID if there is only one available
         if len(self.accounts()) == 1:
