@@ -11,7 +11,9 @@ public API and allows you to use it directly in your Python project.
 It creates a layer of abstraction and returns Python objects instead of just
 passing the received JSONs. It also deals with authentication and allows using
 either an access token or fully authenticate via OAuth 2 that's a PITA to set
-up but is then automatically refreshed in the background.
+up but is then automatically refreshed in the background. Yeah, you read it
+correctly - no more manual changing of the access token every couple if hours.
+High five!
 
 ## Installation
 From PyPI:
@@ -62,9 +64,8 @@ $ export MONZO_CLIENT_SECRET='...'
 $ export MONZO_AUTH_CODE='...'
 ```
 
-That's it! The token is then saved (`~/.pymonzo`) on the disk and is
-automatically refreshed when needed via the awesome
-[requests-oauthlib][requests-oauthlib] so all this _should_ be one time only.
+That's it! The token is then saved on the disk (`~/.pymonzo`) and is
+automatically refreshed when needed, so all this (_should_) be one time only.
 
 ## Roadmap
 The library currently does not implement feed items, webhooks and attachments
@@ -120,5 +121,4 @@ Released under [MIT License][license].
 [monzo docs introduction]: https://monzo.com/docs/#introduction
 [pawelad]: https://github.com/pawelad
 [pypi]: https://pypi.python.org/pypi/pymonzo
-[requests-oauthlib]: https://github.com/requests/requests-oauthlib
 [travis]: https://travis-ci.org/pawelad/pymonzo

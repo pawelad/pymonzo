@@ -5,6 +5,7 @@ import os
 import shelve
 
 import requests
+from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth2Session
 from six.moves.urllib.parse import urljoin
 
@@ -99,16 +100,10 @@ class MonzoAPI(object):
                 "'client_secret' and 'auth_code'"
             )
 
-        # Create a session with newly acquired token
+        # Create a session with the acquired token
         self._session = OAuth2Session(
-            client_id=client_id,
+            client_id=self._client_id,
             token=self._token,
-            auto_refresh_url=urljoin(API_URL, '/oauth2/token'),
-            auto_refresh_kwargs={
-                'client_id': self._client_id,
-                'client_secret': self._client_secret,
-            },
-            token_updater=self._save_token_on_disk,
         )
 
         # Make sure that we're authenticated
@@ -131,9 +126,11 @@ class MonzoAPI(object):
 
         Official docs:
             https://monzo.com/docs/#acquire-an-access-token
+
+        :returns: OAuth 2 access token
+        :rtype: dict
         """
-        endpoint = '/oauth2/token'
-        url = urljoin(API_URL, endpoint)
+        url = urljoin(API_URL, '/oauth2/token')
 
         oauth = OAuth2Session(
             client_id=self._client_id,
@@ -145,6 +142,32 @@ class MonzoAPI(object):
             code=self._auth_code,
             client_secret=self._client_secret,
         )
+
+        self._save_token_on_disk(token)
+
+        return token
+
+    def _refresh_oath_token(self):
+        """
+        For some reason 'requests-oauthlib' automatic token refreshing doesn't
+        work so we do it here semi-manually
+
+        Official docs:
+            https://monzo.com/docs/#refreshing-access
+
+        :returns: OAuth 2 access token
+        :rtype: dict
+        """
+        url = urljoin(API_URL, '/oauth2/token')
+        data = {
+            'grant_type': 'refresh_token',
+            'client_id': self._client_id,
+            'client_secret': self._client_secret,
+            'refresh_token': self._token['refresh_token'],
+        }
+
+        token_response = requests.post(url, data=data)
+        token = token_response.json()
 
         self._save_token_on_disk(token)
 
@@ -165,7 +188,18 @@ class MonzoAPI(object):
         :rtype: Response
         """
         url = urljoin(API_URL, endpoint)
-        response = getattr(self._session, method)(url, params=params)
+
+        try:
+            response = getattr(self._session, method)(url, params=params)
+        except TokenExpiredError:
+            self._token = self._refresh_oath_token()
+
+            self._session = OAuth2Session(
+                client_id=self._client_id,
+                token=self._token,
+            )
+
+            response = getattr(self._session, method)(url, params=params)
 
         if response.status_code != requests.codes.ok:
             raise MonzoAPIException(
