@@ -12,7 +12,7 @@ It creates a layer of abstraction and returns Python objects instead of just
 passing the received JSONs. It also deals with authentication and allows using
 either an access token or fully authenticate via OAuth 2 that's a PITA to set
 up but is then automatically refreshed in the background. Yeah, you read it
-correctly - no more manual changing of the access token every couple if hours.
+correctly - no more manual changing of the access token every couple of hours.
 High five!
 
 ## Installation
@@ -68,20 +68,20 @@ That's it! The token is then saved on the disk (`~/.pymonzo`) and is
 automatically refreshed when needed, so all this (_should_) be one time only.
 
 ## Roadmap
-The library currently does not implement feed items, webhooks and attachments
-endpoints - I plan to add them in the future, but they were't essential to my
-current needs and they could be completely different in the future - per
-[docs][monzo docs introduction]:
+The library currently doesn't implement feed items, webhooks and attachments
+endpoints, mostly because they were't essential to my current needs
+([monz][monz]) and they could be completely different in the future - per
+[Monzo docs][monzo docs introduction]:
 > The Monzo API is under active development. Breaking changes should be expected.
 
-I plan to implement all API functionality as soon as it comes out of beta and
-stabilizes.
+That said, if you need one of those endpoints feel free to either create a PR
+that add them or let me know that you want them and I'll see what I can do : -)
 
 ## API
-There's no documentation as of now, but the code is commented and
+There's no proper documentation as of now, but the code is commented and
 *should* be pretty straightforward to use.
 
-But feel free to ask me via [email](mailto:pawel.adamczak@sidnet.info) or 
+But feel free to ask me via [email](mailto:pawel.ad@gmail.com) or 
 [GitHub issues][github add issue] if anything is unclear.
 
 ## Tests
