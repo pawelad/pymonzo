@@ -9,18 +9,21 @@ import six
 from requests_oauthlib import OAuth2Session
 
 from pymonzo import MonzoAPI
+from pymonzo.exceptions import MonzoAPIException
 from pymonzo.api_objects import (
     MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
 )
-from pymonzo.exceptions import MonzoAPIException
-from pymonzo.monzo_api import MONZO_ACCESS_TOKEN_ENV
+from pymonzo.monzo_api import (
+    MONZO_ACCESS_TOKEN_ENV, MONZO_AUTH_CODE_ENV,
+    MONZO_CLIENT_ID_ENV, MONZO_CLIENT_SECRET_ENV,
+)
 
 
 # Fixtures
 @pytest.fixture(scope='function')
 def monzo():
     """Create a `MonzoAPI` instance"""
-    return MonzoAPI()
+    return MonzoAPI(access_token=os.environ.get(MONZO_ACCESS_TOKEN_ENV))
 
 
 # Tests
@@ -28,8 +31,15 @@ def monzo():
     None,
     os.environ.get(MONZO_ACCESS_TOKEN_ENV),
 ])
-def test_init_access_token(access_token):
-    """Test initialization with provided `access_token`"""
+def test_init_access_token(monkeypatch, mocker, access_token):
+    """Test initialization with only `access_token` provided"""
+    # Make sure that other auth options are invalid
+    monkeypatch.delenv(MONZO_AUTH_CODE_ENV, raising=False)
+    monkeypatch.delenv(MONZO_CLIENT_ID_ENV, raising=False)
+    monkeypatch.delenv(MONZO_CLIENT_SECRET_ENV, raising=False)
+    is_file = mocker.patch('os.path.isfile')
+    is_file.return_value = False
+
     monzo = MonzoAPI(access_token=access_token)
 
     assert monzo
@@ -39,34 +49,54 @@ def test_init_access_token(access_token):
     assert monzo._token['token_type'] == 'Bearer'
 
 
-def test_init_no_data(monkeypatch):
-    """Test initialization with no `access_token`"""
-    monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
-
-    with pytest.raises(ValueError):
-        MonzoAPI()
-
-
-def test_init_authorization_code(mocker, monkeypatch):
+@pytest.mark.parametrize('client_id,client_secret,auth_code', [
+    (None, None, None),
+    (str(uuid4), str(uuid4), str(uuid4)),
+])
+def test_init_oauth(monkeypatch, mocker, client_id, client_secret, auth_code):
     """
     Test initialization with `client_id`, `client_secret` and `auth_code`
     """
+    # Mock request that gets the OAuth token
     mocked_get_oauth_token = mocker.patch.object(MonzoAPI, '_get_oauth_token')
     mocked_get_oauth_token.return_value = {
         'access_token': os.environ.get(MONZO_ACCESS_TOKEN_ENV),
         'token_type': 'Bearer',
     }
 
+    # Make sure that other auth options are invalid
     monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
+    is_file = mocker.patch('os.path.isfile')
+    is_file.return_value = False
 
-    MonzoAPI(
-        client_id=str(uuid4),
-        client_secret=str(uuid4),
-        auth_code=str(uuid4),
+    # Set the environment variables
+    monkeypatch.setenv(MONZO_CLIENT_ID_ENV, str(uuid4))
+    monkeypatch.setenv(MONZO_CLIENT_SECRET_ENV, str(uuid4))
+    monkeypatch.setenv(MONZO_AUTH_CODE_ENV, str(uuid4))
+
+    monzo = MonzoAPI(
+        client_id=client_id,
+        client_secret=client_secret,
+        auth_code=auth_code,
     )
 
+    assert monzo
     assert mocked_get_oauth_token.called
     assert mocked_get_oauth_token.call_count == 1
+
+
+def test_init_no_data(monkeypatch, mocker):
+    """Test initialization with no auth data provided"""
+    # Make sure that all auth options are invalid
+    monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
+    monkeypatch.delenv(MONZO_AUTH_CODE_ENV, raising=False)
+    monkeypatch.delenv(MONZO_CLIENT_ID_ENV, raising=False)
+    monkeypatch.delenv(MONZO_CLIENT_SECRET_ENV, raising=False)
+    is_file = mocker.patch('os.path.isfile')
+    is_file.return_value = False
+
+    with pytest.raises(ValueError):
+        MonzoAPI()
 
 
 def test_init_session(monzo):
@@ -151,7 +181,10 @@ def test_transaction(monzo):
 
     assert transaction
     assert isinstance(transaction, MonzoTransaction)
-    assert isinstance(transaction.merchant, six.text_type)
+
+    # Depends on what the latest transaction is and if it has a merchant
+    if transaction.merchant:
+        assert isinstance(transaction.merchant, six.text_type)
 
     # Expand merchant
     transaction_expand_merchant = monzo.transaction(
@@ -161,7 +194,7 @@ def test_transaction(monzo):
 
     assert transaction_expand_merchant
     assert isinstance(transaction_expand_merchant, MonzoTransaction)
-    # Depends on what the latest transaction is, and if it has a merchant
+    # Depends on what the latest transaction is and if it has a merchant
     if transaction_expand_merchant.merchant:
         assert isinstance(transaction_expand_merchant.merchant, MonzoMerchant)
 
