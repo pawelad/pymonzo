@@ -96,8 +96,9 @@ class MonzoAPI(object):
         else:
             raise ValueError(
                 "You need to pass (or set as environment variables) either "
-                "explicit 'access_token' or all of 'client_id', "
-                "'client_secret' and 'auth_code'"
+                "the access token or all of client ID, client secret "
+                "and authentication code. For more info see "
+                "https://github.com/pawelad/pymonzo#authentication"
             )
 
         # Create a session with the acquired token
@@ -122,7 +123,7 @@ class MonzoAPI(object):
 
     def _get_oauth_token(self):
         """
-        Get Monzo access token via OAuth2 `authorization_code` grant type.
+        Get Monzo access token via OAuth2 `authorization code` grant type.
 
         Official docs:
             https://monzo.com/docs/#acquire-an-access-token
@@ -149,8 +150,7 @@ class MonzoAPI(object):
 
     def _refresh_oath_token(self):
         """
-        For some reason 'requests-oauthlib' automatic token refreshing doesn't
-        work so we do it here semi-manually
+        Refresh Monzo OAuth 2 token.
 
         Official docs:
             https://monzo.com/docs/#refreshing-access
@@ -192,6 +192,8 @@ class MonzoAPI(object):
         try:
             response = getattr(self._session, method)(url, params=params)
         except TokenExpiredError:
+            # For some reason 'requests-oauthlib' automatic token refreshing
+            # doesn't work so we do it here semi-manually
             self._token = self._refresh_oath_token()
 
             self._session = OAuth2Session(
