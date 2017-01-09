@@ -17,6 +17,7 @@ High five!
 
 ## Installation
 From PyPI:
+
 ```
 $ pip install pymonzo
 ```
@@ -44,21 +45,24 @@ don't really matter but you need to set the redirect URL to this repo
 (`https://github.com/pawelad/pymonzo`) and set it to be confidential.
 
 Got it? Cool. You now have required 'Client ID' and 'Client secret' and only
-need the auth code. You get it by creating a link with your client ID:  
+need the auth code. You get it by creating a link with your client ID:
+
 ```
-https://auth.getmondo.co.uk/?client_id=$ClientID&response_type=code&redirect_uri=https://github.com/pawelad/pymonzo
+https://auth.getmondo.co.uk/?client_id=ClientID&response_type=code&redirect_uri=https://github.com/pawelad/pymonzo
 ```
 
 You then go to the link and authorise the app. You should get an email with a
 link back to the GitHub repo and the authorization code, something like:
+
 ```
-https://github.com/pawelad/pymonzo?code=$AuthCode
+https://github.com/pawelad/pymonzo?code=AuthCode
 ```
 
 You now have all three needed values - client ID, client secret and the auth
 code. As with the access token, you can either pass them directly to
 `MonzoAPI()` class or save them as environment variables:
-```
+
+```shell
 $ export MONZO_CLIENT_ID='...'
 $ export MONZO_CLIENT_SECRET='...'
 $ export MONZO_AUTH_CODE='...'
@@ -92,6 +96,7 @@ Code coverage is available at [Coveralls][coveralls].
 
 To run tests yourself you need to set environment variables with access token
 before running `tox` inside the repository:
+
 ```shell
 $ pip install -r requirements/dev.txt
 $ export MONZO_ACCESS_TOKEN='...'
