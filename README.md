@@ -79,7 +79,7 @@ endpoints, mostly because they were't essential to my current needs
 > The Monzo API is under active development. Breaking changes should be expected.
 
 That said, if you need one of those endpoints feel free to either create a PR
-that add them or let me know that you want them and I'll see what I can do : -)
+that adds them or let me know that you want them and I'll see what I can do : -)
 
 ## API
 There's no proper documentation as of now, but the code is commented and
