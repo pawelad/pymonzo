@@ -1,0 +1,10 @@
+url: https://pawelad.xyz/pymonzo/
+enforce_ssl: pawelad.xyz/pymonzo/
+
+theme: jekyll-theme-dinky
+
+gems:
+  - jekyll-default-layout
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-titles-from-headings
