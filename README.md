@@ -85,7 +85,7 @@ that adds them or let me know that you want them and I'll see what I can do : -)
 There's no proper documentation as of now, but the code is commented and
 *should* be pretty straightforward to use.
 
-But feel free to ask me via [email](mailto:pawel.ad@gmail.com) or 
+That said - feel free to ask me via [email](mailto:pawel.ad@gmail.com) or 
 [GitHub issues][github add issue] if anything is unclear.
 
 ## Tests
@@ -107,7 +107,7 @@ $ tox
 Package source code is available at [GitHub][github].
 
 Feel free to use, ask, fork, star, report bugs, fix them, suggest enhancements,
-add functionality and point out any mistakes.
+add functionality and point out any mistakes. Thanks!
 
 ## Authors
 Developed and maintained by [Paweł Adamczak][pawelad].
