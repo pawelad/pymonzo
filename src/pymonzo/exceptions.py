@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+pymonzo related exceptions
+"""
 from __future__ import unicode_literals
 
 

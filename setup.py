@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import io
 import os
 import re
@@ -42,28 +40,24 @@ setup(
     url='https://github.com/pawelad/pymonzo',
     download_url='https://github.com/pawelad/pymonzo/releases/latest',
     bugtrack_url='https://github.com/pawelad/pymonzo/issues',
-    version=find_version('pymonzo', '__init__.py'),
+    version=find_version('src', 'pymonzo', '__init__.py'),
     license='MIT License',
     author='Paweł Adamczak',
     author_email='pawel.ad@gmail.com',
     maintainer='Paweł Adamczak',
     maintainer_email='pawel.ad@gmail.com',
-    description='An - dare I say it - awesome Python library that smartly '
-                'wraps Monzo public API and allows you to use it directly in '
-                'your Python project.',
+    description='An - dare I say it - awesome Python Monzo public API wrapper',
     long_description=description,
-    packages=find_packages(),
-    include_package_data=True,
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
+    zip_safe=False,
     install_requires=[
-        'python-dateutil>=2.6.0',
-        'requests>=2.12.4',
-        'requests-oauthlib>=0.7.0',
-        'six>=1.10.0',
+        'python-dateutil>=2.6.1,<3.0',
+        'requests>=2.18.4,<3.0',
+        'requests-oauthlib>=0.8.0,<1.0',
+        'six>=1.10.0,<2.0',
     ],
-    extras_require={
-        'testing': ['pytest'],
-    },
-    keywords='monzo api',
+    keywords=['monzo', 'api', 'mondo'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

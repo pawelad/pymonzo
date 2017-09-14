@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+Test 'pymonzo.monzo_api' file
+"""
 from __future__ import unicode_literals
 
 import os

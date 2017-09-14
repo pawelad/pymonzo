@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+Monzo API objects related code
+"""
 from __future__ import unicode_literals
 
 from abc import ABCMeta

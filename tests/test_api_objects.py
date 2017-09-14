@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+Test 'pymonzo.api_objects' file
+"""
 from __future__ import unicode_literals
 
 from abc import ABCMeta
 from datetime import datetime
 
 from pymonzo import api_objects
-from pymonzo.test import sample_api_responses
+from . import sample_api_responses
 
 
 def test_monzo_object():
