@@ -1,6 +1,6 @@
 include *.md
 include *.txt
-include *.yml
 include LICENSE
 include tox.ini
 recursive-include requirements *.txt
+recursive-include tests *.py
