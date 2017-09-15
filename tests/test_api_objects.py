@@ -25,6 +25,7 @@ class TestMonzoObject:
 
     @pytest.fixture(scope='session')
     def instance(self):
+        """Simple fixture that returns initialize object"""
         return self.klass(data=self.data)
 
     def test_class_inheritance(self, instance):
@@ -59,10 +60,12 @@ class TestMonzoAccount:
 
     @pytest.fixture(scope='session')
     def data(self, accounts_api_response):
+        """Simple fixture that returns data used to initialize the object"""
         return accounts_api_response['accounts'][0]
 
     @pytest.fixture(scope='session')
     def instance(self, data):
+        """Simple fixture that returns initialize object"""
         return self.klass(data)
 
     def test_class_inheritance(self, instance):
@@ -103,10 +106,12 @@ class TestMonzoBalance:
 
     @pytest.fixture(scope='session')
     def data(self, balance_api_response):
+        """Simple fixture that returns data used to initialize the object"""
         return balance_api_response
 
     @pytest.fixture(scope='session')
     def instance(self, data):
+        """Simple fixture that returns initialize object"""
         return self.klass(data)
 
     def test_class_inheritance(self, instance):
@@ -145,10 +150,12 @@ class TestMonzoTransaction:
 
     @pytest.fixture(scope='session')
     def data(self, transaction_api_response):
+        """Simple fixture that returns data used to initialize the object"""
         return transaction_api_response['transaction']
 
     @pytest.fixture(scope='session')
     def instance(self, data):
+        """Simple fixture that returns initialize object"""
         return self.klass(data)
 
     def test_class_inheritance(self, instance):
@@ -200,10 +207,12 @@ class TestMonzoMerchant:
 
     @pytest.fixture(scope='session')
     def data(self, transaction_api_response):
+        """Simple fixture that returns data used to initialize the object"""
         return transaction_api_response['transaction']['merchant']
 
     @pytest.fixture(scope='session')
     def instance(self, data):
+        """Simple fixture that returns initialize object"""
         return self.klass(data)
 
     def test_class_inheritance(self, instance):
