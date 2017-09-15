@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 
 import os
 import shelve
+from contextlib import closing
 
 import requests
 from oauthlib.oauth2 import TokenExpiredError
@@ -13,19 +14,8 @@ from requests_oauthlib import OAuth2Session
 from six.moves.urllib.parse import urljoin
 
 from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
+from pymonzo import config
 from pymonzo.exceptions import MonzoAPIException
-
-
-API_URL = 'https://api.monzo.com/'
-PYMONZO_REDIRECT_URI = 'https://github.com/pawelad/pymonzo'
-
-MONZO_ACCESS_TOKEN_ENV = 'MONZO_ACCESS_TOKEN'
-MONZO_AUTH_CODE_ENV = 'MONZO_AUTH_CODE'
-MONZO_CLIENT_ID_ENV = 'MONZO_CLIENT_ID'
-MONZO_CLIENT_SECRET_ENV = 'MONZO_CLIENT_SECRET'
-
-TOKEN_FILE_NAME = '.pymonzo-token'
-TOKEN_FILE_PATH = os.path.join(os.path.expanduser('~'), TOKEN_FILE_NAME)
 
 
 class MonzoAPI(object):
@@ -35,6 +25,7 @@ class MonzoAPI(object):
     Official docs:
         https://monzo.com/docs/
     """
+    api_url = 'https://api.monzo.com/'
     default_account_id = None
 
     def __init__(self, access_token=None, client_id=None, client_secret=None,
@@ -60,16 +51,16 @@ class MonzoAPI(object):
         """
         # If no values are passed, try to get them from environment variables
         self._access_token = (
-            access_token or os.environ.get(MONZO_ACCESS_TOKEN_ENV)
+            access_token or os.environ.get(config.MONZO_ACCESS_TOKEN_ENV)
         )
         self._client_id = (
-            client_id or os.environ.get(MONZO_CLIENT_ID_ENV)
+            client_id or os.environ.get(config.MONZO_CLIENT_ID_ENV)
         )
         self._client_secret = (
-            client_secret or os.environ.get(MONZO_CLIENT_SECRET_ENV)
+            client_secret or os.environ.get(config.MONZO_CLIENT_SECRET_ENV)
         )
         self._auth_code = (
-            auth_code or os.environ.get(MONZO_AUTH_CODE_ENV)
+            auth_code or os.environ.get(config.MONZO_AUTH_CODE_ENV)
         )
 
         # We try to get the access token from:
@@ -83,8 +74,8 @@ class MonzoAPI(object):
         elif all([client_id, client_secret, auth_code]):
             self._token = self._get_oauth_token()
         # c) token file saved on the disk
-        elif os.path.isfile(TOKEN_FILE_PATH):
-            with shelve.open(TOKEN_FILE_PATH) as f:
+        elif os.path.isfile(config.TOKEN_FILE_PATH):
+            with closing(shelve.open(config.TOKEN_FILE_PATH)) as f:
                 self._token = f['token']
         # d) 'access_token' saved as a environment variable
         elif self._access_token:
@@ -98,7 +89,8 @@ class MonzoAPI(object):
             self._token = self._get_oauth_token()
         else:
             raise ValueError(
-                "You need to pass (or set as environment variables) either "
+                "To authenticate and use Monzo public API you need to pass "
+                "(or set as environment variables) either "
                 "the access token or all of client ID, client secret "
                 "and authentication code. For more info see "
                 "https://github.com/pawelad/pymonzo#authentication"
@@ -112,7 +104,10 @@ class MonzoAPI(object):
 
         # Make sure that we're authenticated
         if not self.whoami().get('authenticated'):
-            raise MonzoAPIException("You're not authenticated")
+            raise MonzoAPIException(
+                "For some reason you're not authenticated - '/whoami' "
+                "returned: {}".format(self.whoami())
+            )
 
         # Set the default account ID if there is only one available
         if len(self.accounts()) == 1:
@@ -121,7 +116,7 @@ class MonzoAPI(object):
     @staticmethod
     def _save_token_on_disk(token):
         """Helper function that saves passed token on disk"""
-        with shelve.open(TOKEN_FILE_PATH) as f:
+        with closing(shelve.open(config.TOKEN_FILE_PATH)) as f:
             f['token'] = token
 
     def _get_oauth_token(self):
@@ -134,11 +129,11 @@ class MonzoAPI(object):
         :returns: OAuth 2 access token
         :rtype: dict
         """
-        url = urljoin(API_URL, '/oauth2/token')
+        url = urljoin(self.api_url, '/oauth2/token')
 
         oauth = OAuth2Session(
             client_id=self._client_id,
-            redirect_uri=PYMONZO_REDIRECT_URI,
+            redirect_uri=config.PYMONZO_REDIRECT_URI,
         )
 
         token = oauth.fetch_token(
@@ -161,7 +156,7 @@ class MonzoAPI(object):
         :returns: OAuth 2 access token
         :rtype: dict
         """
-        url = urljoin(API_URL, '/oauth2/token')
+        url = urljoin(self.api_url, '/oauth2/token')
         data = {
             'grant_type': 'refresh_token',
             'client_id': self._client_id,
@@ -190,7 +185,7 @@ class MonzoAPI(object):
         :returns: API response
         :rtype: Response
         """
-        url = urljoin(API_URL, endpoint)
+        url = urljoin(self.api_url, endpoint)
 
         try:
             response = getattr(self._session, method)(url, params=params)
