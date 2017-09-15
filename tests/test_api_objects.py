@@ -4,49 +4,237 @@ Test 'pymonzo.api_objects' file
 """
 from __future__ import unicode_literals
 
-from abc import ABCMeta
 from datetime import datetime
 
+import pytest
+from dateutil.parser import parse as parse_date
+
 from pymonzo import api_objects
-from . import sample_api_responses
+from pymonzo.utils import CommonMixin
 
 
-def test_monzo_object():
-    """Test `MonzoObject`"""
-    assert isinstance(api_objects.MonzoObject, ABCMeta)
-    assert hasattr(api_objects.MonzoObject, '_required_keys')
+class TestMonzoObject:
+    """
+    Test `api_objects.MonzoObject` class
+    """
+    klass = api_objects.MonzoObject
+    data = {
+        'foo': 'foo',
+        'bar': 'bar',
+    }
+
+    @pytest.fixture(scope='session')
+    def instance(self):
+        return self.klass(data=self.data)
+
+    def test_class_inheritance(self, instance):
+        """Test class inheritance"""
+        assert isinstance(instance, api_objects.MonzoObject)
+        assert isinstance(instance, CommonMixin)
+
+    def test_class_properties(self, instance):
+        """Test class properties"""
+        assert self.klass._required_keys == []
+        assert instance._required_keys == []
+
+    def test_class_initialization(self, instance):
+        """Test class `__init__` method"""
+        assert instance._raw_data == self.data
+        assert instance.foo == 'foo'
+        assert instance.bar == 'bar'
+
+    def test_class_lack_of_required_keys(self, mocker):
+        """Test class `__init__` method when data lack one of required keys"""
+        mocker.patch.multiple(self.klass, _required_keys='baz')
+
+        with pytest.raises(ValueError):
+            self.klass(data=self.data)
 
 
-def test_monzo_account():
-    """Test `MonzoAccount`"""
-    monzo_account = api_objects.MonzoAccount(
-        data=sample_api_responses.ACCOUNTS_API_RESPONSE['accounts'][0]
-    )
+class TestMonzoAccount:
+    """
+    Test `api_objects.MonzoAccount` class
+    """
+    klass = api_objects.MonzoAccount
 
-    assert monzo_account
-    assert isinstance(monzo_account.created, datetime)
+    @pytest.fixture(scope='session')
+    def data(self, accounts_api_response):
+        return accounts_api_response['accounts'][0]
+
+    @pytest.fixture(scope='session')
+    def instance(self, data):
+        return self.klass(data)
+
+    def test_class_inheritance(self, instance):
+        """Test class inheritance"""
+        assert isinstance(instance, api_objects.MonzoAccount)
+        assert isinstance(instance, api_objects.MonzoObject)
+
+    def test_class_properties(self, instance):
+        """Test class properties"""
+        expected_keys = ['id', 'description', 'created']
+        assert self.klass._required_keys == expected_keys
+        assert instance._required_keys == expected_keys
+
+    def test_class_initialization(self, instance, data):
+        """Test class `__init__` method"""
+        expected_data = data.copy()
+
+        assert instance._raw_data == data
+        del instance._raw_data
+
+        expected_data['created'] = parse_date(expected_data['created'])
+        assert vars(instance) == expected_data
+        assert isinstance(instance.created, datetime)
+
+    def test_class_lack_of_required_keys(self, mocker, data):
+        """Test class `__init__` method when data lack one of required keys"""
+        mocker.patch.multiple(self.klass, _required_keys='baz')
+
+        with pytest.raises(ValueError):
+            self.klass(data=data)
 
 
-def test_monzo_balance():
-    """Test `MonzoBalance`"""
-    monzo_balance = api_objects.MonzoBalance(
-        data=sample_api_responses.BALANCE_API_RESPONSE
-    )
+class TestMonzoBalance:
+    """
+    Test `api_objects.MonzoBalance` class
+    """
+    klass = api_objects.MonzoBalance
 
-    assert monzo_balance
+    @pytest.fixture(scope='session')
+    def data(self, balance_api_response):
+        return balance_api_response
+
+    @pytest.fixture(scope='session')
+    def instance(self, data):
+        return self.klass(data)
+
+    def test_class_inheritance(self, instance):
+        """Test class inheritance"""
+        assert isinstance(instance, api_objects.MonzoBalance)
+        assert isinstance(instance, api_objects.MonzoObject)
+
+    def test_class_properties(self, instance):
+        """Test class properties"""
+        expected_keys = ['balance', 'currency', 'spend_today']
+        assert self.klass._required_keys == expected_keys
+        assert instance._required_keys == expected_keys
+
+    def test_class_initialization(self, instance, data):
+        """Test class `__init__` method"""
+        expected_data = data.copy()
+
+        assert instance._raw_data == expected_data
+        del instance._raw_data
+
+        assert vars(instance) == expected_data
+
+    def test_class_lack_of_required_keys(self, mocker, data):
+        """Test class `__init__` method when data lack one of required keys"""
+        mocker.patch.multiple(self.klass, _required_keys='baz')
+
+        with pytest.raises(ValueError):
+            self.klass(data=data)
 
 
-def test_monzo_transaction():
-    """Test `MonzoTransaction`"""
-    transaction = api_objects.MonzoTransaction(
-        data=sample_api_responses.TRANSACTION_API_RESPONSE['transaction']
-    )
+class TestMonzoTransaction:
+    """
+    Test `api_objects.MonzoTransaction` class
+    """
+    klass = api_objects.MonzoTransaction
 
-    assert transaction
+    @pytest.fixture(scope='session')
+    def data(self, transaction_api_response):
+        return transaction_api_response['transaction']
 
-    if transaction.settled:
-        assert isinstance(transaction.settled, datetime)
+    @pytest.fixture(scope='session')
+    def instance(self, data):
+        return self.klass(data)
 
-    if transaction.merchant:
-        assert isinstance(transaction.merchant, api_objects.MonzoMerchant)
-        assert isinstance(transaction.merchant.created, datetime)
+    def test_class_inheritance(self, instance):
+        """Test class inheritance"""
+        assert isinstance(instance, api_objects.MonzoTransaction)
+        assert isinstance(instance, api_objects.MonzoObject)
+
+    def test_class_properties(self, instance):
+        """Test class properties"""
+        expected_keys = [
+            'account_balance', 'amount', 'created', 'currency', 'description',
+            'id', 'merchant', 'metadata', 'notes', 'is_load',
+        ]
+
+        assert self.klass._required_keys == expected_keys
+        assert instance._required_keys == expected_keys
+
+    def test_class_initialization(self, instance, data):
+        """Test class `__init__` method"""
+        expected_data = data.copy()
+
+        assert instance._raw_data == expected_data
+        del instance._raw_data
+
+        expected_data['created'] = parse_date(expected_data['created'])
+        expected_data['settled'] = parse_date(expected_data['settled'])
+        expected_data['merchant'] = api_objects.MonzoMerchant(
+            data=expected_data['merchant']
+        )
+        assert vars(instance) == expected_data
+
+        assert isinstance(instance.created, datetime)
+        assert isinstance(instance.settled, datetime)
+        assert isinstance(instance.merchant, api_objects.MonzoMerchant)
+
+    def test_class_lack_of_required_keys(self, mocker, data):
+        """Test class `__init__` method when data lack one of required keys"""
+        mocker.patch.multiple(self.klass, _required_keys='baz')
+
+        with pytest.raises(ValueError):
+            self.klass(data=data)
+
+
+class TestMonzoMerchant:
+    """
+    Test `api_objects.MonzoMerchant` class
+    """
+    klass = api_objects.MonzoMerchant
+
+    @pytest.fixture(scope='session')
+    def data(self, transaction_api_response):
+        return transaction_api_response['transaction']['merchant']
+
+    @pytest.fixture(scope='session')
+    def instance(self, data):
+        return self.klass(data)
+
+    def test_class_inheritance(self, instance):
+        """Test class inheritance"""
+        assert isinstance(instance, api_objects.MonzoMerchant)
+        assert isinstance(instance, api_objects.MonzoObject)
+
+    def test_class_properties(self, instance):
+        """Test class properties"""
+        expected_keys = [
+            'address', 'created', 'group_id', 'id',
+            'logo', 'emoji', 'name', 'category',
+        ]
+
+        assert self.klass._required_keys == expected_keys
+        assert instance._required_keys == expected_keys
+
+    def test_class_initialization(self, instance, data):
+        """Test class `__init__` method"""
+        expected_data = data.copy()
+
+        assert instance._raw_data == expected_data
+        del instance._raw_data
+
+        expected_data['created'] = parse_date(expected_data['created'])
+        assert vars(instance) == expected_data
+        assert isinstance(instance.created, datetime)
+
+    def test_class_lack_of_required_keys(self, mocker, data):
+        """Test class `__init__` method when data lack one of required keys"""
+        mocker.patch.multiple(self.klass, _required_keys='baz')
+
+        with pytest.raises(ValueError):
+            self.klass(data=data)

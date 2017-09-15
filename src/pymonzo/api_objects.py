@@ -4,25 +4,25 @@ Monzo API objects related code
 """
 from __future__ import unicode_literals
 
-from abc import ABCMeta
-
-import dateutil.parser
 import six
+from dateutil.parser import parse as parse_date
+
+from pymonzo.utils import CommonMixin
 
 
-class MonzoObject(object, six.with_metaclass(ABCMeta)):
+class MonzoObject(CommonMixin):
     """
-    Base abstract class for Monzo API objects
+    Base class for all Monzo API objects
     """
     _required_keys = []
 
     def __init__(self, data):
         """
-        Takes JSON data and maps the keys as class properties, while also
-        requiring certain keys to be present to make sure we got the response
+        Takes Monzo API response data and maps the keys as class properties.
+        It requires certain keys to be present to make sure we got the response
         we wanted.
 
-        :param data: JSON data from appropriate Monzo API request
+        :param data: response from Monzo API request
         :type data: dict
         """
         missing_keys = [
@@ -35,7 +35,20 @@ class MonzoObject(object, six.with_metaclass(ABCMeta)):
                 "(missing keys: {})".format(','.join(missing_keys))
             )
 
-        self._data = data
+        self._raw_data = data.copy()
+        data_copy = data.copy()
+
+        # Take care of parsing non-standard fields
+        self._parse_special_fields(data_copy)
+
+        # Map the rest of the fields automatically
+        self.__dict__.update(**data_copy)
+
+    def _parse_special_fields(self, data):
+        """
+        Helper method that parses special fields to Python objects
+        """
+        pass
 
 
 class MonzoAccount(MonzoObject):
@@ -44,22 +57,14 @@ class MonzoAccount(MonzoObject):
     """
     _required_keys = ['id', 'description', 'created']
 
-    def __init__(self, data):
+    def _parse_special_fields(self, data):
         """
-        Takes JSON data and maps the keys as class properties, while also
-        requiring certain keys to be present to make sure we got the response
-        we wanted.
+        Helper method that parses special fields to Python objects
 
-        :param data: JSON data from appropriate Monzo API request
+        :param data: response from Monzo API request
         :type data: dict
         """
-        super(MonzoAccount, self).__init__(data)
-
-        # Take care of non-usual fields
-        self.created = dateutil.parser.parse(data.pop('created'))
-
-        # Map the rest of the fields automatically
-        self.__dict__.update(**data)
+        self.created = parse_date(data.pop('created'))
 
 
 class MonzoBalance(MonzoObject):
@@ -67,20 +72,6 @@ class MonzoBalance(MonzoObject):
     Class representation of Monzo account balance
     """
     _required_keys = ['balance', 'currency', 'spend_today']
-
-    def __init__(self, data):
-        """
-        Takes JSON data and maps the keys as class properties, while also
-        requiring certain keys to be present to make sure we got the response
-        we wanted.
-
-        :param data: JSON data from appropriate Monzo API request
-        :type data: dict
-        """
-        super(MonzoBalance, self).__init__(data)
-
-        # Map all the fields automatically
-        self.__dict__.update(**data)
 
 
 class MonzoTransaction(MonzoObject):
@@ -92,30 +83,22 @@ class MonzoTransaction(MonzoObject):
         'id', 'merchant', 'metadata', 'notes', 'is_load',
     ]
 
-    def __init__(self, data):
+    def _parse_special_fields(self, data):
         """
-        Takes JSON data and maps the keys as class properties, while also
-        requiring certain keys to be present to make sure we got the response
-        we wanted.
+        Helper method that parses special fields to Python objects
 
-        :param data: JSON data from appropriate Monzo API request
+        :param data: response from Monzo API request
         :type data: dict
         """
-        super(MonzoTransaction, self).__init__(data)
-
-        # Take care of non-usual fields
-        self.created = dateutil.parser.parse(data.pop('created'))
+        self.created = parse_date(data.pop('created'))
 
         if data.get('settled'):  # Not always returned
-            self.settled = dateutil.parser.parse(data.pop('settled'))
+            self.settled = parse_date(data.pop('settled'))
 
         # Merchant field can contain either merchant ID or the whole object
         if (data.get('merchant') and
                 not isinstance(data['merchant'], six.text_type)):
             self.merchant = MonzoMerchant(data=data.pop('merchant'))
-
-        # Map the rest of the fields automatically
-        self.__dict__.update(**data)
 
 
 class MonzoMerchant(MonzoObject):
@@ -127,19 +110,11 @@ class MonzoMerchant(MonzoObject):
         'logo', 'emoji', 'name', 'category',
     ]
 
-    def __init__(self, data):
+    def _parse_special_fields(self, data):
         """
-        Takes JSON data and maps the keys as class properties, while also
-        requiring certain keys to be present to make sure we got the response
-        we wanted.
+        Helper method that parses special fields to Python objects
 
-        :param data: JSON data from appropriate Monzo API request
+        :param data: response from Monzo API request
         :type data: dict
         """
-        super(MonzoMerchant, self).__init__(data)
-
-        # Take care of non-usual fields
-        self.created = dateutil.parser.parse(data.pop('created'))
-
-        # Map the rest of the fields automatically
-        self.__dict__.update(**data)
+        self.created = parse_date(data.pop('created'))
