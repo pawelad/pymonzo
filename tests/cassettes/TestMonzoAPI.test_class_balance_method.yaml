@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/accounts
+  response:
+    body: {string: "{\"accounts\":[{\"id\":\"acc_REDACTED\",\"created\"\
+        :\"2010-01-01T12:00:00.000Z\",\"description\":\"Bender Rodriguez\",\"type\"\
+        :\"uk_prepaid\"}]}"}
+    headers:
+      CF-RAY: [39fe77e9997e5625-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:28:25 GMT']
+      Server: [cloudflare-nginx]
+      Set-Cookie: ['__cfduid=d58bbdc86cabbcc0bcd2a25bbd762d4fe1505676504; expires=Mon,
+          17-Sep-18 19:28:24 GMT; path=/; domain=.monzo.com; HttpOnly']
+      Trace-Id: [ec4b861b-d42f-44a6-6995-c8ae4ce37fb1]
+      Transfer-Encoding: [chunked]
+      content-length: ['139']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/balance?account_id=acc_REDACTED
+  response:
+    body: {string: '{"balance":1567,"currency":"GBP","spend_today":0,"local_currency":"CAD","local_exchange_rate":1.653504,"local_spend":[]}'}
+    headers:
+      CF-RAY: [39fe77eecc9f5625-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:28:25 GMT']
+      Server: [cloudflare-nginx]
+      Trace-Id: [fec18f53-de37-452c-45d3-541da8fa1751]
+      Transfer-Encoding: [chunked]
+      content-length: ['120']
+    status: {code: 200, message: OK}
+version: 1

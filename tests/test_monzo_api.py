@@ -5,201 +5,329 @@ Test 'pymonzo.monzo_api' file
 from __future__ import unicode_literals
 
 import os
+import shelve
+import tempfile
+from contextlib import closing
+from shelve import DbfilenameShelf
 from uuid import uuid4
 
 import pytest
 import six
-from requests_oauthlib import OAuth2Session
+from six.moves.urllib.parse import urljoin
 
 from pymonzo import MonzoAPI
-from pymonzo.exceptions import MonzoAPIException
 from pymonzo.api_objects import (
     MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
 )
-from pymonzo.monzo_api import (
-    MONZO_ACCESS_TOKEN_ENV, MONZO_AUTH_CODE_ENV,
-    MONZO_CLIENT_ID_ENV, MONZO_CLIENT_SECRET_ENV,
-)
+from pymonzo import config
 
 
-# Fixtures
-@pytest.fixture(scope='function')
-def monzo():
-    """Create a `MonzoAPI` instance"""
-    return MonzoAPI(access_token=os.environ.get(MONZO_ACCESS_TOKEN_ENV))
-
-
-# Tests
-@pytest.mark.parametrize('access_token', [
-    None,
-    os.environ.get(MONZO_ACCESS_TOKEN_ENV),
-])
-def test_init_access_token(monkeypatch, mocker, access_token):
-    """Test initialization with only `access_token` provided"""
-    # Make sure that other auth options are invalid
-    monkeypatch.delenv(MONZO_AUTH_CODE_ENV, raising=False)
-    monkeypatch.delenv(MONZO_CLIENT_ID_ENV, raising=False)
-    monkeypatch.delenv(MONZO_CLIENT_SECRET_ENV, raising=False)
-    is_file = mocker.patch('os.path.isfile')
-    is_file.return_value = False
-
-    monzo = MonzoAPI(access_token=access_token)
-
-    assert monzo
-    assert monzo._token['access_token'] == os.environ.get(
-        MONZO_ACCESS_TOKEN_ENV
-    )
-    assert monzo._token['token_type'] == 'Bearer'
-
-
-@pytest.mark.parametrize('client_id,client_secret,auth_code', [
-    (None, None, None),
-    (str(uuid4), str(uuid4), str(uuid4)),
-])
-def test_init_oauth(monkeypatch, mocker, client_id, client_secret, auth_code):
+class TestMonzoAPI:
     """
-    Test initialization with `client_id`, `client_secret` and `auth_code`
+    Test `monzo_api.MonzoAPI` class
     """
-    # Mock request that gets the OAuth token
-    mocked_get_oauth_token = mocker.patch.object(MonzoAPI, '_get_oauth_token')
-    mocked_get_oauth_token.return_value = {
-        'access_token': os.environ.get(MONZO_ACCESS_TOKEN_ENV),
-        'token_type': 'Bearer',
-    }
 
-    # Make sure that other auth options are invalid
-    monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
-    is_file = mocker.patch('os.path.isfile')
-    is_file.return_value = False
+    @pytest.fixture(scope='session')
+    def monzo(self):
+        """Helper fixture that returns a `MonzoAPI` instance"""
+        return MonzoAPI(access_token='explicit_access_token')
 
-    # Set the environment variables
-    monkeypatch.setenv(MONZO_CLIENT_ID_ENV, str(uuid4))
-    monkeypatch.setenv(MONZO_CLIENT_SECRET_ENV, str(uuid4))
-    monkeypatch.setenv(MONZO_AUTH_CODE_ENV, str(uuid4))
+    @pytest.fixture
+    def mocked_monzo(self, mocker):
+        """Helper fixture that returns a mocked `MonzoAPI` instance"""
+        mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocker.patch('pymonzo.monzo_api.MonzoAPI._save_token_on_disk')
 
-    monzo = MonzoAPI(
-        client_id=client_id,
-        client_secret=client_secret,
-        auth_code=auth_code,
-    )
+        client_id = 'explicit_client_id'
+        client_secret = 'explicit_client_secret'
+        auth_code = 'explicit_auth_code'
 
-    assert monzo
-    assert mocked_get_oauth_token.called
-    assert mocked_get_oauth_token.call_count == 1
+        monzo = MonzoAPI(
+            client_id=client_id,
+            client_secret=client_secret,
+            auth_code=auth_code,
+        )
 
+        return monzo
 
-def test_init_no_data(monkeypatch, mocker):
-    """Test initialization with no auth data provided"""
-    # Make sure that all auth options are invalid
-    monkeypatch.delenv(MONZO_ACCESS_TOKEN_ENV, raising=False)
-    monkeypatch.delenv(MONZO_AUTH_CODE_ENV, raising=False)
-    monkeypatch.delenv(MONZO_CLIENT_ID_ENV, raising=False)
-    monkeypatch.delenv(MONZO_CLIENT_SECRET_ENV, raising=False)
-    is_file = mocker.patch('os.path.isfile')
-    is_file.return_value = False
+    def test_class_initialization(self, monkeypatch, mocker):
+        """Test class `__init__` method"""
+        access_token = 'explicit_access_token'
+        client_id = 'explicit_client_id'
+        client_secret = 'explicit_client_secret'
+        auth_code = 'explicit_auth_code'
+        monkeypatch.setenv(config.MONZO_ACCESS_TOKEN_ENV, 'env_access_token')
+        monkeypatch.setenv(config.MONZO_CLIENT_ID_ENV, 'env_client_id')
+        monkeypatch.setenv(config.MONZO_CLIENT_SECRET_ENV, 'env_client_secret')
+        monkeypatch.setenv(config.MONZO_AUTH_CODE_ENV, 'env_auth_code')
 
-    with pytest.raises(ValueError):
-        MonzoAPI()
+        # When we provide all variables both explicitly and via environment
+        # variables, the explicit 'access token' should take precedence
+        mocker.patch('os.path.isfile', return_value=True)
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        expected_token = {
+            'access_token': 'explicit_access_token',
+            'token_type': 'Bearer',
+        }
 
+        monzo = MonzoAPI(
+            access_token=access_token, client_id=client_id,
+            client_secret=client_secret, auth_code=auth_code,
+        )
 
-def test_init_session(monzo):
-    """Test session initialization"""
-    assert monzo._session
-    assert monzo._session.token
-    assert isinstance(monzo._session, OAuth2Session)
+        assert monzo._access_token == 'explicit_access_token'
+        assert monzo._client_id is None
+        assert monzo._client_secret is None
+        assert monzo._auth_code is None
+        assert monzo._token == expected_token
+        mocked_oauth2_session.assert_called_once_with(
+            client_id=None,
+            token=expected_token,
+        )
 
+        # Don't pass 'access_token' explicitly
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocked_get_oauth_token = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._get_oauth_token'
+        )
+        expected_token = mocked_get_oauth_token.return_value
 
-def test_init_default_account_id(monzo):
-    """Test setting the default account ID on initialization"""
-    assert monzo.default_account_id == monzo.accounts()[0].id
+        monzo = MonzoAPI(
+            client_id=client_id,
+            client_secret=client_secret,
+            auth_code=auth_code,
+        )
 
+        assert monzo._access_token is None
+        assert monzo._client_id == 'explicit_client_id'
+        assert monzo._client_secret == 'explicit_client_secret'
+        assert monzo._auth_code == 'explicit_auth_code'
+        assert monzo._token == expected_token
+        mocked_get_oauth_token.assert_called_once_with()
+        mocked_oauth2_session.assert_called_once_with(
+            client_id='explicit_client_id',
+            token=expected_token,
+        )
 
-def test_raising_exception():
-    """Test API error caching and exception raising"""
-    with pytest.raises(MonzoAPIException):
-        MonzoAPI(access_token=str(uuid4))
+        # Don't pass anything explicitly and the token file exists
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocker.patch('os.path.isfile', return_value=True)
+        mocked_shelve_file = mocker.MagicMock(spec=DbfilenameShelf)
+        mocked_shelve_open = mocker.patch('shelve.open')
+        mocked_shelve_open.return_value = mocked_shelve_file
+        expected_token = mocked_shelve_file['token']
 
+        monzo = MonzoAPI()
 
-def test_whoami(monzo):
-    """Test `whoami()` method"""
-    whoami = monzo.whoami()
+        assert monzo._access_token is None
+        assert monzo._client_id is None
+        assert monzo._client_secret is None
+        assert monzo._auth_code is None
+        assert monzo._token == expected_token
+        mocked_get_oauth_token.assert_called_once_with()
+        mocked_oauth2_session.assert_called_once_with(
+            client_id=None,
+            token=expected_token,
+        )
 
-    assert whoami
-    assert isinstance(whoami, dict)
+        # Don't pass anything explicitly, the token file doesn't exist
+        # and 'access_token' environment variable exists
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocker.patch('os.path.isfile', return_value=False)
 
+        expected_token = {
+            'access_token': 'env_access_token',
+            'token_type': 'Bearer',
+        }
 
-def test_accounts(monzo):
-    """Test `accounts()` method"""
-    accounts = monzo.accounts()
+        monzo = MonzoAPI()
 
-    assert accounts
-    assert isinstance(accounts, list)
-    assert all([isinstance(i, MonzoAccount) for i in accounts])
+        assert monzo._access_token == 'env_access_token'
+        assert monzo._client_id is None
+        assert monzo._client_secret is None
+        assert monzo._auth_code is None
+        assert monzo._token == expected_token
+        mocked_oauth2_session.assert_called_once_with(
+            client_id=None,
+            token=expected_token,
+        )
 
+        # Don't pass anything explicitly, the token file doesn't exist
+        # and 'access_token' environment variable doesn't exist
+        monkeypatch.delenv(config.MONZO_ACCESS_TOKEN_ENV)
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocked_get_oauth_token = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._get_oauth_token'
+        )
+        expected_token = mocked_get_oauth_token.return_value
 
-def test_balance(monzo):
-    """Test `balance()` method"""
-    balance = monzo.balance()
+        monzo = MonzoAPI()
 
-    assert balance
-    assert isinstance(balance, MonzoBalance)
+        assert monzo._access_token is None
+        assert monzo._client_id == 'env_client_id'
+        assert monzo._client_secret == 'env_client_secret'
+        assert monzo._auth_code == 'env_auth_code'
+        assert monzo._token == expected_token
+        mocked_get_oauth_token.assert_called_once_with()
+        mocked_oauth2_session.assert_called_once_with(
+            client_id='env_client_id',
+            token=expected_token,
+        )
 
-    # No account ID provided
-    with pytest.raises(ValueError):
-        monzo.default_account_id = None
-        monzo.balance()
+        # None of the above
+        monkeypatch.delenv(config.MONZO_CLIENT_ID_ENV)
 
+        with pytest.raises(ValueError):
+            MonzoAPI(
+                auth_code=auth_code, client_id=client_id,
+            )
 
-def test_transactions(monzo):
-    """Test `transactions()` method"""
-    transactions = monzo.transactions()
+    def test_class_save_token_on_disk_method(self):
+        """Test class `_save_token_on_disk` method"""
+        config.TOKEN_FILE_PATH = os.path.join(
+            tempfile.gettempdir(), 'pymonzo_test',
+        )
+        token = {
+            'foo': str(uuid4()),
+            'bar': 1,
+            'baz': False,
+        }
 
-    assert transactions
-    assert isinstance(transactions, list)
-    assert all([isinstance(t, MonzoTransaction) for t in transactions])
+        MonzoAPI._save_token_on_disk(token)
 
-    # Limit results
-    assert len(monzo.transactions(limit=5)) == 5
+        with closing(shelve.open(config.TOKEN_FILE_PATH)) as f:
+            assert f['token'] == token
 
-    # Reverse results
-    transactions_reverse = monzo.transactions(reverse=True)
+    def test_class_get_oauth_token_method(self, mocker, mocked_monzo):
+        """Test class `_get_oauth_token` method"""
+        mocked_fetch_token = mocker.MagicMock()
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocked_oauth2_session.return_value.fetch_token = mocked_fetch_token
+        mocked_save_token_on_disk = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._save_token_on_disk'
+        )
 
-    assert transactions_reverse
-    assert isinstance(transactions_reverse, list)
-    assert all([isinstance(t, MonzoTransaction) for t in transactions_reverse])
-    # No easy way to test reverse so lets just make sure it does _something_
-    assert transactions is not transactions_reverse
+        token = mocked_monzo._get_oauth_token()
 
-    # No account ID provided
-    with pytest.raises(ValueError):
-        monzo.default_account_id = None
-        monzo.transactions()
+        assert token == mocked_fetch_token.return_value
 
+        mocked_oauth2_session.assert_called_once_with(
+            client_id=mocked_monzo._client_id,
+            redirect_uri=config.PYMONZO_REDIRECT_URI,
+        )
+        mocked_fetch_token.assert_called_once_with(
+            token_url=urljoin(mocked_monzo.api_url, '/oauth2/token'),
+            code=mocked_monzo._auth_code,
+            client_secret=mocked_monzo._client_secret,
+        )
+        mocked_save_token_on_disk.assert_called_once_with(
+            mocked_fetch_token.return_value
+        )
 
-def test_transaction(monzo):
-    """Test `transaction()` method"""
-    transaction_id = monzo.transactions(limit=1)[0].id
+    def test_class_refresh_oath_token_method(self, mocker, mocked_monzo):
+        """Test class `_refresh_oath_token` method"""
+        mocked_requests_post_json = mocker.MagicMock()
+        mocked_requests_post = mocker.patch('pymonzo.monzo_api.requests.post')
+        mocked_requests_post.return_value.json = mocked_requests_post_json
+        mocked_save_token_on_disk = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._save_token_on_disk'
+        )
 
-    transaction = monzo.transaction(transaction_id=transaction_id)
+        token = mocked_monzo._refresh_oath_token()
 
-    assert transaction
-    assert isinstance(transaction, MonzoTransaction)
+        assert token == mocked_requests_post_json.return_value
 
-    # Depends on what the latest transaction is and if it has a merchant
-    if transaction.merchant:
+        mocked_requests_post.assert_called_once_with(
+            urljoin(mocked_monzo.api_url, '/oauth2/token'),
+            data={
+                'grant_type': 'refresh_token',
+                'client_id': mocked_monzo._client_id,
+                'client_secret': mocked_monzo._client_secret,
+                'refresh_token': mocked_monzo._token['refresh_token'],
+            }
+        )
+        mocked_requests_post_json.assert_called_once_with()
+        mocked_save_token_on_disk.assert_called_once_with(
+            mocked_requests_post_json.return_value
+        )
+
+    @pytest.mark.vcr()
+    def test_class_whoami_method(self, monzo):
+        """Test class `whoami` method"""
+        whoami = monzo.whoami()
+
+        assert whoami
+        assert isinstance(whoami, dict)
+
+        assert 'authenticated' in whoami
+        assert 'client_id' in whoami
+        assert 'user_id' in whoami
+
+    @pytest.mark.vcr()
+    def test_class_accounts_method(self, monzo):
+        """Test class `accounts` method"""
+        accounts = monzo.accounts()
+
+        assert accounts
+        assert isinstance(accounts, list)
+        assert all([isinstance(i, MonzoAccount) for i in accounts])
+
+    @pytest.mark.vcr()
+    def test_class_balance_method(self, monzo):
+        """Test class `balance` method"""
+        balance = monzo.balance()
+
+        assert balance
+        assert isinstance(balance, MonzoBalance)
+
+    @pytest.mark.vcr()
+    def test_class_transactions_method(self, monzo):
+        """Test class `transactions` method"""
+        transactions = monzo.transactions()
+
+        assert transactions
+        assert isinstance(transactions, list)
+        assert all([isinstance(t, MonzoTransaction) for t in transactions])
+
+        # Non-revered results
+        transactions_asc = monzo.transactions(reverse=False)
+
+        assert transactions_asc
+        assert isinstance(transactions_asc, list)
+        assert all([
+            isinstance(t, MonzoTransaction) for t in transactions_asc
+        ])
+
+        assert transactions == list(reversed(transactions_asc))
+
+        # Limit results
+        transactions_limit = monzo.transactions(limit=5)
+
+        assert transactions_limit
+        assert isinstance(transactions_limit, list)
+        assert all([
+            isinstance(t, MonzoTransaction)
+            for t in transactions_limit
+        ])
+        assert len(transactions_limit) == 5
+
+    @pytest.mark.vcr()
+    def test_class_transaction_method(self, monzo):
+        """Test class `transaction` method"""
+        transaction_id = 'tx_REDACTED7'
+
+        transaction = monzo.transaction(transaction_id=transaction_id)
+
+        assert transaction
+        assert isinstance(transaction, MonzoTransaction)
         assert isinstance(transaction.merchant, six.text_type)
 
-    # Expand merchant
-    transaction_expand_merchant = monzo.transaction(
-        transaction_id=transaction_id,
-        expand_merchant=True,
-    )
+        # Expand merchant
+        transaction_expand_merchant = monzo.transaction(
+            transaction_id=transaction_id,
+            expand_merchant=True,
+        )
 
-    assert transaction_expand_merchant
-    assert isinstance(transaction_expand_merchant, MonzoTransaction)
-    # Depends on what the latest transaction is and if it has a merchant
-    if transaction_expand_merchant.merchant:
+        assert transaction_expand_merchant
+        assert isinstance(transaction_expand_merchant, MonzoTransaction)
         assert isinstance(transaction_expand_merchant.merchant, MonzoMerchant)
-
-    # No easy way to test reverse so lets just make sure it does _something_
-    assert transaction is not transaction_expand_merchant

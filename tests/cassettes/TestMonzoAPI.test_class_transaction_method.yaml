@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/transactions/tx_REDACTED7
+  response:
+    body: {string: '{"transaction":{"id":"tx_REDACTED7","created":"2010-01-07T12:00:00.000Z","description":"TIM        HORTONS #3143# Q   TORONTO
+        CAN","amount":-605,"currency":"GBP","merchant":"merch_REDACTED7","notes":"","metadata":{"trip_id":"trip_REDACTED7"},"account_balance":11232,"attachments":[],"category":"eating_out","is_load":false,"settled":"2010-01-07T12:00:00.000Z","local_amount":-970,"local_currency":"CAD","updated":"2010-01-07T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED7","originator":false,"include_in_spending":true}}'}
+    headers:
+      CF-RAY: [39fef539ef4c54ec-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 20:53:57 GMT']
+      Server: [cloudflare-nginx]
+      Trace-Id: [36d37ddf-d097-47bd-4fd7-726688f2d03c]
+      Transfer-Encoding: [chunked]
+      content-length: ['652']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/transactions/tx_REDACTED7?expand%5B%5D=merchant
+  response:
+    body: {string: '{"transaction":{"id":"tx_REDACTED7","created":"2010-01-07T12:00:00.000Z","description":"TIM
+        HORTONS #3143# Q   TORONTO       CAN","amount":-605,"currency":"GBP","merchant":{"id":"merch_REDACTED7","group_id":"grp_REDACTED7","created":"2010-01-07T12:00:00.000Z","name":"Tim
+        Hortons #3143# Q","logo":"","emoji":"","category":"eating_out","online":false,"atm":false,"address":{"short_formatted":"148        Simcoe Street, Toronto, Ontario, M5h 3g4, Canada","formatted":"148 Simcoe
+        Street, Toronto, Ontario, M5h 3g4, Canada","address":"148 Simcoe Street","city":"Toronto","region":"Ontario","country":"CAN","postcode":"M5H        3G4","latitude":43.649731,"longitude":-79.387238,"zoom_level":17,"approximate":false},"updated":"2010-01-07T12:00:0.000Z","metadata":{"created_for_transaction":"tx_REDACTED7","enriched_from_settlement":"tx_REDACTED7","google_places_icon":"https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png","google_places_id":"ChIJXZNPHs40K4gR_QYiai0CuF4","google_places_name":"Tim        Hortons","suggested_name":"Tim Hortons"},"disable_feedback":false},"notes":"","metadata":{"trip_id":"trip_REDACTED7"},"account_balance":11232,"attachments":[],"category":"eating_out","is_load":false,"settled":"2010-01-07T12:00:00.000Z","local_amount":-970,"local_currency":"CAD","updated":"2010-01-07T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED7","originator":false,"include_in_spending":true}}'}
+    headers:
+      CF-RAY: [39fef53cb92a54ec-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 20:53:58 GMT']
+      Server: [cloudflare-nginx]
+      Trace-Id: [8cff028d-7c77-4ae6-7642-226ef508eae2]
+      Transfer-Encoding: [chunked]
+      content-length: ['1560']
+    status: {code: 200, message: OK}
+version: 1

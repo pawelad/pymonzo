@@ -1,0 +1,111 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/accounts
+  response:
+    body: {string: "{\"accounts\":[{\"id\":\"acc_REDACTED\",\"created\"\
+        :\"2010-01-01T12:00:00.000Z\",\"description\":\"Bender Rodriguez\",\"type\"\
+        :\"uk_prepaid\"}]}"}
+    headers:
+      CF-RAY: [39fe9bcf184b71a3-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:52:55 GMT']
+      Server: [cloudflare-nginx]
+      Set-Cookie: ['__cfduid=dee59aee86b374b666d85d7ea255687541505677974; expires=Mon,
+          17-Sep-18 19:52:54 GMT; path=/; domain=.monzo.com; HttpOnly']
+      Trace-Id: [3a27919a-10db-442c-4ea6-d0c003c9d1d5]
+      Transfer-Encoding: [chunked]
+      content-length: ['139']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/transactions?account_id=acc_REDACTED
+  response:
+    body: {string: '{"transactions":[{"id":"tx_REDACTED1","created":"2010-01-01T12:00:00.000Z","description":"Initial
+        top up","amount":10000,"currency":"GBP","merchant":null,"notes":"","metadata":{"is_topup":"true"},"account_balance":10000,"attachments":[],"category":"mondo","is_load":true,"settled":"2010-01-01T12:00:00.000Z","local_amount":10000,"local_currency":"GBP","updated":"2010-01-01T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED1","originator":false,"include_in_spending":false},{"id":"tx_REDACTED2","created":"2010-01-02T12:00:00.000Z","description":"South
+        Bristol Sports   01179038681   GBR","amount":-700,"currency":"GBP","merchant":"merch_REDACTED2","notes":"","metadata":{},"account_balance":3480,"attachments":[],"category":"general","is_load":false,"settled":"2010-01-02T12:00:00.000Z","local_amount":-700,"local_currency":"GBP","updated":"2010-01-02T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED2","originator":false,"include_in_spending":true},{"id":"tx_REDACTED3","created":"2010-01-03T12:00:00.000Z","description":"Top
+        up","amount":5000,"currency":"GBP","merchant":null,"notes":"","metadata":{"is_topup":"true","stripe_card_last_four":"REDA","stripe_charge_id":"ch_REDACTED"},"account_balance":5664,"attachments":[],"category":"mondo","is_load":true,"settled":"2010-01-03T12:00:00.000Z","local_amount":5000,"local_currency":"GBP","updated":"2010-01-03T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED3","originator":false,"include_in_spending":false},{"id":"tx_REDACTED4","created":"2010-01-04T12:00:00.000Z","description":"BAGEL
+        BOY              BRISTOL       GBR","amount":-500,"currency":"GBP","merchant":"merch_REDACTED4","notes":"","metadata":{},"account_balance":5164,"attachments":[],"category":"groceries","is_load":false,"settled":"2010-01-04T12:00:00.000Z","local_amount":-500,"local_currency":"GBP","updated":"2010-01-04T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED4","originator":false,"include_in_spending":true},{"id":"tx_REDACTED5","created":"2010-01-05T12:00:00.000Z","description":"NORWICH
+        CTY OFFICE     NORWICH       GBR","amount":0,"currency":"GBP","merchant":"merch_REDACTED5","notes":"","metadata":{},"account_balance":1505,"attachments":[],"category":"cash","is_load":false,"settled":"","decline_reason":"INVALID_PIN","local_amount":-20000,"local_currency":"GBP","updated":"2010-01-05T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED5","originator":false,"include_in_spending":false},{"id":"tx_REDACTED6","created":"2010-01-06T12:00:00.000Z","description":"NORWICH
+        CTY OFFICE     NORWICH       GBR","amount":0,"currency":"GBP","merchant":"merch_REDACTED6","notes":"","metadata":{},"account_balance":1505,"attachments":[],"category":"cash","is_load":false,"settled":"","decline_reason":"OTHER","local_amount":-20000,"local_currency":"GBP","updated":"2010-01-06T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED6","originator":false,"include_in_spending":false},{"id":"tx_REDACTED7","created":"2010-01-07T12:00:00.000Z","description":"TIM
+        HORTONS #3143# Q   TORONTO       CAN","amount":-605,"currency":"GBP","merchant":"merch_REDACTED7","notes":"","metadata":{"trip_id":"trip_REDACTED7"},"account_balance":11232,"attachments":[],"category":"eating_out","is_load":false,"settled":"2010-01-07T12:00:00.000Z","local_amount":-970,"local_currency":"CAD","updated":"2010-01-07T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED7","originator":false,"include_in_spending":true}]}'}
+    headers:
+      CF-RAY: [39fe9bd37aa571a3-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:52:57 GMT']
+      Server: [cloudflare-nginx]
+      Trace-Id: [ca5208c6-33a8-4246-7b96-36734c002bde]
+      Transfer-Encoding: [chunked]
+      content-length: ['183728']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/transactions?account_id=acc_REDACTED
+  response:
+    body: {string: '{"transactions":[{"id":"tx_REDACTED1","created":"2010-01-01T12:00:00.000Z","description":"Initial
+        top up","amount":10000,"currency":"GBP","merchant":null,"notes":"","metadata":{"is_topup":"true"},"account_balance":10000,"attachments":[],"category":"mondo","is_load":true,"settled":"2010-01-01T12:00:00.000Z","local_amount":10000,"local_currency":"GBP","updated":"2010-01-01T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED1","originator":false,"include_in_spending":false},{"id":"tx_REDACTED2","created":"2010-01-02T12:00:00.000Z","description":"South
+        Bristol Sports   01179038681   GBR","amount":-700,"currency":"GBP","merchant":"merch_REDACTED2","notes":"","metadata":{},"account_balance":3480,"attachments":[],"category":"general","is_load":false,"settled":"2010-01-02T12:00:00.000Z","local_amount":-700,"local_currency":"GBP","updated":"2010-01-02T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED2","originator":false,"include_in_spending":true},{"id":"tx_REDACTED3","created":"2010-01-03T12:00:00.000Z","description":"Top
+        up","amount":5000,"currency":"GBP","merchant":null,"notes":"","metadata":{"is_topup":"true","stripe_card_last_four":"REDA","stripe_charge_id":"ch_REDACTED"},"account_balance":5664,"attachments":[],"category":"mondo","is_load":true,"settled":"2010-01-03T12:00:00.000Z","local_amount":5000,"local_currency":"GBP","updated":"2010-01-03T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED3","originator":false,"include_in_spending":false},{"id":"tx_REDACTED4","created":"2010-01-04T12:00:00.000Z","description":"BAGEL
+        BOY              BRISTOL       GBR","amount":-500,"currency":"GBP","merchant":"merch_REDACTED4","notes":"","metadata":{},"account_balance":5164,"attachments":[],"category":"groceries","is_load":false,"settled":"2010-01-04T12:00:00.000Z","local_amount":-500,"local_currency":"GBP","updated":"2010-01-04T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED4","originator":false,"include_in_spending":true},{"id":"tx_REDACTED5","created":"2010-01-05T12:00:00.000Z","description":"NORWICH
+        CTY OFFICE     NORWICH       GBR","amount":0,"currency":"GBP","merchant":"merch_REDACTED5","notes":"","metadata":{},"account_balance":1505,"attachments":[],"category":"cash","is_load":false,"settled":"","decline_reason":"INVALID_PIN","local_amount":-20000,"local_currency":"GBP","updated":"2010-01-05T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED5","originator":false,"include_in_spending":false},{"id":"tx_REDACTED6","created":"2010-01-06T12:00:00.000Z","description":"NORWICH
+        CTY OFFICE     NORWICH       GBR","amount":0,"currency":"GBP","merchant":"merch_REDACTED6","notes":"","metadata":{},"account_balance":1505,"attachments":[],"category":"cash","is_load":false,"settled":"","decline_reason":"OTHER","local_amount":-20000,"local_currency":"GBP","updated":"2010-01-06T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED6","originator":false,"include_in_spending":false},{"id":"tx_REDACTED7","created":"2010-01-07T12:00:00.000Z","description":"TIM
+        HORTONS #3143# Q   TORONTO       CAN","amount":-605,"currency":"GBP","merchant":"merch_REDACTED7","notes":"","metadata":{"trip_id":"trip_REDACTED7"},"account_balance":11232,"attachments":[],"category":"eating_out","is_load":false,"settled":"2010-01-07T12:00:00.000Z","local_amount":-970,"local_currency":"CAD","updated":"2010-01-07T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED7","originator":false,"include_in_spending":true}]}'}
+    headers:
+      CF-RAY: [39fe9bd37aa571a3-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:52:57 GMT']
+      Server: [cloudflare-nginx]
+      Trace-Id: [ca5208c6-33a8-4246-7b96-36734c002bde]
+      Transfer-Encoding: [chunked]
+      content-length: ['183728']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/transactions?account_id=acc_REDACTED
+  response:
+    body: {string: '{"transactions":[{"id":"tx_REDACTED1","created":"2010-01-01T12:00:00.000Z","description":"Initial
+        top up","amount":10000,"currency":"GBP","merchant":null,"notes":"","metadata":{"is_topup":"true"},"account_balance":10000,"attachments":[],"category":"mondo","is_load":true,"settled":"2010-01-01T12:00:00.000Z","local_amount":10000,"local_currency":"GBP","updated":"2010-01-01T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED1","originator":false,"include_in_spending":false},{"id":"tx_REDACTED2","created":"2010-01-02T12:00:00.000Z","description":"South
+        Bristol Sports   01179038681   GBR","amount":-700,"currency":"GBP","merchant":"merch_REDACTED2","notes":"","metadata":{},"account_balance":3480,"attachments":[],"category":"general","is_load":false,"settled":"2010-01-02T12:00:00.000Z","local_amount":-700,"local_currency":"GBP","updated":"2010-01-02T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED2","originator":false,"include_in_spending":true},{"id":"tx_REDACTED3","created":"2010-01-03T12:00:00.000Z","description":"Top
+        up","amount":5000,"currency":"GBP","merchant":null,"notes":"","metadata":{"is_topup":"true","stripe_card_last_four":"REDA","stripe_charge_id":"ch_REDACTED"},"account_balance":5664,"attachments":[],"category":"mondo","is_load":true,"settled":"2010-01-03T12:00:00.000Z","local_amount":5000,"local_currency":"GBP","updated":"2010-01-03T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED3","originator":false,"include_in_spending":false},{"id":"tx_REDACTED4","created":"2010-01-04T12:00:00.000Z","description":"BAGEL
+        BOY              BRISTOL       GBR","amount":-500,"currency":"GBP","merchant":"merch_REDACTED4","notes":"","metadata":{},"account_balance":5164,"attachments":[],"category":"groceries","is_load":false,"settled":"2010-01-04T12:00:00.000Z","local_amount":-500,"local_currency":"GBP","updated":"2010-01-04T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED4","originator":false,"include_in_spending":true},{"id":"tx_REDACTED5","created":"2010-01-05T12:00:00.000Z","description":"NORWICH
+        CTY OFFICE     NORWICH       GBR","amount":0,"currency":"GBP","merchant":"merch_REDACTED5","notes":"","metadata":{},"account_balance":1505,"attachments":[],"category":"cash","is_load":false,"settled":"","decline_reason":"INVALID_PIN","local_amount":-20000,"local_currency":"GBP","updated":"2010-01-05T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED5","originator":false,"include_in_spending":false},{"id":"tx_REDACTED6","created":"2010-01-06T12:00:00.000Z","description":"NORWICH
+        CTY OFFICE     NORWICH       GBR","amount":0,"currency":"GBP","merchant":"merch_REDACTED6","notes":"","metadata":{},"account_balance":1505,"attachments":[],"category":"cash","is_load":false,"settled":"","decline_reason":"OTHER","local_amount":-20000,"local_currency":"GBP","updated":"2010-01-06T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED6","originator":false,"include_in_spending":false},{"id":"tx_REDACTED7","created":"2010-01-07T12:00:00.000Z","description":"TIM
+        HORTONS #3143# Q   TORONTO       CAN","amount":-605,"currency":"GBP","merchant":"merch_REDACTED7","notes":"","metadata":{"trip_id":"trip_REDACTED7"},"account_balance":11232,"attachments":[],"category":"eating_out","is_load":false,"settled":"2010-01-07T12:00:00.000Z","local_amount":-970,"local_currency":"CAD","updated":"2010-01-07T12:00:00.000Z","account_id":"acc_REDACTED","counterparty":{},"scheme":"gps_mastercard","dedupe_id":"REDACTED7","originator":false,"include_in_spending":true}]}'}
+    headers:
+      CF-RAY: [39fe9bd37aa571a3-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:52:57 GMT']
+      Server: [cloudflare-nginx]
+      Trace-Id: [ca5208c6-33a8-4246-7b96-36734c002bde]
+      Transfer-Encoding: [chunked]
+      content-length: ['183728']
+    status: {code: 200, message: OK}
+version: 1

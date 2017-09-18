@@ -1,0 +1,27 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/ping/whoami
+  response:
+    body: {string: '{"authenticated":true,"client_id":"oauthclient_REDACTED","user_id":"user_REDACTED"}
+
+        '}
+    headers:
+      CF-RAY: [39fe616d78d109ca-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:13:04 GMT']
+      Server: [cloudflare-nginx]
+      Set-Cookie: ['__cfduid=d8879bfcc15003029cb71c83426130dbc1505675583; expires=Mon,
+          17-Sep-18 19:13:03 GMT; path=/; domain=.monzo.com; HttpOnly']
+      Trace-Id: [ec0911bb-3ad1-4c5e-7157-0149eda0dfa1]
+      Transfer-Encoding: [chunked]
+      content-length: ['112']
+    status: {code: 200, message: OK}
+version: 1

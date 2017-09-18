@@ -7,6 +7,19 @@ from __future__ import unicode_literals
 import pytest
 
 
+# pytest-vcr
+@pytest.fixture
+def vcr_config():
+    """
+    Custom vcr.py config
+    """
+    return {
+        'filter_headers': ['authorization', 'Cookie'],
+        'decode_compressed_response': True,
+    }
+
+
+# Example Monzo API responses from docs
 @pytest.fixture(scope='session')
 def accounts_api_response():
     """"
