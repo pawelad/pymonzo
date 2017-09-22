@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 
 import os
 import shelve
+import warnings
 from contextlib import closing
 
 import requests
@@ -111,6 +112,12 @@ class MonzoAPI(CommonMixin):
     @staticmethod
     def _save_token_on_disk(token):
         """Helper function that saves passed token on disk"""
+        warnings.warn(
+            "Token file format will be changed from 'shelve' to JSON in next "
+            "release and will need to be regenerated.",
+            DeprecationWarning,
+        )
+
         with closing(shelve.open(config.TOKEN_FILE_PATH)) as f:
             f['token'] = token
 

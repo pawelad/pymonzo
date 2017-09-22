@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased]
+### Added
+ - Added deprecation warning about changing token file format from `shelve` to
+   JSON in next release (#4)
 
 ## [0.9.0] - 2017-09-17
 ### Added
