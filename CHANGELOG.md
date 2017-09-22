@@ -6,6 +6,8 @@ adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
 ## Changed
+ - Changed token file format from `shelve` to JSON. Because of that the file
+   will need to be regenerated. (#3)
  - Updated `six` library to version 1.11.0.
 
 ## [0.9.1][v0.9.1] - 2017-09-21

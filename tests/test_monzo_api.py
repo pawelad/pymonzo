@@ -4,12 +4,10 @@ Test 'pymonzo.monzo_api' file
 """
 from __future__ import unicode_literals
 
+import codecs
+import json
 import os
-import shelve
 import tempfile
-from contextlib import closing
-from shelve import DbfilenameShelf
-from uuid import uuid4
 
 import pytest
 import six
@@ -112,10 +110,9 @@ class TestMonzoAPI:
         # Don't pass anything explicitly and the token file exists
         mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
         mocker.patch('os.path.isfile', return_value=True)
-        mocked_shelve_file = mocker.MagicMock(spec=DbfilenameShelf)
-        mocked_shelve_open = mocker.patch('shelve.open')
-        mocked_shelve_open.return_value = mocked_shelve_file
-        expected_token = mocked_shelve_file['token']
+        mocked_open = mocker.patch('codecs.open', mocker.mock_open())
+        mocked_json_load = mocker.patch('json.load')
+        expected_token = mocked_json_load.return_value
 
         monzo = MonzoAPI()
 
@@ -124,6 +121,10 @@ class TestMonzoAPI:
         assert monzo._client_secret is None
         assert monzo._auth_code is None
         assert monzo._token == expected_token
+        mocked_open.assert_called_once_with(
+            config.TOKEN_FILE_PATH, 'r', 'utf-8',
+        )
+        mocked_json_load.assert_called_once_with(mocked_open.return_value)
         mocked_get_oauth_token.assert_called_once_with()
         mocked_oauth2_session.assert_called_once_with(
             client_id=None,
@@ -188,15 +189,15 @@ class TestMonzoAPI:
             tempfile.gettempdir(), 'pymonzo_test',
         )
         token = {
-            'foo': str(uuid4()),
+            'foo': u'UNICODE',
             'bar': 1,
             'baz': False,
         }
 
         MonzoAPI._save_token_on_disk(token)
 
-        with closing(shelve.open(config.TOKEN_FILE_PATH)) as f:
-            assert f['token'] == token
+        with codecs.open(config.TOKEN_FILE_PATH, 'r', 'utf-8') as f:
+            assert token == json.load(f)
 
     def test_class_get_oauth_token_method(self, mocker, mocked_monzo):
         """Test class `_get_oauth_token` method"""
