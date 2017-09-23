@@ -6,19 +6,19 @@ adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
 
-## [0.10.0][v0.10.0] - 2017-09-22
+## [v0.10.0][v0.10.0] - 2017-09-22
 ## Changed
  - Changed token file format from `shelve` to JSON. Because of that the file
    will need to be regenerated. (#3)
  - Updated `six` library to version 1.11.0.
 
-## [0.9.1][v0.9.1] - 2017-09-21
+## [v0.9.1][v0.9.1] - 2017-09-21
 ### Deprecated
  - Added deprecation warning about changing token file format from `shelve`
    to JSON in next release. Because of that the file will need to be
    regenerated. (#4)
 
-## [0.9.0][v0.9.0] - 2017-09-17
+## [v0.9.0][v0.9.0] - 2017-09-17
 ### Added
 - Started keeping a changelog.
 
