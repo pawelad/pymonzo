@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+
+## [0.10.0][v0.10.0] - 2017-09-22
 ## Changed
  - Changed token file format from `shelve` to JSON. Because of that the file
    will need to be regenerated. (#3)
@@ -27,6 +29,7 @@ adheres to [Semantic Versioning][semver].
 
 [keepachangelog]: http://keepachangelog.com/en/1.0.0/
 [semver]: http://semver.org/spec/v2.0.0.html
-[unreleased]: https://github.com/pawelad/pymonzo/compare/v0.9.1...HEAD
+[unreleased]: https://github.com/pawelad/pymonzo/compare/v0.10.0...HEAD
 [v0.9.0]: https://github.com/pawelad/pymonzo/releases/tag/v0.9.0
 [v0.9.1]: https://github.com/pawelad/pymonzo/releases/tag/v0.9.1
+[v0.10.0]: https://github.com/pawelad/pymonzo/releases/tag/v0.10.0

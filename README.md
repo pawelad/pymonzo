@@ -99,7 +99,7 @@ Code coverage is available at [Coveralls][coveralls].
 To run tests yourself you need to run `tox` inside the repository:
 
 ```shell
-$ git clone
+$ git clone https://github.com/pawelad/pymonzo && cd pymonzo
 $ pip install tox
 $ tox
 ```
