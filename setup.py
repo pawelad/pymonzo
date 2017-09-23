@@ -46,7 +46,8 @@ setup(
     author_email='pawel.ad@gmail.com',
     maintainer='Paweł Adamczak',
     maintainer_email='pawel.ad@gmail.com',
-    description='An - dare I say it - awesome Python Monzo public API wrapper',
+    description='An - dare I say it - awesome Python wrapper for '
+                'Monzo public API.',
     long_description=description,
     packages=find_packages(where='src'),
     package_dir={'': 'src'},

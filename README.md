@@ -5,12 +5,22 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pymonzo.svg)][pypi]
 [![License](https://img.shields.io/github/license/pawelad/pymonzo.svg)][license]
 
-An - dare I say it - awesome Python [Monzo][monzo] public API wrapper.
+An - dare I say it - awesome Python wrapper for [Monzo][monzo] public API.
 
 It creates a layer of abstraction and returns Python objects instead of just
-passing along the received JSONs. It also deals with authentication and allows
+passing along received JSONs. It also deals with authentication and allows
 using either an access token or fully authenticate via OAuth 2 that's a
-[PITA to set up](#oauth-2) but also automatically refreshes in the background.
+[PITA to set up](#oauth-2) but automatically refreshes in the background.
+
+The library currently does not implement feed items, webhooks and attachments
+endpoints - they were't essential to my current needs and they could be 
+completely different in the future - per [docs][monzo docs introduction]:
+
+> The Monzo API is under active development. Breaking changes should be expected.
+
+With the above disclaimer from Monzo, `pymonzo` currently as stable as it gets
+before the actual API becomes stable, at which point I'm planning to fully
+implement all of its endpoints and release version 1.0.
 
 ## Installation
 From PyPI:
