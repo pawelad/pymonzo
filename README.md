@@ -18,9 +18,9 @@ completely different in the future - per [docs][monzo docs introduction]:
 
 > The Monzo API is under active development. Breaking changes should be expected.
 
-With the above disclaimer from Monzo, `pymonzo` currently as stable as it gets
-before the actual API becomes stable, at which point I'm planning to fully
-implement all of its endpoints and release version 1.0.
+With the above disclaimer from Monzo, `pymonzo` is as stable as it gets before
+the actual API becomes stable, at which point I'm planning to fully implement
+all of its endpoints and release version 1.0.
 
 ## Installation
 From PyPI:
