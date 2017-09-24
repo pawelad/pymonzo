@@ -15,8 +15,8 @@ script:
   - tox
 
 before_install:
-  - pip install coverage coveralls
+  - pip install coveralls
 
 after_success:
-  - coverage report
+  - tox -e coverage-report
   - coveralls
