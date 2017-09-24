@@ -254,7 +254,6 @@ class TestMonzoAPI:
             mocked_requests_post_json.return_value
         )
 
-
     @pytest.mark.vcr()
     def test_class_whoami_method(self, monzo):
         """Test class `whoami` method"""
