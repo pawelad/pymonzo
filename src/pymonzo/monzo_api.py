@@ -15,7 +15,7 @@ from six.moves.urllib.parse import urljoin
 
 from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
 from pymonzo import config
-from pymonzo.exceptions import MonzoAPIException
+from pymonzo.exceptions import MonzoAPIException, UnableToRefreshTokenException
 from pymonzo.utils import CommonMixin
 
 
@@ -153,8 +153,7 @@ class MonzoAPI(CommonMixin):
         Official docs:
             https://monzo.com/docs/#refreshing-access
 
-        :returns: OAuth 2 access token
-        :rtype: dict
+        :raises UnableToRefreshTokenException: when token couldn't be refreshed
         """
         url = urljoin(self.api_url, '/oauth2/token')
         data = {
@@ -167,9 +166,13 @@ class MonzoAPI(CommonMixin):
         token_response = requests.post(url, data=data)
         token = token_response.json()
 
-        self._save_token_on_disk(token)
+        if 'error' in token:
+            raise UnableToRefreshTokenException(
+                "Unable to refresh the token: {}".format(token)
+            )
 
-        return token
+        self._token = token
+        self._save_token_on_disk(token)
 
     def _get_response(self, method, endpoint, params=None):
         """
@@ -197,7 +200,7 @@ class MonzoAPI(CommonMixin):
         except TokenExpiredError:
             # For some reason 'requests-oauthlib' automatic token refreshing
             # doesn't work so we do it here semi-manually
-            self._token = self._refresh_oath_token()
+            self._refresh_oath_token()
 
             self._session = OAuth2Session(
                 client_id=self._client_id,

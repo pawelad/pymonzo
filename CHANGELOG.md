@@ -5,14 +5,18 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+### Changed
+- `MonzoAPI()._refresh_oath_token()` now doesn't return anything, replaces
+  current token and raises `UnableToRefreshTokenException` when token couldn't
+  be refreshed.
 
 ## [v0.10.1][v0.10.1] - 2017-09-24
-## Fixed
+### Fixed
 - Try to refresh token if API request returned HTTP 401 (which could mean that
   the token is expired). (#6)
 
 ## [v0.10.0][v0.10.0] - 2017-09-22
-## Changed
+### Changed
  - Changed token file format from `shelve` to JSON. Because of that the file
    will need to be regenerated. (#3)
  - Updated `six` library to version 1.11.0.
