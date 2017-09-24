@@ -234,23 +234,26 @@ class TestMonzoAPI:
             'pymonzo.monzo_api.MonzoAPI._save_token_on_disk'
         )
 
-        token = mocked_monzo._refresh_oath_token()
+        expected_data = {
+            'grant_type': 'refresh_token',
+            'client_id': mocked_monzo._client_id,
+            'client_secret': mocked_monzo._client_secret,
+            'refresh_token': mocked_monzo._token['refresh_token'],
+        }
 
-        assert token == mocked_requests_post_json.return_value
+        mocked_monzo._refresh_oath_token()
+
+        assert mocked_monzo._token == mocked_requests_post_json.return_value
 
         mocked_requests_post.assert_called_once_with(
             urljoin(mocked_monzo.api_url, '/oauth2/token'),
-            data={
-                'grant_type': 'refresh_token',
-                'client_id': mocked_monzo._client_id,
-                'client_secret': mocked_monzo._client_secret,
-                'refresh_token': mocked_monzo._token['refresh_token'],
-            }
+            data=expected_data,
         )
         mocked_requests_post_json.assert_called_once_with()
         mocked_save_token_on_disk.assert_called_once_with(
             mocked_requests_post_json.return_value
         )
+
 
     @pytest.mark.vcr()
     def test_class_whoami_method(self, monzo):
