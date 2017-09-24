@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+## Fixed
+- Try to refresh token if API request returned HTTP 401 (which could mean that
+  the token is expired). (#6)
 
 ## [v0.10.0][v0.10.0] - 2017-09-22
 ## Changed

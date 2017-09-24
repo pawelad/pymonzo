@@ -188,6 +188,12 @@ class MonzoAPI(CommonMixin):
 
         try:
             response = getattr(self._session, method)(url, params=params)
+
+            # Check if Monzo API returned HTTP 401, which could mean that the
+            # token is expired
+            if response.status_code == 401:
+                raise TokenExpiredError
+
         except TokenExpiredError:
             # For some reason 'requests-oauthlib' automatic token refreshing
             # doesn't work so we do it here semi-manually
@@ -202,7 +208,7 @@ class MonzoAPI(CommonMixin):
 
         if response.status_code != requests.codes.ok:
             raise MonzoAPIException(
-                "Something wrong happened: {}".format(response.json())
+                "Something went wrong: {}".format(response.json())
             )
 
         return response
