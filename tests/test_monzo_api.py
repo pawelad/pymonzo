@@ -117,7 +117,7 @@ class TestMonzoAPI:
         monzo = MonzoAPI()
 
         assert monzo._access_token is None
-        assert monzo._client_id is None
+        assert monzo._client_id is expected_token['client_id']
         assert monzo._client_secret is None
         assert monzo._auth_code is None
         assert monzo._token == expected_token
@@ -127,7 +127,7 @@ class TestMonzoAPI:
         mocked_json_load.assert_called_once_with(mocked_open.return_value)
         mocked_get_oauth_token.assert_called_once_with()
         mocked_oauth2_session.assert_called_once_with(
-            client_id=None,
+            client_id=expected_token['client_id'],
             token=expected_token,
         )
 
