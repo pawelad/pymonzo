@@ -15,7 +15,9 @@ from six.moves.urllib.parse import urljoin
 
 from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
 from pymonzo import config
-from pymonzo.exceptions import MonzoAPIException, UnableToRefreshTokenException
+from pymonzo.exceptions import MonzoAPIException, UnableToGetToken, \
+    UnableToRefreshTokenException
+
 from pymonzo.utils import CommonMixin
 
 
@@ -71,7 +73,7 @@ class MonzoAPI(CommonMixin):
             self._auth_code = auth_code
 
             self._token = self._get_oauth_token()
-        # c) token file saved on the disk and possibly passing in 'client_secret'
+        # c) token file saved on the disk with passed 'client_secret'
         elif os.path.isfile(config.TOKEN_FILE_PATH):
             with codecs.open(config.TOKEN_FILE_PATH, 'r', 'utf-8') as f:
                 self._token = json.load(f)
@@ -131,7 +133,15 @@ class MonzoAPI(CommonMixin):
 
         :returns: OAuth 2 access token
         :rtype: dict
+        :raises UnableToGetToken: when no client secret is present
         """
+
+        # Check if we have a secret to generate an oauth token
+        if self._client_secret is None:
+            raise UnableToGetToken(
+                'Unable to get token due to no client secret being provided'
+            )
+
         url = urljoin(self.api_url, '/oauth2/token')
 
         oauth = OAuth2Session(
@@ -157,7 +167,15 @@ class MonzoAPI(CommonMixin):
             https://monzo.com/docs/#refreshing-access
 
         :raises UnableToRefreshTokenException: when token couldn't be refreshed
+        :raises UnableToGetToken: when no client secret is present
         """
+
+        # Check if we have a secret to generate an oauth token
+        if self._client_secret is None:
+            raise UnableToGetToken(
+                'Unable to get token due to no client secret being provided'
+            )
+
         url = urljoin(self.api_url, '/oauth2/token')
         data = {
             'grant_type': 'refresh_token',
