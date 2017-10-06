@@ -12,8 +12,8 @@ adheres to [Semantic Versioning][semver].
 
 ### Changed
 - `MonzoAPI()._refresh_oath_token()` now doesn't return anything, replaces
-  current token and raises `UnableToRefreshTokenException` when token couldn't
-  be refreshed.
+  current token and raises `CantRefreshTokenError` when token couldn't be
+  refreshed.
 - Client secret is now saved in token file JSON file.
 - Cleaned up exceptions.
 
