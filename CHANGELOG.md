@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+### Fixed
+- Fixed automatic token refreshing - thanks @bartonp! (#5)
+
 ### Changed
 - `MonzoAPI()._refresh_oath_token()` now doesn't return anything, replaces
   current token and raises `UnableToRefreshTokenException` when token couldn't
