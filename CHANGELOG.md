@@ -5,10 +5,15 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+### Fixed
+- Fixed automatic token refreshing - thanks @bartonp! (#5)
+
 ### Changed
 - `MonzoAPI()._refresh_oath_token()` now doesn't return anything, replaces
   current token and raises `UnableToRefreshTokenException` when token couldn't
   be refreshed.
+- Client secret is now saved in token file JSON file.
+- Cleaned up exceptions.
 
 ## [v0.10.1][v0.10.1] - 2017-09-24
 ### Fixed
