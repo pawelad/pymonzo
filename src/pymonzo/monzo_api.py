@@ -15,8 +15,7 @@ from six.moves.urllib.parse import urljoin
 
 from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
 from pymonzo import config
-from pymonzo.exceptions import MonzoAPIException, UnableToGetToken, \
-    UnableToRefreshTokenException
+from pymonzo.exceptions import MonzoAPIError, CantRefreshTokenError
 
 from pymonzo.utils import CommonMixin
 
@@ -138,15 +137,7 @@ class MonzoAPI(CommonMixin):
 
         :returns: OAuth 2 access token
         :rtype: dict
-        :raises UnableToGetToken: when no client secret is present
         """
-
-        # Check if we have a secret to generate an oauth token
-        if self._client_secret is None:
-            raise UnableToGetToken(
-                'Unable to get token due to no client secret being provided'
-            )
-
         url = urljoin(self.api_url, '/oauth2/token')
 
         oauth = OAuth2Session(
@@ -172,15 +163,7 @@ class MonzoAPI(CommonMixin):
             https://monzo.com/docs/#refreshing-access
 
         :raises UnableToRefreshTokenException: when token couldn't be refreshed
-        :raises UnableToGetToken: when no client secret is present
         """
-
-        # Check if we have a secret to generate an oauth token
-        if self._client_secret is None:
-            raise UnableToGetToken(
-                'Unable to get token due to no client secret being provided'
-            )
-
         url = urljoin(self.api_url, '/oauth2/token')
         data = {
             'grant_type': 'refresh_token',
@@ -192,8 +175,9 @@ class MonzoAPI(CommonMixin):
         token_response = requests.post(url, data=data)
         token = token_response.json()
 
+        # Not ideal, but that's how Monzo API returns errors
         if 'error' in token:
-            raise UnableToRefreshTokenException(
+            raise CantRefreshTokenError(
                 "Unable to refresh the token: {}".format(token)
             )
 
@@ -236,7 +220,7 @@ class MonzoAPI(CommonMixin):
             response = getattr(self._session, method)(url, params=params)
 
         if response.status_code != requests.codes.ok:
-            raise MonzoAPIException(
+            raise MonzoAPIError(
                 "Something went wrong: {}".format(response.json())
             )
 
