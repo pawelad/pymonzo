@@ -73,13 +73,13 @@ class MonzoAPI(CommonMixin):
             self._auth_code = auth_code
 
             self._token = self._get_oauth_token()
-        # c) token file saved on the disk with passed 'client_secret'
+        # c) token file saved on the disk
         elif os.path.isfile(config.TOKEN_FILE_PATH):
             with codecs.open(config.TOKEN_FILE_PATH, 'r', 'utf-8') as f:
                 self._token = json.load(f)
+
             self._client_id = self._token['client_id']
-            if client_secret is not None:
-                self._client_secret = client_secret
+            self._client_secret = self._token['client_secret']
         # d) 'access_token' saved as a environment variable
         elif os.getenv(config.MONZO_ACCESS_TOKEN_ENV):
             self._access_token = os.getenv(config.MONZO_ACCESS_TOKEN_ENV)
@@ -113,9 +113,14 @@ class MonzoAPI(CommonMixin):
             token=self._token,
         )
 
-    @staticmethod
-    def _save_token_on_disk(token):
+    def _save_token_on_disk(self):
         """Helper function that saves passed token on disk"""
+        token = self._token.copy()
+
+        # Client secret is needed for token refreshing and isn't returned
+        # as a pared of OAuth token by default
+        token.update(client_secret=self._client_secret)
+
         with codecs.open(config.TOKEN_FILE_PATH, 'w', 'utf8') as f:
             json.dump(
                 token, f,
@@ -155,7 +160,7 @@ class MonzoAPI(CommonMixin):
             client_secret=self._client_secret,
         )
 
-        self._save_token_on_disk(token)
+        self._save_token_on_disk()
 
         return token
 
@@ -193,7 +198,7 @@ class MonzoAPI(CommonMixin):
             )
 
         self._token = token
-        self._save_token_on_disk(token)
+        self._save_token_on_disk()
 
     def _get_response(self, method, endpoint, params=None):
         """
