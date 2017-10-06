@@ -93,7 +93,7 @@ $ export MONZO_AUTH_CODE='...'
 That's it! The token is then saved on the disk (`~/.pymonzo`) and is
 automatically refreshed when needed, so all this (_should_) be one time only.
 
-## API
+## Docs
 There's no proper documentation as of now, but the code is commented and
 *should* be pretty straightforward to use.
 
