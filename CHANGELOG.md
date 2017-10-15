@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+### Fixed
+- Fixed saving token file to disk. (#9)
 
 ## [v0.10.2][v0.10.2] - 2017-10-05
 ### Fixed
