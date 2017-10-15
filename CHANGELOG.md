@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+
+## [v0.10.3][v0.10.3] - 2017-10-15
 ### Fixed
 - Fixed saving token file to disk. (#9)
 
@@ -53,3 +55,4 @@ adheres to [Semantic Versioning][semver].
 [v0.10.0]: https://github.com/pawelad/pymonzo/releases/tag/v0.10.0
 [v0.10.1]: https://github.com/pawelad/pymonzo/releases/tag/v0.10.1
 [v0.10.2]: https://github.com/pawelad/pymonzo/releases/tag/v0.10.2
+[v0.10.3]: https://github.com/pawelad/pymonzo/releases/tag/v0.10.3
