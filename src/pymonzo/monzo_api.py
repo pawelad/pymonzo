@@ -72,6 +72,7 @@ class MonzoAPI(CommonMixin):
             self._auth_code = auth_code
 
             self._token = self._get_oauth_token()
+            self._save_token_on_disk()
         # c) token file saved on the disk
         elif os.path.isfile(config.TOKEN_FILE_PATH):
             with codecs.open(config.TOKEN_FILE_PATH, 'r', 'utf-8') as f:
@@ -97,6 +98,7 @@ class MonzoAPI(CommonMixin):
             self._auth_code = os.getenv(config.MONZO_AUTH_CODE_ENV)
 
             self._token = self._get_oauth_token()
+            self._save_token_on_disk()
         else:
             raise ValueError(
                 "To authenticate and use Monzo public API you need to pass "
@@ -113,7 +115,7 @@ class MonzoAPI(CommonMixin):
         )
 
     def _save_token_on_disk(self):
-        """Helper function that saves passed token on disk"""
+        """Helper function that saves the token on disk"""
         token = self._token.copy()
 
         # Client secret is needed for token refreshing and isn't returned
@@ -150,8 +152,6 @@ class MonzoAPI(CommonMixin):
             code=self._auth_code,
             client_secret=self._client_secret,
         )
-
-        self._save_token_on_disk()
 
         return token
 

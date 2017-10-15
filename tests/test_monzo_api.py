@@ -88,6 +88,9 @@ class TestMonzoAPI:
         mocked_get_oauth_token = mocker.patch(
             'pymonzo.monzo_api.MonzoAPI._get_oauth_token'
         )
+        mocked_save_token_on_disk = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._save_token_on_disk'
+        )
         expected_token = mocked_get_oauth_token.return_value
 
         monzo = MonzoAPI(
@@ -102,6 +105,7 @@ class TestMonzoAPI:
         assert monzo._auth_code == 'explicit_auth_code'
         assert monzo._token == expected_token
         mocked_get_oauth_token.assert_called_once_with()
+        mocked_save_token_on_disk.assert_called_once_with()
         mocked_oauth2_session.assert_called_once_with(
             client_id='explicit_client_id',
             token=expected_token,
@@ -160,6 +164,9 @@ class TestMonzoAPI:
         mocked_get_oauth_token = mocker.patch(
             'pymonzo.monzo_api.MonzoAPI._get_oauth_token'
         )
+        mocked_save_token_on_disk = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._save_token_on_disk'
+        )
         expected_token = mocked_get_oauth_token.return_value
 
         monzo = MonzoAPI()
@@ -170,6 +177,7 @@ class TestMonzoAPI:
         assert monzo._auth_code == 'env_auth_code'
         assert monzo._token == expected_token
         mocked_get_oauth_token.assert_called_once_with()
+        mocked_save_token_on_disk.assert_called_once_with()
         mocked_oauth2_session.assert_called_once_with(
             client_id='env_client_id',
             token=expected_token,
@@ -208,9 +216,6 @@ class TestMonzoAPI:
         mocked_fetch_token = mocker.MagicMock()
         mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
         mocked_oauth2_session.return_value.fetch_token = mocked_fetch_token
-        mocked_save_token_on_disk = mocker.patch(
-            'pymonzo.monzo_api.MonzoAPI._save_token_on_disk'
-        )
 
         token = mocked_monzo._get_oauth_token()
 
@@ -225,7 +230,6 @@ class TestMonzoAPI:
             code=mocked_monzo._auth_code,
             client_secret=mocked_monzo._client_secret,
         )
-        mocked_save_token_on_disk.assert_called_once_with()
 
     def test_class_refresh_oath_token_method(self, mocker, mocked_monzo):
         """Test class `_refresh_oath_token` method"""
