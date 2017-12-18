@@ -271,6 +271,18 @@ class TestMonzoAPI:
         assert 'user_id' in whoami
 
     @pytest.mark.vcr()
+    def test_class_profile_method(self, monzo):
+        """Test class `profile` method"""
+        profile = monzo.profile()
+
+        assert profile
+        assert isinstance(profile, dict)
+
+        assert 'authenticated' in profile
+        assert 'client_id' in profile
+        assert 'user_id' in profile
+
+    @pytest.mark.vcr()
     def test_class_accounts_method(self, monzo):
         """Test class `accounts` method"""
         accounts = monzo.accounts()
