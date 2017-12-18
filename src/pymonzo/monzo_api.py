@@ -242,14 +242,14 @@ class MonzoAPI(CommonMixin):
         )
 
         return response.json()
-    
+
     def profile(self):
         """
         Get information about the user.
-        
+
         Official docs:
             TBC
-            
+
         :returns: User profile details
         :rtype: dict
         """
