@@ -300,6 +300,23 @@ class MonzoAPI(CommonMixin):
 
         return MonzoBalance(data=response.json())
 
+    def pots(self):
+        """
+        Get full list and balance of pots.
+
+        Official docs:
+            https://monzo.com/docs/#pots
+
+        :returns: name, balance, created, update information of all pots
+        """
+        endpoint = '/pots/listV1'
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+        )
+
+        return response.json()
+
+    
     def transactions(self, account_id=None, reverse=True, limit=None):
         """
         Returns a list of transactions on the user's account.
