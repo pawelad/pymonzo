@@ -303,15 +303,13 @@ class MonzoAPI(CommonMixin):
     
     def pots(self, refresh=False):
         """
-        Returns a list of accounts owned by the currently authorised user.
-        It's often used when deciding whether to require explicit account ID
-        or use the only available one, so we cache the response by default.
+        Returns a list of pts owned by the currently authorised user.
         Official docs:
-            https://monzo.com/docs/#list-accounts
-        :param refresh: decides if the accounts information should be refreshed
+            https://monzo.com/docs/#pots
+        :param refresh: decides if the pots information should be refreshed
         :type refresh: bool
-        :returns: list of Monzo accounts
-        :rtype: list of MonzoAccount
+        :returns: list of Monzo pots
+        :rtype: list of MonzoPot
         """
         if not refresh and self._cached_pots:
             return self._cached_pots
