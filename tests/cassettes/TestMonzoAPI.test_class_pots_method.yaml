@@ -1,0 +1,27 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.monzo.com/pots/listV1
+  response:
+    body: {string: !!python/unicode '{"code":"unauthorized.bad_access_token","error":"invalid_token","error_description":"Bad
+        access token","message":"Bad access token"}
+
+        '}
+    headers:
+      cf-ray: [3dfc299bdb1b3446-LHR]
+      connection: [keep-alive]
+      content-length: ['133']
+      content-type: [application/json]
+      date: ['Fri, 19 Jan 2018 19:22:24 GMT']
+      expect-ct: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
+      server: [cloudflare]
+      terror: ['1']
+      trace-id: [2f1c3a27-64eb-47bc-4997-d867145f8684]
+    status: {code: 401, message: Unauthorized}
+version: 1

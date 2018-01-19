@@ -16,6 +16,7 @@ from six.moves.urllib.parse import urljoin
 from pymonzo import MonzoAPI
 from pymonzo.api_objects import (
     MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
+    MonzoPot
 )
 from pymonzo import config
 
@@ -278,6 +279,15 @@ class TestMonzoAPI:
         assert accounts
         assert isinstance(accounts, list)
         assert all([isinstance(i, MonzoAccount) for i in accounts])
+
+    @pytest.mark.vcr()
+    def test_class_pots_method(self, monzo):
+        """Test class `pots` method"""
+        pots = monzo.pots()
+
+        assert pots
+        assert isinstance(pots, list)
+        assert all([isinstance(i, MonzoPot) for i in pots])
 
     @pytest.mark.vcr()
     def test_class_balance_method(self, monzo):
