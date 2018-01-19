@@ -299,7 +299,35 @@ class MonzoAPI(CommonMixin):
         )
 
         return MonzoBalance(data=response.json())
+    
+    def pots(self, refresh=False):
+        """
+        Returns a list of accounts owned by the currently authorised user.
+        It's often used when deciding whether to require explicit account ID
+        or use the only available one, so we cache the response by default.
+        Official docs:
+            https://monzo.com/docs/#list-accounts
+        :param refresh: decides if the accounts information should be refreshed
+        :type refresh: bool
+        :returns: list of Monzo accounts
+        :rtype: list of MonzoAccount
+        """
+        if not refresh and self._cached_pots:
+            return self._cached_pots
 
+        endpoint = '/pots/listV1'
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+        )
+
+        pots_json = response.json()['pots']
+        pots = [MonzoPot(data=pot) for pot in pots_json]
+        self._cached_pots = pots
+
+        return pots
+    
+    
+    
     def transactions(self, account_id=None, reverse=True, limit=None):
         """
         Returns a list of transactions on the user's account.
