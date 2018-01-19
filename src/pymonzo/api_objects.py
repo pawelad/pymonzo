@@ -68,7 +68,7 @@ class MonzoAccount(MonzoObject):
         
 class MonzoPot(MonzoObject):
     """
-    Class representation of Monzo account
+    Class representation of Monzo pot
     """
     _required_keys = ['id', 'name', 'created']
 
