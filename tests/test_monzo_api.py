@@ -16,8 +16,8 @@ from six.moves.urllib.parse import urljoin
 from pymonzo import MonzoAPI
 from pymonzo.api_objects import (
     MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
-    MonzoPot
 )
+from pymonzo.api_objects import MonzoPot
 from pymonzo import config
 
 

@@ -9,19 +9,18 @@ interactions:
     method: GET
     uri: https://api.monzo.com/pots/listV1
   response:
-    body: {string: !!python/unicode '{"code":"unauthorized.bad_access_token","error":"invalid_token","error_description":"Bad
-        access token","message":"Bad access token"}
-
-        '}
+    body: {string: "{\"pots\":[{\"style\":\"rain\",\"id\":\"pot_REDACTED\",\"created\"\
+        :\"2010-01-01T12:00:00.000Z\",\"name\":\"Monthly Savings\",\"deleted\":false,\"currency\":\"GBP\",\"balance\":500}]}"}
     headers:
-      cf-ray: [3dfc299bdb1b3446-LHR]
-      connection: [keep-alive]
-      content-length: ['133']
-      content-type: [application/json]
-      date: ['Fri, 19 Jan 2018 19:22:24 GMT']
-      expect-ct: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
-      server: [cloudflare]
-      terror: ['1']
-      trace-id: [2f1c3a27-64eb-47bc-4997-d867145f8684]
-    status: {code: 401, message: Unauthorized}
+      CF-RAY: [39fe6d7cfed27137-ORD]
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Sun, 17 Sep 2017 19:21:18 GMT']
+      Server: [cloudflare-nginx]
+      Set-Cookie: ['__cfduid=dadf85a60e3d24e27a2f9a3f49efb394f1505676077; expires=Mon,
+          17-Sep-18 19:21:17 GMT; path=/; domain=.monzo.com; HttpOnly']
+      Trace-Id: [1869982d-de71-4e99-6409-0d64f21d0459]
+      Transfer-Encoding: [chunked]
+      content-length: ['139']
+    status: {code: 200, message: OK}
 version: 1
