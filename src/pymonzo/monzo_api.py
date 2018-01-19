@@ -35,6 +35,7 @@ class MonzoAPI(CommonMixin):
     _auth_code = None
 
     _cached_accounts = None
+    _cached_pots = None
 
     def __init__(self, access_token=None, client_id=None, client_secret=None,
                  auth_code=None):
