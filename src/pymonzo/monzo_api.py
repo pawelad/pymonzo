@@ -13,7 +13,8 @@ from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth2Session
 from six.moves.urllib.parse import urljoin
 
-from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction, MonzoPot
+from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
+from pymonzo.api_objects import MonzoPot
 from pymonzo import config
 from pymonzo.exceptions import MonzoAPIError, CantRefreshTokenError
 
@@ -300,7 +301,7 @@ class MonzoAPI(CommonMixin):
         )
 
         return MonzoBalance(data=response.json())
-    
+
     def pots(self, refresh=False):
         """
         Returns a list of pots owned by the currently authorised user.
@@ -324,9 +325,7 @@ class MonzoAPI(CommonMixin):
         self._cached_pots = pots
 
         return pots
-    
-    
-    
+
     def transactions(self, account_id=None, reverse=True, limit=None):
         """
         Returns a list of transactions on the user's account.

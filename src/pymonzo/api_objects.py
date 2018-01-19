@@ -65,7 +65,8 @@ class MonzoAccount(MonzoObject):
         :type data: dict
         """
         self.created = parse_date(data.pop('created'))
-        
+
+
 class MonzoPot(MonzoObject):
     """
     Class representation of Monzo pot
