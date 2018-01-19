@@ -13,7 +13,7 @@ from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth2Session
 from six.moves.urllib.parse import urljoin
 
-from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
+from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction, MonzoPot
 from pymonzo import config
 from pymonzo.exceptions import MonzoAPIError, CantRefreshTokenError
 
