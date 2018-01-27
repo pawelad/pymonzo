@@ -39,6 +39,26 @@ def accounts_api_response():
     }
 
 
+# Example Monzo API responses from docs
+@pytest.fixture(scope='session')
+def pots_api_response():
+    """"
+    Helper fixture that returns an example Monzo API 'pots' response
+
+    Source:
+        https://monzo.com/docs/#pots
+    """
+    return {
+        'pots': [
+            {
+                'id': 'acc_00009237aqC8c5umZmrRdh',
+                'name': "Peter Pan's pot",
+                'created': '2015-11-13T12:17:42Z',
+            },
+        ],
+    }
+
+
 @pytest.fixture(scope='session')
 def balance_api_response():
     """"

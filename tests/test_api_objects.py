@@ -98,6 +98,52 @@ class TestMonzoAccount:
             self.klass(data=data)
 
 
+class TestMonzoPot:
+    """
+    Test `api_objects.MonzoPot` class
+    """
+    klass = api_objects.MonzoPot
+
+    @pytest.fixture(scope='session')
+    def data(self, pots_api_response):
+        """Simple fixture that returns data used to initialize the object"""
+        return pots_api_response['pots'][0]
+
+    @pytest.fixture(scope='session')
+    def instance(self, data):
+        """Simple fixture that returns initialize object"""
+        return self.klass(data)
+
+    def test_class_inheritance(self, instance):
+        """Test class inheritance"""
+        assert isinstance(instance, api_objects.MonzoPot)
+        assert isinstance(instance, api_objects.MonzoObject)
+
+    def test_class_properties(self, instance):
+        """Test class properties"""
+        expected_keys = ['id', 'name', 'created']
+        assert self.klass._required_keys == expected_keys
+        assert instance._required_keys == expected_keys
+
+    def test_class_initialization(self, instance, data):
+        """Test class `__init__` method"""
+        expected_data = data.copy()
+
+        assert instance._raw_data == data
+        del instance._raw_data
+
+        expected_data['created'] = parse_date(expected_data['created'])
+        assert vars(instance) == expected_data
+        assert isinstance(instance.created, datetime)
+
+    def test_class_lack_of_required_keys(self, mocker, data):
+        """Test class `__init__` method when data lack one of required keys"""
+        mocker.patch.multiple(self.klass, _required_keys='baz')
+
+        with pytest.raises(ValueError):
+            self.klass(data=data)
+
+
 class TestMonzoBalance:
     """
     Test `api_objects.MonzoBalance` class
