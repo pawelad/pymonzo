@@ -308,7 +308,7 @@ class MonzoAPI(CommonMixin):
 
         Official docs:
             https://monzo.com/docs/#pots
-            
+
         :param refresh: decides if the pots information should be refreshed.
         :type refresh: bool
         :returns: list of Monzo pots
