@@ -245,6 +245,23 @@ class MonzoAPI(CommonMixin):
 
         return response.json()
 
+    def profile(self):
+        """
+        Get information about the user.
+
+        Official docs:
+            TBC
+
+        :returns: User profile details
+        :rtype: dict
+        """
+        endpoint = '/profile'
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+        )
+
+        return response.json()
+
     def accounts(self, refresh=False):
         """
         Returns a list of accounts owned by the currently authorised user.
