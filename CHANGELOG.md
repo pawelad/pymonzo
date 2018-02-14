@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog][keepachangelog] and this project
 adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
+### Added
+- Added Monzo Pots API endpoint - thanks @Sheaffy! (#13)
 
 ## [v0.10.3][v0.10.3] - 2017-10-15
 ### Fixed
