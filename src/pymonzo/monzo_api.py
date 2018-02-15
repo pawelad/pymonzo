@@ -146,7 +146,7 @@ class MonzoAPI(CommonMixin):
 
         oauth = OAuth2Session(
             client_id=self._client_id,
-            redirect_uri=config.PYMONZO_REDIRECT_URI,
+            redirect_uri=config.REDIRECT_URI,
         )
 
         token = oauth.fetch_token(

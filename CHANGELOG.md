@@ -6,7 +6,12 @@ adheres to [Semantic Versioning][semver].
 
 ## [Unreleased][unreleased]
 ### Added
+- Made redirect URI, token file name and token path configurable via
+  environment variables. (#14)
 - Added Monzo Pots API endpoint - thanks @Sheaffy! (#13)
+
+### Changed
+- Renamed `config.PYMONZO_REDIRECT_URI` to `config.REDIRECT_URI`.
 
 ## [v0.10.3][v0.10.3] - 2017-10-15
 ### Fixed

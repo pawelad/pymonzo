@@ -223,7 +223,7 @@ class TestMonzoAPI:
 
         mocked_oauth2_session.assert_called_once_with(
             client_id=mocked_monzo._client_id,
-            redirect_uri=config.PYMONZO_REDIRECT_URI,
+            redirect_uri=config.REDIRECT_URI,
         )
         mocked_fetch_token.assert_called_once_with(
             token_url=urljoin(mocked_monzo.api_url, '/oauth2/token'),
