@@ -118,7 +118,8 @@ $ tox
 Package source code is available at [GitHub][github].
 
 Feel free to use, ask, fork, star, report bugs, fix them, suggest enhancements,
-add functionality and point out any mistakes. Thanks!
+add functionality and point out any mistakes.
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more info. Thanks!
 
 ## Authors
 Developed and maintained by [Paweł Adamczak][pawelad].
