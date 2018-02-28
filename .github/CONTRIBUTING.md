@@ -1,7 +1,7 @@
 # Contributing
 First of all - thanks for contributing (or thinking about it)! Honestly, that's
 really nice of you - there's a lot of other, _way_ more fun things you could've
-been doing instead soz thank you : -)
+been doing instead so thank you : -)
 
 This document is mainly to help you to get started by codifying tribal
 knowledge and expectations and make it more accessible to everyone. But don't
