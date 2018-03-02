@@ -16,7 +16,7 @@ class MonzoObject(CommonMixin):
     """
     _required_keys = []
 
-    def __init__(self, data):
+    def __init__(self, data, context=None):
         """
         Takes Monzo API response data and maps the keys as class properties.
         It requires certain keys to be present to make sure we got the response
@@ -43,6 +43,8 @@ class MonzoObject(CommonMixin):
 
         # Map the rest of the fields automatically
         self.__dict__.update(**data_copy)
+
+        self._context = context
 
     def _parse_special_fields(self, data):
         """
@@ -71,7 +73,7 @@ class MonzoPot(MonzoObject):
     """
     Class representation of Monzo pot
     """
-    _required_keys = ['id', 'name', 'created']
+    _required_keys = ['id', 'name', 'created', 'style', 'balance', 'currency', 'updated', 'deleted']
 
     def _parse_special_fields(self, data):
         """
@@ -81,6 +83,54 @@ class MonzoPot(MonzoObject):
         :type data: dict
         """
         self.created = parse_date(data.pop('created'))
+
+    def add(self, amount, account):
+        """
+        Adds an amount of whole pence from an account to this pot.
+
+        Official docs:
+            https://monzo.com/docs/#pots
+
+        :param amount: amount of pence to be moved
+        :type amount: int
+        :param account: Account
+        :type account: MonzoAccount
+        """
+
+        endpoint = '/pots/'+self.id+'/deposit'
+        response = self._context._get_response(
+            method='put', endpoint=endpoint,
+            params={
+                'account_id': account.id,
+                'amount': amount,
+            },
+        )
+
+        return self.__init__(data=response.json(), context=self._context)
+
+    def withdraw(self, amount, account):
+        """
+        Withdraw an amount of whole pence to an account from this pot.
+
+        Official docs:
+            https://monzo.com/docs/#pots
+
+        :param amount: amount of pence to be moved
+        :type amount: int
+        :param account: Account
+        :type account: MonzoAccount
+        """
+
+        endpoint = '/pots/'+self.id+'/withdraw'
+        response = self._context._get_response(
+            method='put', endpoint=endpoint,
+            params={
+                'account_id': account.id,
+                'amount': amount,
+            },
+        )
+
+        return self.__init__(data=response.json(), context=self._context)
 
 
 class MonzoBalance(MonzoObject):

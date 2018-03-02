@@ -317,16 +317,36 @@ class MonzoAPI(CommonMixin):
         if not refresh and self._cached_pots:
             return self._cached_pots
 
-        endpoint = '/pots/listV1'
+        endpoint = '/pots'
         response = self._get_response(
             method='get', endpoint=endpoint,
         )
 
         pots_json = response.json()['pots']
-        pots = [MonzoPot(data=pot) for pot in pots_json]
+        pots = [MonzoPot(data=pot, context=self) for pot in pots_json]
         self._cached_pots = pots
 
         return pots
+
+    def pot(self, pot_id):
+        """
+        Returns a single pot by ID, owned by the currently authorised user.
+
+        Official docs:
+            https://monzo.com/docs/#pots
+
+        :param pot_id: Pot ID
+        :type pot_id: str
+        :returns: Monzo pot
+        :rtype: MonzoPot
+        """
+
+        endpoint = '/pots/'+pot_id
+        response = self._get_response(
+            method='get', endpoint=endpoint,
+        )
+
+        return MonzoPot(data=response.json(), context=self)
 
     def transactions(self, account_id=None, reverse=True, limit=None):
         """
