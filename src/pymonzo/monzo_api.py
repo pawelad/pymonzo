@@ -186,7 +186,7 @@ class MonzoAPI(CommonMixin):
         self._token = token
         self._save_token_on_disk()
 
-    def _get_response(self, method, endpoint, params=None):
+    def _get_response(self, method, endpoint, params=None, body=None):
         """
         Helper method to handle HTTP requests and catch API errors
 
@@ -202,7 +202,7 @@ class MonzoAPI(CommonMixin):
         url = urljoin(self.api_url, endpoint)
 
         try:
-            response = getattr(self._session, method)(url, params=params)
+            response = getattr(self._session, method)(url, params=params, data=body)
 
             # Check if Monzo API returned HTTP 401, which could mean that the
             # token is expired
@@ -268,7 +268,7 @@ class MonzoAPI(CommonMixin):
         )
 
         accounts_json = response.json()['accounts']
-        accounts = [MonzoAccount(data=account) for account in accounts_json]
+        accounts = [MonzoAccount(data=account, context=self) for account in accounts_json]
         self._cached_accounts = accounts
 
         return accounts
@@ -300,7 +300,7 @@ class MonzoAPI(CommonMixin):
             },
         )
 
-        return MonzoBalance(data=response.json())
+        return MonzoBalance(data=response.json(), context=self)
 
     def pots(self, refresh=False):
         """
@@ -389,7 +389,7 @@ class MonzoAPI(CommonMixin):
         if limit:
             transactions = transactions[:limit]
 
-        return [MonzoTransaction(data=t) for t in transactions]
+        return [MonzoTransaction(data=t, context=self) for t in transactions]
 
     def transaction(self, transaction_id, expand_merchant=False):
         """
@@ -415,4 +415,4 @@ class MonzoAPI(CommonMixin):
             method='get', endpoint=endpoint, params=data,
         )
 
-        return MonzoTransaction(data=response.json()['transaction'])
+        return MonzoTransaction(data=response.json()['transaction'], context=self)

@@ -58,6 +58,9 @@ class MonzoAccount(MonzoObject):
     Class representation of Monzo account
     """
     _required_keys = ['id', 'description', 'created']
+    id = None
+    description = None
+    created = None
 
     def _parse_special_fields(self, data):
         """
@@ -74,6 +77,14 @@ class MonzoPot(MonzoObject):
     Class representation of Monzo pot
     """
     _required_keys = ['id', 'name', 'created', 'style', 'balance', 'currency', 'updated', 'deleted']
+    id = None
+    name = None
+    created = None
+    style = None
+    balance = None
+    currency = None
+    updated = None
+    deleted = None
 
     def _parse_special_fields(self, data):
         """
@@ -84,7 +95,7 @@ class MonzoPot(MonzoObject):
         """
         self.created = parse_date(data.pop('created'))
 
-    def add(self, amount, account):
+    def add(self, amount, account, dedupe):
         """
         Adds an amount of whole pence from an account to this pot.
 
@@ -100,15 +111,16 @@ class MonzoPot(MonzoObject):
         endpoint = '/pots/'+self.id+'/deposit'
         response = self._context._get_response(
             method='put', endpoint=endpoint,
-            params={
-                'account_id': account.id,
+            body={
+                'source_account_id': account.id,
                 'amount': amount,
+                'dedupe_id': dedupe,
             },
         )
 
         return self.__init__(data=response.json(), context=self._context)
 
-    def withdraw(self, amount, account):
+    def withdraw(self, amount, account, dedupe):
         """
         Withdraw an amount of whole pence to an account from this pot.
 
@@ -124,9 +136,10 @@ class MonzoPot(MonzoObject):
         endpoint = '/pots/'+self.id+'/withdraw'
         response = self._context._get_response(
             method='put', endpoint=endpoint,
-            params={
-                'account_id': account.id,
+            body={
+                'destination_account_id': account.id,
                 'amount': amount,
+                'dedupe_id': dedupe,
             },
         )
 
