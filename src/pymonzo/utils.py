@@ -28,8 +28,4 @@ class CommonMixin(object):
         return '{}({})'.format(self.__class__.__name__, data)
 
     def __repr__(self):
-        data = ', '.join([
-            '{}={}'.format(k, v) for k, v in iteritems(self.__dict__)
-            if not k.startswith('_')
-        ])
-        return '{}({})'.format(self.__class__, data)
+         return '{}({})'.format(self.__class__, self.__dict__)

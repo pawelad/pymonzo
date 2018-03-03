@@ -95,7 +95,7 @@ class MonzoPot(MonzoObject):
         """
         self.created = parse_date(data.pop('created'))
 
-    def add(self, amount, account, dedupe):
+    def deposit(self, amount, account, dedupe):
         """
         Adds an amount of whole pence from an account to this pot.
 
@@ -118,7 +118,7 @@ class MonzoPot(MonzoObject):
             },
         )
 
-        return self.__init__(data=response.json(), context=self._context)
+        self.__init__(data=response.json(), context=self._context)
 
     def withdraw(self, amount, account, dedupe):
         """
@@ -143,7 +143,7 @@ class MonzoPot(MonzoObject):
             },
         )
 
-        return self.__init__(data=response.json(), context=self._context)
+        self.__init__(data=response.json(), context=self._context)
 
 
 class MonzoBalance(MonzoObject):

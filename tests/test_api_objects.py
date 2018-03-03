@@ -9,7 +9,8 @@ from datetime import datetime
 import pytest
 from dateutil.parser import parse as parse_date
 
-from pymonzo import api_objects
+from pymonzo import api_objects, MonzoAPI
+from pymonzo.api_objects import MonzoAccount, MonzoPot
 from pymonzo.utils import CommonMixin
 
 
@@ -87,7 +88,15 @@ class TestMonzoAccount:
         del instance._raw_data
 
         expected_data['created'] = parse_date(expected_data['created'])
-        assert vars(instance) == expected_data
+
+        orig_instance_vars = vars(instance)
+        instance_vars = orig_instance_vars.copy()
+        # Don't inspect private variables
+        for k in orig_instance_vars.keys():
+            if k.startswith('_'):
+                instance_vars.pop(k)
+
+        assert instance_vars == expected_data
         assert isinstance(instance.created, datetime)
 
     def test_class_lack_of_required_keys(self, mocker, data):
@@ -103,6 +112,24 @@ class TestMonzoPot:
     Test `api_objects.MonzoPot` class
     """
     klass = api_objects.MonzoPot
+
+    @pytest.fixture
+    def mocked_monzo(self, mocker):
+        """Helper fixture that returns a mocked `MonzoAPI` instance"""
+        mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocker.patch('pymonzo.monzo_api.MonzoAPI._save_token_on_disk')
+
+        client_id = 'explicit_client_id'
+        client_secret = 'explicit_client_secret'
+        auth_code = 'explicit_auth_code'
+
+        monzo = MonzoAPI(
+            client_id=client_id,
+            client_secret=client_secret,
+            auth_code=auth_code,
+        )
+
+        return monzo
 
     @pytest.fixture(scope='session')
     def data(self, pots_api_response):
@@ -121,7 +148,7 @@ class TestMonzoPot:
 
     def test_class_properties(self, instance):
         """Test class properties"""
-        expected_keys = ['id', 'name', 'created']
+        expected_keys = ['id', 'name', 'created', 'style', 'balance', 'currency', 'updated', 'deleted']
         assert self.klass._required_keys == expected_keys
         assert instance._required_keys == expected_keys
 
@@ -133,7 +160,14 @@ class TestMonzoPot:
         del instance._raw_data
 
         expected_data['created'] = parse_date(expected_data['created'])
-        assert vars(instance) == expected_data
+        orig_instance_vars = vars(instance)
+        instance_vars = orig_instance_vars.copy()
+        # Don't inspect private variables
+        for k in orig_instance_vars.keys():
+            if k.startswith('_'):
+                instance_vars.pop(k)
+
+        assert instance_vars == expected_data
         assert isinstance(instance.created, datetime)
 
     def test_class_lack_of_required_keys(self, mocker, data):
@@ -142,6 +176,82 @@ class TestMonzoPot:
 
         with pytest.raises(ValueError):
             self.klass(data=data)
+
+    def test_class_deposit_method(self, mocker, mocked_monzo,
+                              pots_api_response, accounts_api_response):
+        """Test class `add` method"""
+        mocked_get_response = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._get_response',
+        )
+        mocked_get_response.return_value.json.return_value = pots_api_response['pots'][0]
+
+        accounts_json = accounts_api_response['accounts']
+        pots_json = pots_api_response['pots']
+
+        mocked_monzo._cached_accounts = [
+            MonzoAccount(data=account, context=mocked_monzo) for account in accounts_json
+        ]
+        mocked_monzo._cached_pots = [
+            MonzoPot(data=pot, context=mocked_monzo) for pot in pots_json
+        ]
+
+        pot = mocked_monzo.pots()[0]
+
+        expected_result = pot
+        expected_result.balance = 50000
+
+        result = pot.deposit(37655, mocked_monzo._cached_accounts[0], "abc")
+
+        mocked_get_response.assert_called_once_with(
+            method='put',
+            endpoint='/pots/'+mocked_monzo._cached_pots[0].id+'/deposit',
+            body={
+                'source_account_id': mocked_monzo._cached_accounts[0].id,
+                'amount': 37655,
+                'dedupe_id': "abc",
+            },
+        )
+
+        assert result is None
+        assert pot == expected_result
+
+    def test_class_withdraw_method(self, mocker, mocked_monzo,
+                                   pots_api_response, accounts_api_response):
+        """Test class `add` method"""
+        mocked_get_response = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._get_response',
+        )
+        mocked_get_response.return_value.json.return_value = pots_api_response['pots'][0]
+
+        accounts_json = accounts_api_response['accounts']
+        pots_json = pots_api_response['pots']
+
+        mocked_monzo._cached_accounts = [
+            MonzoAccount(data=account, context=mocked_monzo) for account in accounts_json
+        ]
+        mocked_monzo._cached_pots = [
+            MonzoPot(data=pot, context=mocked_monzo) for pot in pots_json
+        ]
+
+        pot = mocked_monzo.pots()[0]
+
+        expected_result = pot
+        expected_result.balance = 2500
+
+        result = pot.withdraw(9845, mocked_monzo._cached_accounts[0], "abc")
+
+        mocked_get_response.assert_called_once_with(
+            method='put',
+            endpoint='/pots/'+mocked_monzo._cached_pots[0].id+'/withdraw',
+            body={
+                'destination_account_id': mocked_monzo._cached_accounts[0].id,
+                'amount': 9845,
+                'dedupe_id': "abc",
+            },
+        )
+
+        assert result is None
+        assert pot == expected_result
 
 
 class TestMonzoBalance:
@@ -178,7 +288,14 @@ class TestMonzoBalance:
         assert instance._raw_data == expected_data
         del instance._raw_data
 
-        assert vars(instance) == expected_data
+        orig_instance_vars = vars(instance)
+        instance_vars = orig_instance_vars.copy()
+        # Don't inspect private variables
+        for k in orig_instance_vars.keys():
+            if k.startswith('_'):
+                instance_vars.pop(k)
+
+        assert instance_vars == expected_data
 
     def test_class_lack_of_required_keys(self, mocker, data):
         """Test class `__init__` method when data lack one of required keys"""
@@ -231,7 +348,15 @@ class TestMonzoTransaction:
         expected_data['merchant'] = api_objects.MonzoMerchant(
             data=expected_data['merchant']
         )
-        assert vars(instance) == expected_data
+
+        orig_instance_vars = vars(instance)
+        instance_vars = orig_instance_vars.copy()
+        # Don't inspect private variables
+        for k in orig_instance_vars.keys():
+            if k.startswith('_'):
+                instance_vars.pop(k)
+
+        assert instance_vars == expected_data
 
         assert isinstance(instance.created, datetime)
         assert isinstance(instance.settled, datetime)
@@ -284,7 +409,14 @@ class TestMonzoMerchant:
         del instance._raw_data
 
         expected_data['created'] = parse_date(expected_data['created'])
-        assert vars(instance) == expected_data
+        orig_instance_vars = vars(instance)
+        instance_vars = orig_instance_vars.copy()
+        # Don't inspect private variables
+        for k in orig_instance_vars.keys():
+            if k.startswith('_'):
+                instance_vars.pop(k)
+
+        assert instance_vars == expected_data
         assert isinstance(instance.created, datetime)
 
     def test_class_lack_of_required_keys(self, mocker, data):

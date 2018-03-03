@@ -291,7 +291,7 @@ class TestMonzoAPI:
 
         accounts_json = accounts_api_response['accounts']
         expected_result = [
-            MonzoAccount(data=account) for account in accounts_json
+            MonzoAccount(data=account, context=mocked_monzo) for account in accounts_json
         ]
 
         assert result == expected_result
@@ -325,7 +325,7 @@ class TestMonzoAPI:
 
         accounts_json = accounts_api_response['accounts']
         expected_result = [
-            MonzoAccount(data=account) for account in accounts_json
+            MonzoAccount(data=account, context=mocked_monzo) for account in accounts_json
         ]
 
         assert result == expected_result
@@ -354,7 +354,7 @@ class TestMonzoAPI:
             },
         )
 
-        expected_result = MonzoBalance(balance_api_response)
+        expected_result = MonzoBalance(balance_api_response, context=mocked_monzo)
 
         assert result == expected_result
 
@@ -376,11 +376,11 @@ class TestMonzoAPI:
         result = mocked_monzo.pots()
 
         mocked_get_response.assert_called_once_with(
-            method='get', endpoint='/pots/listV1',
+            method='get', endpoint='/pots',
         )
 
         pots_json = pots_api_response['pots']
-        expected_result = [MonzoPot(data=pot) for pot in pots_json]
+        expected_result = [MonzoPot(data=pot, context=mocked_monzo) for pot in pots_json]
 
         assert result == expected_result
         assert mocked_monzo._cached_pots == expected_result
@@ -408,11 +408,11 @@ class TestMonzoAPI:
         result = mocked_monzo.pots(refresh=True)
 
         mocked_get_response.assert_called_once_with(
-            method='get', endpoint='/pots/listV1',
+            method='get', endpoint='/pots',
         )
 
         pots_json = pots_api_response['pots']
-        expected_result = [MonzoPot(data=pot) for pot in pots_json]
+        expected_result = [MonzoPot(data=pot, context=mocked_monzo) for pot in pots_json]
 
         assert result == expected_result
         assert mocked_monzo._cached_pots == expected_result
@@ -442,7 +442,7 @@ class TestMonzoAPI:
 
         transactions_json = transactions_api_response['transactions']
         expected_result = [
-            MonzoTransaction(data=transaction) for transaction in transactions_json
+            MonzoTransaction(data=transaction, context=mocked_monzo) for transaction in transactions_json
         ]
 
         assert result == expected_result
@@ -468,7 +468,7 @@ class TestMonzoAPI:
             params={},
         )
 
-        expected_result = MonzoTransaction(transaction_api_response['transaction'])
+        expected_result = MonzoTransaction(transaction_api_response['transaction'], context=mocked_monzo)
 
         assert result == expected_result
 
@@ -488,6 +488,6 @@ class TestMonzoAPI:
             },
         )
 
-        expected_result = MonzoTransaction(transaction_api_response['transaction'])
+        expected_result = MonzoTransaction(transaction_api_response['transaction'], context=mocked_monzo)
 
         assert result == expected_result
