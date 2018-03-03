@@ -442,7 +442,8 @@ class TestMonzoAPI:
 
         transactions_json = transactions_api_response['transactions']
         expected_result = [
-            MonzoTransaction(data=transaction, context=mocked_monzo) for transaction in transactions_json
+            MonzoTransaction(data=transaction, context=mocked_monzo)
+            for transaction in transactions_json
         ]
 
         assert result == expected_result
@@ -468,7 +469,8 @@ class TestMonzoAPI:
             params={},
         )
 
-        expected_result = MonzoTransaction(transaction_api_response['transaction'], context=mocked_monzo)
+        expected_result = MonzoTransaction(transaction_api_response['transaction']
+                                           , context=mocked_monzo)
 
         assert result == expected_result
 
@@ -488,6 +490,7 @@ class TestMonzoAPI:
             },
         )
 
-        expected_result = MonzoTransaction(transaction_api_response['transaction'], context=mocked_monzo)
+        expected_result = MonzoTransaction(transaction_api_response['transaction'],
+                                           context=mocked_monzo)
 
         assert result == expected_result

@@ -148,7 +148,9 @@ class TestMonzoPot:
 
     def test_class_properties(self, instance):
         """Test class properties"""
-        expected_keys = ['id', 'name', 'created', 'style', 'balance', 'currency', 'updated', 'deleted']
+        expected_keys = [
+            'id', 'name', 'created', 'style', 'balance', 'currency', 'updated','deleted'
+        ]
         assert self.klass._required_keys == expected_keys
         assert instance._required_keys == expected_keys
 
