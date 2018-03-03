@@ -149,7 +149,7 @@ class TestMonzoPot:
     def test_class_properties(self, instance):
         """Test class properties"""
         expected_keys = [
-            'id', 'name', 'created', 'style', 'balance', 'currency', 'updated','deleted'
+            'id', 'name', 'created', 'style', 'balance', 'currency', 'updated', 'deleted'
         ]
         assert self.klass._required_keys == expected_keys
         assert instance._required_keys == expected_keys
@@ -180,7 +180,7 @@ class TestMonzoPot:
             self.klass(data=data)
 
     def test_class_deposit_method(self, mocker, mocked_monzo,
-                              pots_api_response, accounts_api_response):
+                                  pots_api_response, accounts_api_response):
         """Test class `add` method"""
         mocked_get_response = mocker.patch(
             'pymonzo.monzo_api.MonzoAPI._get_response',

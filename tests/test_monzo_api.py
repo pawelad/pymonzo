@@ -469,8 +469,8 @@ class TestMonzoAPI:
             params={},
         )
 
-        expected_result = MonzoTransaction(transaction_api_response['transaction']
-                                           , context=mocked_monzo)
+        expected_result = MonzoTransaction(transaction_api_response['transaction'],
+                                           context=mocked_monzo)
 
         assert result == expected_result
 
