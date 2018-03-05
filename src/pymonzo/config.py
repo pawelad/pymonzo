@@ -12,11 +12,6 @@ MONZO_AUTH_CODE_ENV = 'MONZO_AUTH_CODE'
 MONZO_CLIENT_ID_ENV = 'MONZO_CLIENT_ID'
 MONZO_CLIENT_SECRET_ENV = 'MONZO_CLIENT_SECRET'
 
-REDIRECT_URI = os.getenv(
-    'PYMONZO_REDIRECT_URI',
-    default='https://github.com/pawelad/pymonzo',
-)
-
 TOKEN_FILE_NAME = os.getenv(
     'PYMONZO_TOKEN_FILE_NAME',
     default='.pymonzo-token',

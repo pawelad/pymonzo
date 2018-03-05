@@ -39,7 +39,7 @@ class MonzoAPI(CommonMixin):
     _cached_pots = None
 
     def __init__(self, access_token=None, client_id=None, client_secret=None,
-                 auth_code=None):
+                 auth_code=None, redirect_url="https://github.com/pawelad/pymonzo"):
         """
         We need Monzo access token to work with the API, which we try to get
         in multiple ways detailed below. Basically you need to either pass
@@ -59,6 +59,9 @@ class MonzoAPI(CommonMixin):
         :param auth_code: your Monzo OAuth 2 auth code
         :type auth_code: str
         """
+
+        self._redirect_url = redirect_url
+
         # Lets get the access token from:
         # a) explicitly passed 'access_token'
         if access_token:
@@ -146,7 +149,7 @@ class MonzoAPI(CommonMixin):
 
         oauth = OAuth2Session(
             client_id=self._client_id,
-            redirect_uri=config.REDIRECT_URI,
+            redirect_uri=self._redirect_url,
         )
 
         token = oauth.fetch_token(
