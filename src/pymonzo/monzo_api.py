@@ -186,7 +186,7 @@ class MonzoAPI(CommonMixin):
         self._token = token
         self._save_token_on_disk()
 
-    def _get_response(self, method, endpoint, params=None):
+    def _get_response(self, method, endpoint, params=None, body=None):
         """
         Helper method to handle HTTP requests and catch API errors
 
@@ -202,7 +202,7 @@ class MonzoAPI(CommonMixin):
         url = urljoin(self.api_url, endpoint)
 
         try:
-            response = getattr(self._session, method)(url, params=params)
+            response = getattr(self._session, method)(url, params=params, body=body)
 
             # Check if Monzo API returned HTTP 401, which could mean that the
             # token is expired
@@ -396,3 +396,37 @@ class MonzoAPI(CommonMixin):
         )
 
         return MonzoTransaction(data=response.json()['transaction'])
+
+    def create_feed_item(self, account_id, title, image_url, body=None, background_color=None, title_color=None, body_color=None, type="basic", url=None):
+        endpoint = "/feed"
+
+        post_data = {
+                "account_id": account_id,
+                "type": type,
+                "params": {
+                    "title": title,
+                    "image_url": image_url
+                }
+            }
+
+        if url:
+            post_data['url'] = url
+        if body:
+            post_data['params']['body'] = body
+        if background_color:
+            post_data['params']['background_color'] = background_color
+        if title_color:
+            post_data['params']['title_color'] = title_color
+        if body_color:
+            post_data['params']['body_color'] = body_color
+
+        response = self._get_response(
+            method='post', endpoint=endpoint,
+            body=post_data
+        )
+
+        pots_json = response.json()['pots']
+        pots = [MonzoPot(data=pot) for pot in pots_json]
+        self._cached_pots = pots
+
+        return pots
