@@ -39,7 +39,7 @@ class MonzoAPI(CommonMixin):
     _cached_pots = None
 
     def __init__(self, access_token=None, client_id=None, client_secret=None,
-                 auth_code=None):
+                 auth_code=None, token_data=None, token_save_function=None):
         """
         We need Monzo access token to work with the API, which we try to get
         in multiple ways detailed below. Basically you need to either pass
@@ -59,6 +59,10 @@ class MonzoAPI(CommonMixin):
         :param auth_code: your Monzo OAuth 2 auth code
         :type auth_code: str
         """
+
+        if token_save_function:
+            self._save_token_on_disk = token_save_function
+
         # Lets get the access token from:
         # a) explicitly passed 'access_token'
         if access_token:
@@ -75,14 +79,19 @@ class MonzoAPI(CommonMixin):
 
             self._token = self._get_oauth_token()
             self._save_token_on_disk()
-        # c) token file saved on the disk
+        # c) explicitly passed token data dictionary
+        elif token_data:
+            self._token = token_data
+            self._client_id = self._token['client_id']
+            self._client_secret = self._token['client_secret']
+        # d) token file saved on the disk
         elif os.path.isfile(config.TOKEN_FILE_PATH):
             with codecs.open(config.TOKEN_FILE_PATH, 'r', 'utf-8') as f:
                 self._token = json.load(f)
 
             self._client_id = self._token['client_id']
             self._client_secret = self._token['client_secret']
-        # d) 'access_token' saved as a environment variable
+        # e) 'access_token' saved as a environment variable
         elif os.getenv(config.MONZO_ACCESS_TOKEN_ENV):
             self._access_token = os.getenv(config.MONZO_ACCESS_TOKEN_ENV)
 
@@ -90,7 +99,7 @@ class MonzoAPI(CommonMixin):
                 'access_token': self._access_token,
                 'token_type': 'Bearer',
             }
-        # e) 'client_id', 'client_secret' and 'auth_code' saved as
+        # f) 'client_id', 'client_secret' and 'auth_code' saved as
         # environment variables
         elif (os.getenv(config.MONZO_CLIENT_ID_ENV) and
                 os.getenv(config.MONZO_CLIENT_SECRET_ENV) and
