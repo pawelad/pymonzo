@@ -21,6 +21,7 @@ class TestMonzoAPI:
     """
     Test `monzo_api.MonzoAPI` class.
     """
+
     @pytest.fixture(scope='session')
     def monzo(self):
         """Helper fixture that returns a `MonzoAPI` instance"""
@@ -502,10 +503,10 @@ class TestMonzoAPI:
         title = "title"
         image_url = "https://example.com/image_url"
         body = "body"
-        background_color="background_color"
-        title_color="title_color"
-        body_color="body_color"
-        url="https://example.com/url"
+        background_color = "background_color"
+        title_color = "title_color"
+        body_color = "body_color"
+        url = "https://example.com/url"
 
         mocked_monzo.create_feed_item(accounts_api_response['accounts'][0]['id'], title, image_url,
                                       body, background_color, title_color, body_color, url)
