@@ -401,24 +401,22 @@ class MonzoAPI(CommonMixin):
         endpoint = "/feed"
 
         post_data = {
-                "account_id": account_id,
-                "type": type,
-                "params": {
-                    "title": title,
-                    "image_url": image_url
-                }
+            "account_id": account_id,
+            "type": type,
+            "params[title]": title,
+            "params[image_url]": image_url
             }
 
         if url:
             post_data['url'] = url
         if body:
-            post_data['params']['body'] = body
+            post_data['params[body]'] = body
         if background_color:
-            post_data['params']['background_color'] = background_color
+            post_data['params[background_color]'] = background_color
         if title_color:
-            post_data['params']['title_color'] = title_color
+            post_data['params[title_color]'] = title_color
         if body_color:
-            post_data['params']['body_color'] = body_color
+            post_data['params[body_color]'] = body_color
 
         response = self._get_response(
             method='post', endpoint=endpoint,
