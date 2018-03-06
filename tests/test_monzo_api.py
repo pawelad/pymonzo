@@ -518,7 +518,7 @@ class TestMonzoAPI:
             method='post',
             endpoint='/feed',
             body={
-                'account_id': mocked_monzo._cached_accounts[0].id,
+                'account_id': mocked_monzo._cached_accounts[0]['id'],
                 'type': 'basic',
                 'params[title]': title,
                 'params[image_url]': image_url,
