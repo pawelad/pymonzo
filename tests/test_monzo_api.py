@@ -54,6 +54,7 @@ class TestMonzoAPI:
         client_id = 'explicit_client_id'
         client_secret = 'explicit_client_secret'
         auth_code = 'explicit_auth_code'
+        redirect_url = 'explicit_redirect_url'
         monkeypatch.setenv(config.MONZO_ACCESS_TOKEN_ENV, 'env_access_token')
         monkeypatch.setenv(config.MONZO_CLIENT_ID_ENV, 'env_client_id')
         monkeypatch.setenv(config.MONZO_CLIENT_SECRET_ENV, 'env_client_secret')
@@ -71,9 +72,11 @@ class TestMonzoAPI:
         monzo = MonzoAPI(
             access_token=access_token, client_id=client_id,
             client_secret=client_secret, auth_code=auth_code,
+            redirect_url=redirect_url
         )
 
         assert monzo._access_token == 'explicit_access_token'
+        assert monzo._redirect_url == redirect_url
         assert monzo._client_id is None
         assert monzo._client_secret is None
         assert monzo._auth_code is None
@@ -223,7 +226,30 @@ class TestMonzoAPI:
 
         mocked_oauth2_session.assert_called_once_with(
             client_id=mocked_monzo._client_id,
-            redirect_uri=config.REDIRECT_URI,
+            redirect_uri="https://github.com/pawelad/pymonzo",
+        )
+        mocked_fetch_token.assert_called_once_with(
+            token_url=urljoin(mocked_monzo.api_url, '/oauth2/token'),
+            code=mocked_monzo._auth_code,
+            client_secret=mocked_monzo._client_secret,
+        )
+
+    def test_class_get_oauth_token_custom_redirect_method(self, mocker, mocked_monzo):
+        """Test class `_get_oauth_token` method"""
+        mocked_fetch_token = mocker.MagicMock()
+        mocked_oauth2_session = mocker.patch('pymonzo.monzo_api.OAuth2Session')
+        mocked_oauth2_session.return_value.fetch_token = mocked_fetch_token
+
+        redirect_url = "https://example.com/"
+        mocked_monzo._redirect_url = redirect_url
+
+        token = mocked_monzo._get_oauth_token()
+
+        assert token == mocked_fetch_token.return_value
+
+        mocked_oauth2_session.assert_called_once_with(
+            client_id=mocked_monzo._client_id,
+            redirect_uri=redirect_url,
         )
         mocked_fetch_token.assert_called_once_with(
             token_url=urljoin(mocked_monzo.api_url, '/oauth2/token'),
