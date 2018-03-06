@@ -400,7 +400,41 @@ class MonzoAPI(CommonMixin):
 
         return MonzoTransaction(data=response.json()['transaction'])
 
-    def create_feed_item(self, account_id, title, image_url, body=None, background_color=None, title_color=None, body_color=None, type="basic", url=None):
+    def create_feed_item(
+            self,
+            account_id,
+            title,
+            image_url,
+            body=None,
+            background_color=None,
+            title_color=None,
+            body_color=None,
+            type="basic",
+            url=None
+    ):
+        """Create an item in an account's activity feed
+
+        Official docs: https://monzo.com/docs/#create-feed-item
+
+        :param account_id: The account to create a feed item for.
+        :type account_id: str
+        :param title: The title to display.
+        :type title: str
+        :param image_url: URL of the image to display. This will be displayed as an icon in the feed, and on the expanded page if no url has been provided.
+        :type image_url str
+        :param body: The body text of the feed item.
+        :type body: str
+        :param background_color: Hex value for the background colour of the feed item. Defaults to to standard app colours (ie. white background).
+        :type background_color: str
+        :param title_color: Hex value for the colour of the title text. Defaults to standard app colours.
+        :type title_color: str
+        :param body_color: Hex value for the colour of the body text. Defaults to standard app colours.
+        :type body_color: str
+        :param type: Type of feed item. Currently only basic is supported.
+        :type type: str
+        :param url: A URL to open when the feed item is tapped. If no URL is provided, the app will display a fallback view based on the title & body.
+        :type url: str
+        """
         endpoint = "/feed"
 
         post_data = {
