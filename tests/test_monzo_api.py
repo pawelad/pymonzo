@@ -499,11 +499,6 @@ class TestMonzoAPI:
         )
         mocked_get_response.return_value.json.return_value = None
 
-        accounts_json = accounts_api_response['accounts']
-        mocked_monzo._cached_accounts = [
-            MonzoAccount(data=account) for account in accounts_json
-        ]
-
         title = "title"
         image_url = "https://example.com/image_url"
         body = "body"
@@ -512,13 +507,13 @@ class TestMonzoAPI:
         body_color="body_color"
         url="https://example.com/url"
 
-        mocked_monzo.balance(accounts_api_response['accounts'][0].id, title, image_url, body, background_color, title_color, body_color, url)
+        mocked_monzo.balance(accounts_api_response['accounts'][0]['id'], title, image_url, body, background_color, title_color, body_color, url)
 
         mocked_get_response.assert_called_once_with(
             method='post',
             endpoint='/feed',
             body={
-                'account_id': mocked_monzo._cached_accounts[0]['id'],
+                'account_id': accounts_api_response['accounts'][0]['id'],
                 'type': 'basic',
                 'params[title]': title,
                 'params[image_url]': image_url,
