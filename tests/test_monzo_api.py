@@ -507,7 +507,7 @@ class TestMonzoAPI:
         body_color="body_color"
         url="https://example.com/url"
 
-        mocked_monzo.balance(accounts_api_response['accounts'][0]['id'], title, image_url, body, background_color, title_color, body_color, url)
+        mocked_monzo.create_feed_item(accounts_api_response['accounts'][0]['id'], title, image_url, body, background_color, title_color, body_color, url)
 
         mocked_get_response.assert_called_once_with(
             method='post',
