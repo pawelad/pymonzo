@@ -494,3 +494,20 @@ class TestMonzoAPI:
                                            context=mocked_monzo)
 
         assert result == expected_result
+
+    def test_class_pot_method(self, mocker, mocked_monzo, pot_api_response):
+        """Test class `pot` method"""
+        mocked_get_response = mocker.patch(
+            'pymonzo.monzo_api.MonzoAPI._get_response',
+        )
+        mocked_get_response.return_value.json.return_value = pot_api_response
+
+        result = mocked_monzo.pot(pot_api_response['id'])
+
+        mocked_get_response.assert_called_once_with(
+            method="get",
+            endpoint="/pots/"+pot_api_response['id']
+        )
+
+        expected_result = MonzoPot(pot_api_response, context=mocked_monzo)
+        assert result == expected_result
