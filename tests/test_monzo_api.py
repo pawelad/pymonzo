@@ -16,6 +16,9 @@ from pymonzo import MonzoAPI
 from pymonzo import config
 from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoPot, MonzoTransaction
 
+def dummy_token_save(monzo):
+    pass
+
 
 class TestMonzoAPI:
     """
@@ -30,7 +33,6 @@ class TestMonzoAPI:
     def mocked_monzo(self, mocker):
         """Helper fixture that returns a mocked `MonzoAPI` instance"""
         mocker.patch('pymonzo.monzo_api.OAuth2Session')
-        mocker.patch('pymonzo.monzo_api.MonzoAPI._save_token_on_disk')
 
         client_id = 'explicit_client_id'
         client_secret = 'explicit_client_secret'
@@ -40,6 +42,7 @@ class TestMonzoAPI:
             client_id=client_id,
             client_secret=client_secret,
             auth_code=auth_code,
+            token_save_function=dummy_token_save
         )
 
         return monzo
