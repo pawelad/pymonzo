@@ -418,13 +418,7 @@ class MonzoAPI(CommonMixin):
         if body_color:
             post_data['params[body_color]'] = body_color
 
-        response = self._get_response(
+        self._get_response(
             method='post', endpoint=endpoint,
             body=post_data
         )
-
-        pots_json = response.json()['pots']
-        pots = [MonzoPot(data=pot) for pot in pots_json]
-        self._cached_pots = pots
-
-        return pots
