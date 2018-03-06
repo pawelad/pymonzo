@@ -202,7 +202,10 @@ class MonzoAPI(CommonMixin):
         url = urljoin(self.api_url, endpoint)
 
         try:
-            response = getattr(self._session, method)(url, params=params, body=body)
+            if body:
+                response = getattr(self._session, method)(url, params=params, body=body)
+            else:
+                response = getattr(self._session, method)(url, params=params)
 
             # Check if Monzo API returned HTTP 401, which could mean that the
             # token is expired
