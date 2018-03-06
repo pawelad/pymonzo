@@ -409,8 +409,8 @@ class MonzoAPI(CommonMixin):
             background_color=None,
             title_color=None,
             body_color=None,
-            type="basic",
-            url=None
+            url=None,
+            type="basic"
     ):
         """Create an item in an account's activity feed
 
