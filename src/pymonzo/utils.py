@@ -31,8 +31,6 @@ class CommonMixin(object):
     """
     Added .__name__ to def __repr__()
     :param self: By convention.
-    :type arg1: type description
-    :type arg1: type description
     :return: Class Object.
     :Example:
 
