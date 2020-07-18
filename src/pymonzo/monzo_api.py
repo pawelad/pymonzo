@@ -302,7 +302,7 @@ class MonzoAPI(CommonMixin):
 
         return MonzoBalance(data=response.json())
 
-    def pots(self, refresh=False):
+    def pots(self, refresh=False, account_id=None):
         """
         Returns a list of pots owned by the currently authorised user.
 
@@ -316,10 +316,18 @@ class MonzoAPI(CommonMixin):
         """
         if not refresh and self._cached_pots:
             return self._cached_pots
-
-        endpoint = '/pots/listV1'
+        if not account_id:
+            if len(self.accounts()) == 1:
+                account_id = self.accounts()[0].id
+            else:
+                raise ValueError("You need to pass account ID")
+        
+        endpoint = '/pots'
         response = self._get_response(
             method='get', endpoint=endpoint,
+            params={
+                'current_account_id': account_id,
+            },
         )
 
         pots_json = response.json()['pots']
