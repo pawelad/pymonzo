@@ -58,7 +58,9 @@ auth code, which you can get by creating a link like the one below but with your
 client ID:
 
 ```
-https://auth.getmondo.co.uk/?response_type=code&redirect_uri=https://github.com/pawelad/pymonzo&client_id={{CLIENT_ID}}
+https://auth.monzo.com/?response_type=code&redirect_uri=https://github.com/pawelad/pymonzo&client_id={{CLIENT_ID}}
+e.g.
+https://auth.monzo.com/?response_type=code&redirect_uri=https://github.com/pawelad/pymonzo&client_id=oauth2client_0000123456789
 ```
 
 You then go to the link and authorise the app. You should get an email with a
