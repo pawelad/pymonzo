@@ -117,14 +117,15 @@ $ tox
 ## Contributions
 Package source code is available at [GitHub][github].
 
-Feel free to use, ask, fork, star, report bugs, fix them, suggest enhancements,
-add functionality and point out any mistakes.
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more info. Thanks!
+Feel free to use, ask, fork, star, report bugs, fix them, suggest enhancements, add
+functionality and point out any mistakes.
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.
 
 ## Authors
 Developed and maintained by [Paweł Adamczak][pawelad].
 
-Released under [MIT License][license].
+Released under [Mozilla Public License 2.0][license].
 
 
 [coveralls]: https://coveralls.io/github/pawelad/pymonzo
