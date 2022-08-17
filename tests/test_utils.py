@@ -8,6 +8,7 @@ from pymonzo.utils import CommonMixin
 
 class ExampleClass(CommonMixin):
     """Just a dummy test class"""
+
     pass
 
 
@@ -15,11 +16,12 @@ class TestCommonMixin:
     """
     Test `utils.CommonMixin` class
     """
+
     klass = CommonMixin
     data = {
-        '_hidden': 1,
-        'foo': 'foo',
-        'bar': True,
+        "_hidden": 1,
+        "foo": "foo",
+        "bar": True,
     }
 
     @pytest.fixture
@@ -60,12 +62,12 @@ class TestCommonMixin:
         str_b = str(b)
         str_c = str(c)
 
-        assert 'CommonMixin' in str_a
-        assert 'CommonMixin' in str_b
-        assert 'ExampleClass' in str_c
+        assert "CommonMixin" in str_a
+        assert "CommonMixin" in str_b
+        assert "ExampleClass" in str_c
 
         # We don't know the `__dict__` order so let's do it in parts
-        parts = ['foo=foo', 'bar=True']
+        parts = ["foo=foo", "bar=True"]
 
         for part in parts:
             assert part in str_a
@@ -85,7 +87,9 @@ class TestCommonMixin:
 
         # We don't know the `__dict__` order so let's do it in parts
         parts = [
-            "'_hidden': 1", "'foo': 'foo'", "'bar': True",
+            "'_hidden': 1",
+            "'foo': 'foo'",
+            "'bar': True",
         ]
 
         for part in parts:

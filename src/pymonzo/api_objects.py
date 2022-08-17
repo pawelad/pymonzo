@@ -10,6 +10,7 @@ class MonzoObject(CommonMixin):
     """
     Base class for all Monzo API objects
     """
+
     _required_keys = []
 
     def __init__(self, data):
@@ -21,14 +22,11 @@ class MonzoObject(CommonMixin):
         :param data: response from Monzo API request
         :type data: dict
         """
-        missing_keys = [
-            k for k in self._required_keys
-            if k not in data
-        ]
+        missing_keys = [k for k in self._required_keys if k not in data]
         if missing_keys:
             raise ValueError(
                 "Passed data doesn't have all required keys "
-                "(missing keys: {})".format(','.join(missing_keys))
+                "(missing keys: {})".format(",".join(missing_keys))
             )
 
         self._raw_data = data.copy()
@@ -51,7 +49,8 @@ class MonzoAccount(MonzoObject):
     """
     Class representation of Monzo account
     """
-    _required_keys = ['id', 'description', 'created']
+
+    _required_keys = ["id", "description", "created"]
 
     def _parse_special_fields(self, data):
         """
@@ -60,14 +59,15 @@ class MonzoAccount(MonzoObject):
         :param data: response from Monzo API request
         :type data: dict
         """
-        self.created = parse_date(data.pop('created'))
+        self.created = parse_date(data.pop("created"))
 
 
 class MonzoPot(MonzoObject):
     """
     Class representation of Monzo pot
     """
-    _required_keys = ['id', 'name', 'created']
+
+    _required_keys = ["id", "name", "created"]
 
     def _parse_special_fields(self, data):
         """
@@ -76,23 +76,33 @@ class MonzoPot(MonzoObject):
         :param data: response from Monzo API request
         :type data: dict
         """
-        self.created = parse_date(data.pop('created'))
+        self.created = parse_date(data.pop("created"))
 
 
 class MonzoBalance(MonzoObject):
     """
     Class representation of Monzo account balance
     """
-    _required_keys = ['balance', 'currency', 'spend_today']
+
+    _required_keys = ["balance", "currency", "spend_today"]
 
 
 class MonzoTransaction(MonzoObject):
     """
     Class representation of Monzo transaction
     """
+
     _required_keys = [
-        'account_balance', 'amount', 'created', 'currency', 'description',
-        'id', 'merchant', 'metadata', 'notes', 'is_load',
+        "account_balance",
+        "amount",
+        "created",
+        "currency",
+        "description",
+        "id",
+        "merchant",
+        "metadata",
+        "notes",
+        "is_load",
     ]
 
     def _parse_special_fields(self, data):
@@ -102,24 +112,30 @@ class MonzoTransaction(MonzoObject):
         :param data: response from Monzo API request
         :type data: dict
         """
-        self.created = parse_date(data.pop('created'))
+        self.created = parse_date(data.pop("created"))
 
-        if data.get('settled'):  # Not always returned
-            self.settled = parse_date(data.pop('settled'))
+        if data.get("settled"):  # Not always returned
+            self.settled = parse_date(data.pop("settled"))
 
         # Merchant field can contain either merchant ID or the whole object
-        if (data.get('merchant') and
-                not isinstance(data['merchant'], str)):
-            self.merchant = MonzoMerchant(data=data.pop('merchant'))
+        if data.get("merchant") and not isinstance(data["merchant"], str):
+            self.merchant = MonzoMerchant(data=data.pop("merchant"))
 
 
 class MonzoMerchant(MonzoObject):
     """
     Class representation of Monzo merchants
     """
+
     _required_keys = [
-        'address', 'created', 'group_id', 'id',
-        'logo', 'emoji', 'name', 'category',
+        "address",
+        "created",
+        "group_id",
+        "id",
+        "logo",
+        "emoji",
+        "name",
+        "category",
     ]
 
     def _parse_special_fields(self, data):
@@ -129,4 +145,4 @@ class MonzoMerchant(MonzoObject):
         :param data: response from Monzo API request
         :type data: dict
         """
-        self.created = parse_date(data.pop('created'))
+        self.created = parse_date(data.pop("created"))

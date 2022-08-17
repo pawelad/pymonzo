@@ -5,19 +5,23 @@ import pytest
 
 from pymonzo import MonzoAPI
 from pymonzo.api_objects import (
-    MonzoAccount, MonzoBalance, MonzoTransaction, MonzoMerchant,
+    MonzoAccount,
+    MonzoBalance,
+    MonzoMerchant,
+    MonzoPot,
+    MonzoTransaction,
 )
-from pymonzo.api_objects import MonzoPot
 
 
 class TestMonzoAPIIntegration:
     """
     Monzo API integration tests.
     """
-    @pytest.fixture(scope='session')
+
+    @pytest.fixture(scope="session")
     def monzo(self):
         """Helper fixture that returns a `MonzoAPI` instance"""
-        return MonzoAPI(access_token='explicit_access_token')
+        return MonzoAPI(access_token="explicit_access_token")
 
     @pytest.mark.vcr()
     def test_whoami_method(self, monzo):
@@ -27,9 +31,9 @@ class TestMonzoAPIIntegration:
         assert whoami
         assert isinstance(whoami, dict)
 
-        assert 'authenticated' in whoami
-        assert 'client_id' in whoami
-        assert 'user_id' in whoami
+        assert "authenticated" in whoami
+        assert "client_id" in whoami
+        assert "user_id" in whoami
 
     @pytest.mark.vcr()
     def test_accounts_method(self, monzo):
@@ -71,9 +75,7 @@ class TestMonzoAPIIntegration:
 
         assert transactions_asc
         assert isinstance(transactions_asc, list)
-        assert all([
-            isinstance(t, MonzoTransaction) for t in transactions_asc
-        ])
+        assert all([isinstance(t, MonzoTransaction) for t in transactions_asc])
 
         assert transactions == list(reversed(transactions_asc))
 
@@ -82,16 +84,13 @@ class TestMonzoAPIIntegration:
 
         assert transactions_limit
         assert isinstance(transactions_limit, list)
-        assert all([
-            isinstance(t, MonzoTransaction)
-            for t in transactions_limit
-        ])
+        assert all([isinstance(t, MonzoTransaction) for t in transactions_limit])
         assert len(transactions_limit) == 5
 
     @pytest.mark.vcr()
     def test_transaction_method(self, monzo):
         """Test class `transaction` method"""
-        transaction_id = 'tx_REDACTED7'
+        transaction_id = "tx_REDACTED7"
 
         transaction = monzo.transaction(transaction_id=transaction_id)
 

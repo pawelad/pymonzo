@@ -10,11 +10,9 @@ import requests
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth2Session
 
-from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
-from pymonzo.api_objects import MonzoPot
 from pymonzo import config
-from pymonzo.exceptions import MonzoAPIError, CantRefreshTokenError
-
+from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoPot, MonzoTransaction
+from pymonzo.exceptions import CantRefreshTokenError, MonzoAPIError
 from pymonzo.utils import CommonMixin
 
 
@@ -25,7 +23,8 @@ class MonzoAPI(CommonMixin):
     Official docs:
         https://monzo.com/docs/
     """
-    api_url = 'https://api.monzo.com/'
+
+    api_url = "https://api.monzo.com/"
 
     _access_token = None
     _client_id = None
@@ -35,8 +34,9 @@ class MonzoAPI(CommonMixin):
     _cached_accounts = None
     _cached_pots = None
 
-    def __init__(self, access_token=None, client_id=None, client_secret=None,
-                 auth_code=None):
+    def __init__(
+        self, access_token=None, client_id=None, client_secret=None, auth_code=None
+    ):
         """
         We need Monzo access token to work with the API, which we try to get
         in multiple ways detailed below. Basically you need to either pass
@@ -61,8 +61,8 @@ class MonzoAPI(CommonMixin):
         if access_token:
             self._access_token = access_token
             self._token = {
-                'access_token': self._access_token,
-                'token_type': 'Bearer',
+                "access_token": self._access_token,
+                "token_type": "Bearer",
             }
         # b) explicitly passed 'client_id', 'client_secret' and 'auth_code'
         elif all([client_id, client_secret, auth_code]):
@@ -74,24 +74,26 @@ class MonzoAPI(CommonMixin):
             self._save_token_on_disk()
         # c) token file saved on the disk
         elif os.path.isfile(config.TOKEN_FILE_PATH):
-            with codecs.open(config.TOKEN_FILE_PATH, 'r', 'utf-8') as f:
+            with codecs.open(config.TOKEN_FILE_PATH, "r", "utf-8") as f:
                 self._token = json.load(f)
 
-            self._client_id = self._token['client_id']
-            self._client_secret = self._token['client_secret']
+            self._client_id = self._token["client_id"]
+            self._client_secret = self._token["client_secret"]
         # d) 'access_token' saved as a environment variable
         elif os.getenv(config.MONZO_ACCESS_TOKEN_ENV):
             self._access_token = os.getenv(config.MONZO_ACCESS_TOKEN_ENV)
 
             self._token = {
-                'access_token': self._access_token,
-                'token_type': 'Bearer',
+                "access_token": self._access_token,
+                "token_type": "Bearer",
             }
         # e) 'client_id', 'client_secret' and 'auth_code' saved as
         # environment variables
-        elif (os.getenv(config.MONZO_CLIENT_ID_ENV) and
-                os.getenv(config.MONZO_CLIENT_SECRET_ENV) and
-                os.getenv(config.MONZO_AUTH_CODE_ENV)):
+        elif (
+            os.getenv(config.MONZO_CLIENT_ID_ENV)
+            and os.getenv(config.MONZO_CLIENT_SECRET_ENV)
+            and os.getenv(config.MONZO_AUTH_CODE_ENV)
+        ):
             self._client_id = os.getenv(config.MONZO_CLIENT_ID_ENV)
             self._client_secret = os.getenv(config.MONZO_CLIENT_SECRET_ENV)
             self._auth_code = os.getenv(config.MONZO_AUTH_CODE_ENV)
@@ -121,9 +123,10 @@ class MonzoAPI(CommonMixin):
         # as a pared of OAuth token by default
         token.update(client_secret=self._client_secret)
 
-        with codecs.open(config.TOKEN_FILE_PATH, 'w', 'utf8') as f:
+        with codecs.open(config.TOKEN_FILE_PATH, "w", "utf8") as f:
             json.dump(
-                token, f,
+                token,
+                f,
                 ensure_ascii=False,
                 sort_keys=True,
                 indent=4,
@@ -139,7 +142,7 @@ class MonzoAPI(CommonMixin):
         :returns: OAuth 2 access token
         :rtype: dict
         """
-        url = urljoin(self.api_url, '/oauth2/token')
+        url = urljoin(self.api_url, "/oauth2/token")
 
         oauth = OAuth2Session(
             client_id=self._client_id,
@@ -163,22 +166,20 @@ class MonzoAPI(CommonMixin):
 
         :raises UnableToRefreshTokenException: when token couldn't be refreshed
         """
-        url = urljoin(self.api_url, '/oauth2/token')
+        url = urljoin(self.api_url, "/oauth2/token")
         data = {
-            'grant_type': 'refresh_token',
-            'client_id': self._client_id,
-            'client_secret': self._client_secret,
-            'refresh_token': self._token['refresh_token'],
+            "grant_type": "refresh_token",
+            "client_id": self._client_id,
+            "client_secret": self._client_secret,
+            "refresh_token": self._token["refresh_token"],
         }
 
         token_response = requests.post(url, data=data)
         token = token_response.json()
 
         # Not ideal, but that's how Monzo API returns errors
-        if 'error' in token:
-            raise CantRefreshTokenError(
-                "Unable to refresh the token: {}".format(token)
-            )
+        if "error" in token:
+            raise CantRefreshTokenError("Unable to refresh the token: {}".format(token))
 
         self._token = token
         self._save_token_on_disk()
@@ -219,9 +220,7 @@ class MonzoAPI(CommonMixin):
             response = getattr(self._session, method)(url, params=params)
 
         if response.status_code != requests.codes.ok:
-            raise MonzoAPIError(
-                "Something went wrong: {}".format(response.json())
-            )
+            raise MonzoAPIError("Something went wrong: {}".format(response.json()))
 
         return response
 
@@ -235,9 +234,10 @@ class MonzoAPI(CommonMixin):
         :returns: access token details
         :rtype: dict
         """
-        endpoint = '/ping/whoami'
+        endpoint = "/ping/whoami"
         response = self._get_response(
-            method='get', endpoint=endpoint,
+            method="get",
+            endpoint=endpoint,
         )
 
         return response.json()
@@ -259,12 +259,13 @@ class MonzoAPI(CommonMixin):
         if not refresh and self._cached_accounts:
             return self._cached_accounts
 
-        endpoint = '/accounts'
+        endpoint = "/accounts"
         response = self._get_response(
-            method='get', endpoint=endpoint,
+            method="get",
+            endpoint=endpoint,
         )
 
-        accounts_json = response.json()['accounts']
+        accounts_json = response.json()["accounts"]
         accounts = [MonzoAccount(data=account) for account in accounts_json]
         self._cached_accounts = accounts
 
@@ -289,11 +290,12 @@ class MonzoAPI(CommonMixin):
             else:
                 raise ValueError("You need to pass account ID")
 
-        endpoint = '/balance'
+        endpoint = "/balance"
         response = self._get_response(
-            method='get', endpoint=endpoint,
+            method="get",
+            endpoint=endpoint,
             params={
-                'account_id': account_id,
+                "account_id": account_id,
             },
         )
 
@@ -314,12 +316,13 @@ class MonzoAPI(CommonMixin):
         if not refresh and self._cached_pots:
             return self._cached_pots
 
-        endpoint = '/pots/listV1'
+        endpoint = "/pots/listV1"
         response = self._get_response(
-            method='get', endpoint=endpoint,
+            method="get",
+            endpoint=endpoint,
         )
 
-        pots_json = response.json()['pots']
+        pots_json = response.json()["pots"]
         pots = [MonzoPot(data=pot) for pot in pots_json]
         self._cached_pots = pots
 
@@ -347,11 +350,12 @@ class MonzoAPI(CommonMixin):
             else:
                 raise ValueError("You need to pass account ID")
 
-        endpoint = '/transactions'
+        endpoint = "/transactions"
         response = self._get_response(
-            method='get', endpoint=endpoint,
+            method="get",
+            endpoint=endpoint,
             params={
-                'account_id': account_id,
+                "account_id": account_id,
             },
         )
 
@@ -359,7 +363,7 @@ class MonzoAPI(CommonMixin):
         # the basic query of 'get the latest transaction' we need to always get
         # all transactions and do the reversing and slicing in Python
         # I send Monzo an email, we'll se how they'll respond
-        transactions = response.json()['transactions']
+        transactions = response.json()["transactions"]
         if reverse:
             transactions.reverse()
 
@@ -382,14 +386,16 @@ class MonzoAPI(CommonMixin):
         :returns: Monzo transaction details
         :rtype: MonzoTransaction
         """
-        endpoint = '/transactions/{}'.format(transaction_id)
+        endpoint = "/transactions/{}".format(transaction_id)
 
         data = dict()
         if expand_merchant:
-            data['expand[]'] = 'merchant'
+            data["expand[]"] = "merchant"
 
         response = self._get_response(
-            method='get', endpoint=endpoint, params=data,
+            method="get",
+            endpoint=endpoint,
+            params=data,
         )
 
-        return MonzoTransaction(data=response.json()['transaction'])
+        return MonzoTransaction(data=response.json()["transaction"])

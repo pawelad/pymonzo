@@ -34,12 +34,16 @@ test = [
   "pytest",
   "pytest-mock",
   "pytest-vcr",
-  "tox",
 ]
 lint = [
   "flake8",
 ]
-dev = ["pymonzo[test,lint]"]
+dev = [
+  "pymonzo[test,lint]",
+  "black",
+  "isort",
+  "tox",
+]
 
 [project.urls]
 Home = "https://github.com/pawelad/pymonzo"
@@ -48,3 +52,9 @@ Home = "https://github.com/pawelad/pymonzo"
 minversion = "6.0"
 addopts = "-ra --verbose"
 testpaths = "tests"
+
+[tool.black]
+target-version = ["py37"]
+
+[tool.isort]
+profile = "black"
