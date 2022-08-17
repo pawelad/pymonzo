@@ -1,0 +1,50 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pymonzo"
+authors = [{name = "Paweł Adamczak", email = "pawel.ad@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+keywords = ["monzo", "api"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+dynamic = ["version", "description"]
+
+dependencies = [
+  "python-dateutil",
+  "requests",
+  "requests-oauthlib",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-mock",
+  "pytest-vcr",
+  "tox",
+]
+lint = [
+  "flake8",
+]
+dev = ["pymonzo[test,lint]"]
+
+[project.urls]
+Home = "https://github.com/pawelad/pymonzo"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra --verbose"
+testpaths = "tests"

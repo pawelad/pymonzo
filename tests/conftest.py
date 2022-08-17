@@ -5,7 +5,7 @@ import pytest
 
 
 # pytest-vcr
-@pytest.fixture
+@pytest.fixture(scope='module')
 def vcr_config():
     """
     Custom vcr.py config
