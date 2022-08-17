@@ -26,6 +26,7 @@ dynamic = ["version", "description"]
 dependencies = [
   "Authlib",
   "httpx",
+  "pydantic",
   "python-dateutil",
 ]
 

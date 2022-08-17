@@ -4,13 +4,13 @@ Monzo API related code
 import json
 import webbrowser
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 from urllib.parse import urljoin
 
 from authlib.integrations.httpx_client import OAuth2Client
 from httpx import HTTPStatusError, Response
 
-from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoPot, MonzoTransaction
+from pymonzo import schemas
 from pymonzo.exceptions import MonzoAPIError
 from pymonzo.utils import get_authorization_response
 
@@ -19,8 +19,8 @@ class MonzoAPI:
     """
     Monzo API client.
 
-    Official docs:
-        https://monzo.com/docs/
+    Docs:
+        https://docs.monzo.com/
     """
 
     api_url = "https://api.monzo.com/"
@@ -126,178 +126,129 @@ class MonzoAPI:
 
         return response
 
-    def whoami(self):
+    def whoami(self) -> schemas.MonzoWhoAmi:
         """
-        Get information about the access token.
+        Return information about the access token.
 
-        Official docs:
-            https://monzo.com/docs/#authenticating-requests
-
-        :returns: access token details
-        :rtype: dict
+        Docs:
+            https://docs.monzo.com/#authenticating-requests
         """
         endpoint = "/ping/whoami"
-        response = self._get_response(
-            method="get",
-            endpoint=endpoint,
-        )
+        response = self._get_response(method="get", endpoint=endpoint)
 
-        return response.json()
+        who_am_i = schemas.MonzoWhoAmi(**response.json())
 
-    def accounts(self, refresh=False):
+        return who_am_i
+
+    def accounts(self, refresh: bool = False) -> List[schemas.MonzoAccount]:
         """
-        Returns a list of accounts owned by the currently authorised user.
+        Return a list of user accounts.
+
         It's often used when deciding whether to require explicit account ID
         or use the only available one, so we cache the response by default.
 
-        Official docs:
-            https://monzo.com/docs/#list-accounts
-
-        :param refresh: decides if the accounts information should be refreshed
-        :type refresh: bool
-        :returns: list of Monzo accounts
-        :rtype: list of MonzoAccount
+        Docs:
+            https://docs.monzo.com/#list-accounts
         """
         if not refresh and self._cached_accounts:
             return self._cached_accounts
 
         endpoint = "/accounts"
-        response = self._get_response(
-            method="get",
-            endpoint=endpoint,
-        )
+        response = self._get_response(method="get", endpoint=endpoint)
 
-        accounts_json = response.json()["accounts"]
-        accounts = [MonzoAccount(data=account) for account in accounts_json]
+        accounts = [
+            schemas.MonzoAccount(**account) for account in response.json()["accounts"]
+        ]
         self._cached_accounts = accounts
 
         return accounts
 
-    def balance(self, account_id=None):
+    def balance(self, account_id: Optional[str] = None) -> schemas.MonzoBalance:
         """
-        Returns balance information for a specific account.
+        Return balance information for passed account.
 
-        Official docs:
-            https://monzo.com/docs/#read-balance
+        For ease of use, it allows not passing an account ID if the user has only
+        one account.
 
-        :param account_id: Monzo account ID
-        :type account_id: str
-        :raises: ValueError
-        :returns: Monzo balance instance
-        :rtype: MonzoBalance
+        Docs:
+            https://docs.monzo.com/#read-balance
         """
         if not account_id:
             if len(self.accounts()) == 1:
                 account_id = self.accounts()[0].id
             else:
-                raise ValueError("You need to pass account ID")
+                raise ValueError("You need to pass an account ID")
 
         endpoint = "/balance"
-        response = self._get_response(
-            method="get",
-            endpoint=endpoint,
-            params={
-                "account_id": account_id,
-            },
-        )
+        params = {"account_id": account_id}
+        response = self._get_response(method="get", endpoint=endpoint, params=params)
 
-        return MonzoBalance(data=response.json())
+        balance = schemas.MonzoBalance(**response.json())
 
-    def pots(self, refresh=False):
+        return balance
+
+    def pots(self, refresh: bool = False) -> List[schemas.MonzoPot]:
         """
-        Returns a list of pots owned by the currently authorised user.
+        Return a list of user pots.
 
-        Official docs:
+        Docs:
             https://monzo.com/docs/#pots
-
-        :param refresh: decides if the pots information should be refreshed.
-        :type refresh: bool
-        :returns: list of Monzo pots
-        :rtype: list of MonzoPot
         """
         if not refresh and self._cached_pots:
             return self._cached_pots
 
-        endpoint = "/pots/listV1"
-        response = self._get_response(
-            method="get",
-            endpoint=endpoint,
-        )
+        endpoint = "/pots"
+        response = self._get_response(method="get", endpoint=endpoint)
 
-        pots_json = response.json()["pots"]
-        pots = [MonzoPot(data=pot) for pot in pots_json]
+        pots = [schemas.MonzoPot(**pot) for pot in response.json()["pots"]]
         self._cached_pots = pots
 
         return pots
 
-    def transactions(self, account_id=None, reverse=True, limit=None):
+    def transaction(
+        self, transaction_id: str, *, expand_merchant: bool = False
+    ) -> schemas.MonzoTransaction:
         """
-        Returns a list of transactions on the user's account.
+        Return single transaction.
 
-        Official docs:
-            https://monzo.com/docs/#list-transactions
+        Docs:
+            https://docs.monzo.com/#retrieve-transaction
+        """
+        endpoint = f"/transactions/{transaction_id}"
+        params = {}
+        if expand_merchant:
+            params["expand[]"] = "merchant"
 
-        :param account_id: Monzo account ID
-        :type account_id: str
-        :param reverse: whether transactions should be in in descending order
-        :type reverse: bool
-        :param limit: how many transactions should be returned; None for all
-        :type limit: int
-        :returns: list of Monzo transactions
-        :rtype: list of MonzoTransaction
+        response = self._get_response(method="get", endpoint=endpoint, params=params)
+
+        transaction = schemas.MonzoTransaction(**response.json()["transaction"])
+
+        return transaction
+
+    def transactions(
+        self, account_id: Optional[str] = None, limit: Optional[int] = None
+    ) -> List[schemas.MonzoTransaction]:
+        """
+        Return a list of passed account transactions.
+
+        Docs:
+            https://docs.monzo.com/#list-transactions
         """
         if not account_id:
             if len(self.accounts()) == 1:
                 account_id = self.accounts()[0].id
             else:
-                raise ValueError("You need to pass account ID")
+                raise ValueError("You need to pass an account ID")
 
         endpoint = "/transactions"
-        response = self._get_response(
-            method="get",
-            endpoint=endpoint,
-            params={
-                "account_id": account_id,
-            },
-        )
-
-        # The API does not allow reversing the list or limiting it, so to do
-        # the basic query of 'get the latest transaction' we need to always get
-        # all transactions and do the reversing and slicing in Python
-        # I send Monzo an email, we'll se how they'll respond
-        transactions = response.json()["transactions"]
-        if reverse:
-            transactions.reverse()
-
+        params = {"account_id": account_id}
         if limit:
-            transactions = transactions[:limit]
+            params["limit"] = limit
+        response = self._get_response(method="get", endpoint=endpoint, params=params)
 
-        return [MonzoTransaction(data=t) for t in transactions]
+        transactions = [
+            schemas.MonzoTransaction(**transaction)
+            for transaction in response.json()["transactions"]
+        ]
 
-    def transaction(self, transaction_id, expand_merchant=False):
-        """
-        Returns an individual transaction, fetched by its id.
-
-        Official docs:
-            https://monzo.com/docs/#retrieve-transaction
-
-        :param transaction_id: Monzo transaction ID
-        :type transaction_id: str
-        :param expand_merchant: whether merchant data should be included
-        :type expand_merchant: bool
-        :returns: Monzo transaction details
-        :rtype: MonzoTransaction
-        """
-        endpoint = "/transactions/{}".format(transaction_id)
-
-        data = dict()
-        if expand_merchant:
-            data["expand[]"] = "merchant"
-
-        response = self._get_response(
-            method="get",
-            endpoint=endpoint,
-            params=data,
-        )
-
-        return MonzoTransaction(data=response.json()["transaction"])
+        return transactions
