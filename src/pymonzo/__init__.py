@@ -1,7 +1,7 @@
 """
 An - dare I say it - awesome Python Monzo public API wrapper.
 """
-from pymonzo.monzo_api import MonzoAPI  # noqa
+from pymonzo.client import MonzoAPI  # noqa
 
 __title__ = "pymonzo"
 __version__ = "0.22.0.dev0"

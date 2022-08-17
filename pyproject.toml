@@ -24,9 +24,9 @@ classifiers = [
 dynamic = ["version", "description"]
 
 dependencies = [
+  "Authlib",
+  "httpx",
   "python-dateutil",
-  "requests",
-  "requests-oauthlib",
 ]
 
 [project.optional-dependencies]

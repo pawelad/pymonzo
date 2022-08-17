@@ -13,6 +13,7 @@ from pymonzo.api_objects import (
 )
 
 
+@pytest.mark.skip
 class TestMonzoAPIIntegration:
     """
     Monzo API integration tests.
