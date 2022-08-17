@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Monzo integration tests. Made possible with the awesome VCR.py library.
 """
-from __future__ import unicode_literals
-
 import pytest
-import six
 
 from pymonzo import MonzoAPI
 from pymonzo.api_objects import (
@@ -101,7 +97,7 @@ class TestMonzoAPIIntegration:
 
         assert transaction
         assert isinstance(transaction, MonzoTransaction)
-        assert isinstance(transaction.merchant, six.text_type)
+        assert isinstance(transaction.merchant, str)
 
         # Expand merchant
         transaction_expand_merchant = monzo.transaction(

@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 """
 pymonzo config
 """
-from __future__ import unicode_literals
-
 import os
 
 

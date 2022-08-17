@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 pymonzo
 -------
 An - dare I say it - awesome Python Monzo public API wrapper
 """
-from __future__ import unicode_literals
-
 from pymonzo.monzo_api import MonzoAPI  # noqa
 
 

@@ -1,17 +1,14 @@
-# -*- coding: utf-8 -*-
 """
 Monzo API related code
 """
-from __future__ import unicode_literals
-
 import codecs
 import json
 import os
+from urllib.parse import urljoin
 
 import requests
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth2Session
-from six.moves.urllib.parse import urljoin
 
 from pymonzo.api_objects import MonzoAccount, MonzoBalance, MonzoTransaction
 from pymonzo.api_objects import MonzoPot

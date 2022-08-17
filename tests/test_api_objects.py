@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 """
 Test 'pymonzo.api_objects' file
 """
-from __future__ import unicode_literals
-
 from datetime import datetime
 
 import pytest

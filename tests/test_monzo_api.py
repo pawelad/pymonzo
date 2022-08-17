@@ -1,16 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Test 'pymonzo.monzo_api' file
 """
-from __future__ import unicode_literals
-
 import codecs
 import json
 import os
 import tempfile
+from urllib.parse import urljoin
 
 import pytest
-from six.moves.urllib.parse import urljoin
 
 from pymonzo import MonzoAPI
 from pymonzo import config

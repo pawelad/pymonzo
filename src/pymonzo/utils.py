@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
 """
 pymonzo utils
 """
-from __future__ import unicode_literals
-
-from six import iteritems
 
 
 class CommonMixin(object):
@@ -22,7 +18,7 @@ class CommonMixin(object):
 
     def __str__(self):
         data = ', '.join([
-            '{}={}'.format(k, v) for k, v in iteritems(self.__dict__)
+            '{}={}'.format(k, v) for k, v in self.__dict__.items()
             if not k.startswith('_')
         ])
         return '{}({})'.format(self.__class__.__name__, data)

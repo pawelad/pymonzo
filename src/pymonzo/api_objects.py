@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
 """
 Monzo API objects related code
 """
-from __future__ import unicode_literals
-
-import six
 from dateutil.parser import parse as parse_date
 
 from pymonzo.utils import CommonMixin
@@ -113,7 +109,7 @@ class MonzoTransaction(MonzoObject):
 
         # Merchant field can contain either merchant ID or the whole object
         if (data.get('merchant') and
-                not isinstance(data['merchant'], six.text_type)):
+                not isinstance(data['merchant'], str)):
             self.merchant = MonzoMerchant(data=data.pop('merchant'))
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import io
 import os
 import re
@@ -56,7 +55,6 @@ setup(
         'python-dateutil>=2.6.1,<3.0',
         'requests>=2.18.4,<3.0',
         'requests-oauthlib>=0.8.0,<1.0',
-        'six>=1.10.0,<2.0',
     ],
     keywords=['monzo', 'api', 'mondo'],
     classifiers=[

@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Test 'pymonzo.utils' file
 """
-from __future__ import unicode_literals
-
 import pytest
-import six
 
 from pymonzo.utils import CommonMixin
 
@@ -87,21 +83,12 @@ class TestCommonMixin:
         assert "<class 'pymonzo.utils.CommonMixin'>" in repr_b
         assert "<class 'tests.test_utils.ExampleClass'>" in repr_c
 
-        if six.PY2:
-            # We don't know the `__dict__` order so let's do it in parts
-            parts = ["u'_hidden': 1", "u'foo': u'foo'", "u'bar': True"]
+        # We don't know the `__dict__` order so let's do it in parts
+        parts = [
+            "'_hidden': 1", "'foo': 'foo'", "'bar': True",
+        ]
 
-            for part in parts:
-                assert part in repr_a
-                assert part in repr_b
-                assert part in repr_c
-        else:
-            # We don't know the `__dict__` order so let's do it in parts
-            parts = [
-                "'_hidden': 1", "'foo': 'foo'", "'bar': True",
-            ]
-
-            for part in parts:
-                assert part in repr_a
-                assert part in repr_b
-                assert part in repr_c
+        for part in parts:
+            assert part in repr_a
+            assert part in repr_b
+            assert part in repr_c

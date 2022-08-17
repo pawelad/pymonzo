@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 """
 pymonzo pytest configuration and utils
 """
-from __future__ import unicode_literals
-
 import pytest
 
 
