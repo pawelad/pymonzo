@@ -1,5 +1,26 @@
 """
 An - dare I say it - awesome Python Monzo public API wrapper.
+
+Implemented API endpoints:
+- [x] GET /ping/whoami
+- [x] GET /accounts
+- [x] GET /balance
+- [x] GET /pots
+- [ ] GET /pots/$pot_id/deposit
+- [ ] GET /pots/$pot_id/withdraw
+- [x] GET /transactions
+- [x] GET /transactions/$transaction_id
+- [ ] PATCH /transactions/$transaction_id
+- [ ] POST /feed
+- [ ] POST /attachment/upload
+- [ ] POST /attachment/register
+- [ ] POST /attachment/deregister
+- [ ] GET /transaction-receipts
+- [ ] PUT /transaction-receipts
+- [ ] DELETE /transaction-receipts
+- [ ] GET /webhooks
+- [ ] POST /webhooks
+- [ ] DELETE /webhooks/$webhook_id
 """
 from pymonzo.client import MonzoAPI  # noqa
 
