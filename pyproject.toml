@@ -37,6 +37,7 @@ test = [
 ]
 lint = [
   "flake8",
+  "interrogate",
 ]
 dev = [
   "pymonzo[test,lint]",
@@ -58,3 +59,7 @@ target-version = ["py37"]
 
 [tool.isort]
 profile = "black"
+
+[tool.interrogate]
+ignore-init-module = true
+ignore-nested-classes = true
