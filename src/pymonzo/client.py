@@ -40,7 +40,9 @@ class MonzoAPI:
         """
         if all([client_id, client_secret, token]):
             self._settings = PyMonzoSettings(
-                client_id=client_id, client_secret=client_secret, token=token,
+                client_id=client_id,
+                client_secret=client_secret,
+                token=token,
             )
         else:
             try:
