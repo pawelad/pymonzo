@@ -38,7 +38,7 @@ class MonzoAPI:
         except FileNotFoundError:
             raise ValueError(
                 "Couldn't find pymonzo settings file. You need to run "
-                "`MonzoAPI.authorize(client_id, client_secret)`'` first."
+                "`MonzoAPI.authorize(client_id, client_secret)` first."
             )
 
         self.session = OAuth2Client(
