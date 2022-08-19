@@ -1,5 +1,5 @@
 """
-pymonzo related exceptions.
+pymonzo exceptions.
 """
 
 

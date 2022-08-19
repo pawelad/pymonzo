@@ -1,19 +1,17 @@
 """
-pymonzo resources.
+pymonzo resources related code.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from pymonzo.client import MonzoAPI
-
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import httpx
 
 from pymonzo.exceptions import MonzoAPIError
+
+if TYPE_CHECKING:
+    from pymonzo.client import MonzoAPI
 
 
 @dataclass
