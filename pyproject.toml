@@ -33,7 +33,7 @@ dependencies = [
 test = [
   "pytest",
   "pytest-mock",
-  "pytest-vcr",
+  "pytest-recording",
 ]
 lint = [
   "flake8",
