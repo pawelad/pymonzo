@@ -39,7 +39,9 @@ class MonzoAPI:
         Initialize Monzo API client and load pymonzo config file.
         """
         if all([client_id, client_secret, token]):
-            self._settings = PyMonzoSettings(client_id=client_id, client_secret=client_secret, token=token)
+            self._settings = PyMonzoSettings(
+                client_id=client_id, client_secret=client_secret, token=token,
+            )
         else:
             try:
                 self._settings = PyMonzoSettings.load_from_disk(self.settings_path)

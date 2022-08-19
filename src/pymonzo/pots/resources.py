@@ -17,7 +17,9 @@ class PotsResource(BaseResource):
     _cached_pots: dict = field(default_factory=dict)
 
     def list(
-        self, account_id: Optional[str] = None, refresh: bool = False
+        self,
+        account_id: Optional[str] = None,
+        refresh: bool = False,
     ) -> List[MonzoPot]:
         """
         Return a list of user pots.
