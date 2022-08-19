@@ -20,18 +20,18 @@ class PyMonzoSettings(BaseSettings):
         env_prefix = "pymonzo_"
 
     @classmethod
-    def load_from_disk(cls, config_path: Path) -> "PyMonzoSettings":
+    def load_from_disk(cls, settings_path: Path) -> "PyMonzoSettings":
         """
         Load pymonzo settings from disk.
         """
-        with open(config_path, "r") as f:
+        with open(settings_path, "r") as f:
             settings = json.load(f)
 
         return cls(**settings)
 
-    def save_to_disk(self, config_path: Path) -> None:
+    def save_to_disk(self, settings_path: Path) -> None:
         """
         Save pymonzo config on disk.
         """
-        with open(config_path, "w") as f:
+        with open(settings_path, "w") as f:
             json.dump(self.dict(), f, indent=4)
