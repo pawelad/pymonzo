@@ -27,7 +27,6 @@ dependencies = [
   "Authlib",
   "httpx",
   "pydantic",
-  "python-dateutil",
 ]
 
 [project.optional-dependencies]

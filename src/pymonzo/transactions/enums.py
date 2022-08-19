@@ -1,5 +1,5 @@
 """
-Monzo API enums.
+Monzo API transactions related enums.
 """
 from enum import Enum
 
