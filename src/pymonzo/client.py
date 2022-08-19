@@ -3,6 +3,7 @@ pymonzo API client code.
 """
 import webbrowser
 from pathlib import Path
+from typing import Optional
 
 from authlib.integrations.httpx_client import OAuth2Client
 
@@ -26,20 +27,29 @@ class MonzoAPI:
     api_url = "https://api.monzo.com"
     authorization_endpoint = "https://auth.monzo.com/"
     token_endpoint = "https://api.monzo.com/oauth2/token"
-    config_path = Path.home() / ".pymonzo"
+    settings_path = Path.home() / ".pymonzo"
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        client_id: Optional[str] = None,
+        client_secret: Optional[str] = None,
+        token: Optional[dict] = None,
+    ) -> None:
         """
         Initialize Monzo API client and load pymonzo config file.
         """
-        # Initialize OAuth authenticated session from data saved from disk
-        try:
-            self._settings = PyMonzoSettings.load_from_disk(self.config_path)
-        except FileNotFoundError:
-            raise ValueError(
-                "Couldn't find pymonzo settings file. You need to run "
-                "`MonzoAPI.authorize(client_id, client_secret)` first."
-            )
+        if all([client_id, client_secret, token]):
+            self._settings = PyMonzoSettings(client_id=client_id, client_secret=client_secret, token=token)
+        else:
+            try:
+                self._settings = PyMonzoSettings.load_from_disk(self.settings_path)
+            except FileNotFoundError:
+                raise ValueError(
+                    "You either need to run "
+                    "`MonzoAPI.authorize(client_id, client_secret)` to get and save "
+                    "the authorization token or explicitly pass the client_id, "
+                    "client_secret and token arguments."
+                )
 
         self.session = OAuth2Client(
             client_id=self._settings.client_id,
@@ -63,8 +73,9 @@ class MonzoAPI:
         client_id: str,
         client_secret: str,
         *,
+        save_to_disk: bool = True,
         redirect_uri: str = "http://localhost:6600/pymonzo",
-    ) -> None:
+    ) -> dict:
         """
         Use OAuth 2 workflow to authorize and get the access token.
         """
@@ -83,9 +94,12 @@ class MonzoAPI:
         )
 
         # Save config locally
-        settings = PyMonzoSettings(
-            client_id=client_id,
-            client_secret=client_secret,
-            token=token,
-        )
-        settings.save_to_disk(cls.config_path)
+        if save_to_disk:
+            settings = PyMonzoSettings(
+                client_id=client_id,
+                client_secret=client_secret,
+                token=token,
+            )
+            settings.save_to_disk(cls.settings_path)
+
+        return token
