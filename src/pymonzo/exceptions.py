@@ -8,4 +8,8 @@ class PyMonzoException(Exception):
 
 
 class MonzoAPIError(PyMonzoException):
-    """Monzo API error exception"""
+    """Catch all Monzo API error."""
+
+
+class MonzoAccessDenied(MonzoAPIError):
+    """Access to Monzo API has been denied."""
