@@ -15,7 +15,6 @@ def accounts_resource(monzo_api: MonzoAPI) -> AccountsResource:
     return AccountsResource(client=monzo_api)
 
 
-@pytest.mark.skip
 class TestAccountsResource:
     """
     Test 'accounts.AccountsResource' class.

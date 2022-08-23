@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - api.monzo.com
+      user-agent:
+      - python-httpx/0.23.0
+    method: GET
+    uri: https://api.monzo.com/accounts
+  response:
+    content: "{\"accounts\":[{\"id\":\"acc_00009superSecretAccountID1\",\"closed\":true,\"created\":\"2015-01-01T12:38:56.029Z\",\"description\":\"user_00009superSecretUserID\",\"type\":\"uk_prepaid\",\"currency\":\"GBP\",\"country_code\":\"GB\",\"owners\":[{\"user_id\":\"user_00009superSecretUserID\",\"preferred_name\":\"Bender
+      Rodríguez\",\"preferred_first_name\":\"Bender\"}]},{\"id\":\"acc_00009superSecretAccountID2\",\"closed\":false,\"created\":\"2020-01-01T02:55:36.497Z\",\"description\":\"user_00009superSecretUserID\",\"type\":\"uk_retail\",\"currency\":\"GBP\",\"country_code\":\"GB\",\"owners\":[{\"user_id\":\"user_00009superSecretUserID\",\"preferred_name\":\"Bender
+      Rodríguez\",\"preferred_first_name\":\"Bender\"}],\"account_number\":\"12345678\",\"sort_code\":\"040004\",\"payment_details\":{\"locale_uk\":{\"account_number\":\"12345678\",\"sort_code\":\"040004\"}}}]}\n"
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 73f2f0273d5fc03a-VNO
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Aug 2022 09:49:25 GMT
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Opentracing-Id:
+      - 40ec0c0e8c5709a7
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Trace-Id:
+      - 0fa12c5b-4488-40f4-79c2-cad23b3bb8cb
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+    http_version: HTTP/1.1
+    status_code: 200
+version: 1
