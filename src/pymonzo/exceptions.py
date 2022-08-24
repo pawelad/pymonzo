@@ -4,7 +4,11 @@ pymonzo exceptions.
 
 
 class PyMonzoException(Exception):
-    """Base pymonzo exception"""
+    """Base pymonzo exception."""
+
+
+class CannotDetermineDefaultAccount(PyMonzoException):
+    """Cannot determine default account."""
 
 
 class MonzoAPIError(PyMonzoException):

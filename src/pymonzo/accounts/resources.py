@@ -4,6 +4,7 @@ Monzo API accounts resource.
 from typing import List, Optional
 
 from pymonzo.accounts.schemas import MonzoAccount
+from pymonzo.exceptions import CannotDetermineDefaultAccount
 from pymonzo.resources import BaseResource
 
 
@@ -14,17 +15,26 @@ class AccountsResource(BaseResource):
 
     _cached_accounts = None
 
-    def get_default_account(self) -> Optional[MonzoAccount]:
+    def get_default_account(self) -> MonzoAccount:
         """
         If the user has only one active account, treat it as the default account.
         """
-        if len(self.list()) != 1:
-            raise ValueError(
-                "Cannot determine default account. "
-                "You need to explicitly pass an 'account_id' argument."
-            )
+        accounts = self.list()
 
-        return self.client.accounts()[0]
+        # If there is only one account, return it
+        if len(accounts) == 1:
+            return accounts[0]
+
+        # Otherwise check if there is only one active (non-closed) account
+        active_accounts = [account for account in accounts if not account.closed]
+
+        if len(active_accounts) == 1:
+            return active_accounts[0]
+
+        raise CannotDetermineDefaultAccount(
+            "Cannot determine default account. "
+            "You need to explicitly pass an 'account_id' argument."
+        )
 
     def list(self, refresh: bool = False) -> List[MonzoAccount]:
         """
