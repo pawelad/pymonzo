@@ -11,4 +11,8 @@ def monzo_api() -> MonzoAPI:
     """
     Return a 'MonzoAPI' instance.
     """
-    return MonzoAPI()
+    return MonzoAPI(
+        client_id="TEST_CLIENT_ID",
+        client_secret="TEST_CLIENT_SECRET",
+        token={"access_token": "TEST_TOKEN"},
+    )

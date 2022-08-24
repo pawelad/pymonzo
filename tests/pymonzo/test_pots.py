@@ -15,7 +15,6 @@ def pots_resource(monzo_api: MonzoAPI) -> PotsResource:
     return PotsResource(client=monzo_api)
 
 
-@pytest.mark.skip
 class TestPotsResource:
     """
     Test 'pots.PotsResource' class.
