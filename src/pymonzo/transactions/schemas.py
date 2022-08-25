@@ -4,12 +4,13 @@ Monzo API transactions related schemas.
 from datetime import datetime
 from typing import Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from pymonzo.transactions.enums import (
     MonzoTransactionCategory,
     MonzoTransactionDeclineReason,
 )
+from pymonzo.utils import empty_str_to_none
 
 
 class MonzoTransactionMerchantAddress(BaseModel):
@@ -64,5 +65,10 @@ class MonzoTransaction(BaseModel):
     metadata: dict
     notes: str
     is_load: bool
-    settled: datetime
+    settled: Optional[datetime]
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
+
+    # Validators
+    _settled_empty_str_to_none = validator("settled", pre=True, allow_reuse=True)(
+        empty_str_to_none
+    )

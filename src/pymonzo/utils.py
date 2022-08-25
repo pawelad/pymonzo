@@ -2,7 +2,7 @@
 pymonzo utils.
 """
 from datetime import datetime, timedelta
-from typing import Callable, List, Tuple
+from typing import Any, Callable, List, Tuple
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
@@ -14,6 +14,16 @@ def n_days_ago(n: int) -> datetime:
     today = datetime.now()
     delta = timedelta(days=n)
     return today - delta
+
+
+def empty_str_to_none(value: Any) -> Any:
+    """
+    Return passed string, unless it's empty, in which case return 'None'.
+    Used as a pydantic validator.
+    """
+    if value == "":
+        return None
+    return value
 
 
 class WSGIApp:
