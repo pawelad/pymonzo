@@ -1,9 +1,19 @@
 """
 pymonzo utils.
 """
+from datetime import datetime, timedelta
 from typing import Callable, List, Tuple
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
+
+
+def n_days_ago(n: int) -> datetime:
+    """
+    Return datetime that was n days ago.
+    """
+    today = datetime.now()
+    delta = timedelta(days=n)
+    return today - delta
 
 
 class WSGIApp:
