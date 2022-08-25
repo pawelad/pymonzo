@@ -37,7 +37,7 @@ class BaseResource:
         if response.status_code == codes.FORBIDDEN:
             raise MonzoAccessDenied(
                 "Monzo API access denied (HTTP 403 Forbidden). "
-                "Make sure to authenticate the OAuth app on your mobile device."
+                "Make sure to (re)authenticate the OAuth app on your mobile device."
             )
 
         try:

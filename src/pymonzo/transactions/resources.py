@@ -50,6 +50,9 @@ class TransactionsResource(BaseResource):
         For ease of use, it allows not passing an account ID if the user has only
         one account.
 
+        You can only fetch all transactions within 5 minutes of authentication.
+        After that, you can query your last 90 days.
+
         Docs:
             https://docs.monzo.com/#list-transactions
         """
