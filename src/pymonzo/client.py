@@ -109,20 +109,10 @@ class MonzoAPI:
 
         return token
 
-    def update_token(
-        self,
-        token: dict,
-        refresh_token: Optional[str] = None,
-        access_token: Optional[str] = None,
-    ):
+    def update_token(self, token: dict, **kwargs):
         """
         Update settings with refreshed token and save to disk.
         """
-        # TODO: Is this needed?
-        if refresh_token:
-            token["refresh_token"] = refresh_token
-        if access_token:
-            token["access_token"] = access_token
 
         self._settings.token = token
         self._settings.save_to_disk(self.settings_path)
