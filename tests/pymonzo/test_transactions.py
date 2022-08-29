@@ -7,7 +7,7 @@ from pymonzo import MonzoAPI
 from pymonzo.transactions import MonzoTransaction, TransactionsResource
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def transactions_resource(monzo_api: MonzoAPI) -> TransactionsResource:
     """
     Return a 'TransactionsResource' instance.

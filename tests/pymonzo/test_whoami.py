@@ -7,7 +7,7 @@ from pymonzo import MonzoAPI
 from pymonzo.whoami import MonzoWhoAmI, WhoAmIResource
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def whoami_resource(monzo_api: MonzoAPI) -> WhoAmIResource:
     """
     Return a 'WhoAmIResource' instance.

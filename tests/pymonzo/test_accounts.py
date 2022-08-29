@@ -8,7 +8,7 @@ from pymonzo.accounts import AccountsResource, MonzoAccount
 from pymonzo.exceptions import CannotDetermineDefaultAccount
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def accounts_resource(monzo_api: MonzoAPI) -> AccountsResource:
     """
     Return a 'AccountsResource' instance.

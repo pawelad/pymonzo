@@ -7,7 +7,7 @@ from pymonzo import MonzoAPI
 from pymonzo.balance import BalanceResource, MonzoBalance
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def balance_resource(monzo_api: MonzoAPI) -> BalanceResource:
     """
     Return a 'BalanceResource' instance.

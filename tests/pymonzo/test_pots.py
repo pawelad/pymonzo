@@ -7,7 +7,7 @@ from pymonzo import MonzoAPI
 from pymonzo.pots import MonzoPot, PotsResource
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def pots_resource(monzo_api: MonzoAPI) -> PotsResource:
     """
     Return a 'PotsResource' instance.
