@@ -6,7 +6,7 @@ import pytest
 from pymonzo import MonzoAPI
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def monzo_api() -> MonzoAPI:
     """
     Return a 'MonzoAPI' instance.
