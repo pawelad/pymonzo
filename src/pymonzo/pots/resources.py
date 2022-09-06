@@ -12,6 +12,9 @@ from pymonzo.resources import BaseResource
 class PotsResource(BaseResource):
     """
     Monzo API pots resource.
+
+    Docs:
+        https://monzo.com/docs/#pots
     """
 
     _cached_pots: dict = field(default_factory=dict)
@@ -28,7 +31,7 @@ class PotsResource(BaseResource):
         one account.
 
         Docs:
-            https://monzo.com/docs/#pots
+            https://docs.monzo.com/#list-pots
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id

@@ -10,6 +10,9 @@ from pymonzo.resources import BaseResource
 class BalanceResource(BaseResource):
     """
     Monzo API balance resource.
+
+    Docs:
+        https://docs.monzo.com/#balance
     """
 
     def get(self, account_id: Optional[str] = None) -> MonzoBalance:

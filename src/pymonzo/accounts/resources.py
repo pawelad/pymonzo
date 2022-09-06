@@ -11,6 +11,9 @@ from pymonzo.resources import BaseResource
 class AccountsResource(BaseResource):
     """
     Monzo API accounts resource.
+
+    Docs:
+        https://docs.monzo.com/#accounts
     """
 
     _cached_accounts = None

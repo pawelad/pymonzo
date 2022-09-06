@@ -11,6 +11,9 @@ from pymonzo.transactions.schemas import MonzoTransaction
 class TransactionsResource(BaseResource):
     """
     Monzo API transactions resource.
+
+    Docs:
+        https://docs.monzo.com/#transactions
     """
 
     def get(
