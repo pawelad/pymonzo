@@ -16,7 +16,7 @@ class AccountsResource(BaseResource):
         https://docs.monzo.com/#accounts
     """
 
-    _cached_accounts = None
+    _cached_accounts: Optional[List[MonzoAccount]] = None
 
     def get_default_account(self) -> MonzoAccount:
         """

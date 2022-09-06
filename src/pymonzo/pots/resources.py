@@ -3,7 +3,7 @@ Monzo API pots resource.
 """
 from dataclasses import dataclass, field
 from secrets import token_urlsafe
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from pymonzo.exceptions import CannotDetermineDefaultPot
 from pymonzo.pots.schemas import MonzoPot
@@ -19,7 +19,7 @@ class PotsResource(BaseResource):
         https://monzo.com/docs/#pots
     """
 
-    _cached_pots: dict = field(default_factory=dict)
+    _cached_pots: Dict[str, List[MonzoPot]] = field(default_factory=dict)
 
     def get_default_pot(self, account_id: Optional[str] = None) -> MonzoPot:
         """
