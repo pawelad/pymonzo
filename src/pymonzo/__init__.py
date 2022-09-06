@@ -6,8 +6,8 @@ Implemented API endpoints:
 - [x] GET /accounts
 - [x] GET /balance
 - [x] GET /pots
-- [ ] GET /pots/$pot_id/deposit
-- [ ] GET /pots/$pot_id/withdraw
+- [x] PUT /pots/$pot_id/deposit
+- [ ] PUT /pots/$pot_id/withdraw
 - [x] GET /transactions
 - [x] GET /transactions/$transaction_id
 - [ ] PATCH /transactions/$transaction_id

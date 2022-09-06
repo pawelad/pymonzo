@@ -11,6 +11,10 @@ class CannotDetermineDefaultAccount(PyMonzoException):
     """Cannot determine default account."""
 
 
+class CannotDetermineDefaultPot(PyMonzoException):
+    """Cannot determine default pot."""
+
+
 class MonzoAPIError(PyMonzoException):
     """Catch all Monzo API error."""
 
