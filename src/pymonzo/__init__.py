@@ -13,7 +13,7 @@ Implemented API endpoints:
 - [x] PATCH /transactions/$transaction_id
 - [x] POST /feed
 - [x] POST /attachment/upload
-- [ ] POST /attachment/register
+- [x] POST /attachment/register
 - [ ] POST /attachment/deregister
 - [ ] GET /transaction-receipts
 - [ ] PUT /transaction-receipts

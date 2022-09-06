@@ -3,6 +3,7 @@ Monzo API attachments resource.
 """
 from typing import Dict
 
+from pymonzo.attachments import MonzoAttachment
 from pymonzo.resources import BaseResource
 
 
@@ -38,3 +39,27 @@ class AttachmentsResource(BaseResource):
         response = self._get_response(method="post", endpoint=endpoint, params=params)
 
         return response.json()
+
+    def register(
+        self,
+        transaction_id: str,
+        file_url: str,
+        file_type: str,
+    ) -> MonzoAttachment:
+        """
+        Register uploaded image to an attachment.
+
+        Docs:
+            https://docs.monzo.com/#register-attachment
+        """
+        endpoint = "/attachment/register"
+        params = {
+            "external_id": transaction_id,
+            "file_url": file_url,
+            "file_type": file_type,
+        }
+        response = self._get_response(method="post", endpoint=endpoint, params=params)
+
+        attachment = MonzoAttachment(**response.json()["attachment"])
+
+        return attachment
