@@ -17,6 +17,7 @@ class AttachmentsResource(BaseResource):
 
     def upload(
         self,
+        *,
         file_name: str,
         file_type: str,
         content_length: int,
@@ -43,6 +44,7 @@ class AttachmentsResource(BaseResource):
     def register(
         self,
         transaction_id: str,
+        *,
         file_url: str,
         file_type: str,
     ) -> MonzoAttachment:
@@ -63,3 +65,16 @@ class AttachmentsResource(BaseResource):
         attachment = MonzoAttachment(**response.json()["attachment"])
 
         return attachment
+
+    def deregister(self, attachment_id: str) -> dict:
+        """
+        Deregister an attachment.
+
+        Docs:
+            https://docs.monzo.com/#deregister-attachment
+        """
+        endpoint = "/attachment/deregister"
+        params = {"id": attachment_id}
+        response = self._get_response(method="post", endpoint=endpoint, params=params)
+
+        return response.json()

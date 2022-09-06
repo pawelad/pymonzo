@@ -14,7 +14,7 @@ Implemented API endpoints:
 - [x] POST /feed
 - [x] POST /attachment/upload
 - [x] POST /attachment/register
-- [ ] POST /attachment/deregister
+- [x] POST /attachment/deregister
 - [ ] GET /transaction-receipts
 - [ ] PUT /transaction-receipts
 - [ ] DELETE /transaction-receipts
