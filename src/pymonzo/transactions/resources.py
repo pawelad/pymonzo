@@ -2,7 +2,7 @@
 Monzo API transactions resource.
 """
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pymonzo.resources import BaseResource
 from pymonzo.transactions.schemas import MonzoTransaction
@@ -34,6 +34,26 @@ class TransactionsResource(BaseResource):
             params["expand[]"] = "merchant"
 
         response = self._get_response(method="get", endpoint=endpoint, params=params)
+
+        transaction = MonzoTransaction(**response.json()["transaction"])
+
+        return transaction
+
+    def annotate(
+        self,
+        transaction_id: str,
+        metadata: Dict[str, str],
+    ) -> MonzoTransaction:
+        """
+        Annotate transaction with extra metadata.
+
+        Docs:
+            https://docs.monzo.com/#annotate-transaction
+        """
+        endpoint = f"/transactions/{transaction_id}"
+        params = {f"metadata[{key}]": value for key, value in metadata.items()}
+
+        response = self._get_response(method="patch", endpoint=endpoint, params=params)
 
         transaction = MonzoTransaction(**response.json()["transaction"])
 
