@@ -50,8 +50,7 @@ class TransactionsResource(BaseResource):
         """
         Return a list of passed account transactions.
 
-        For ease of use, it allows not passing an account ID if the user has only
-        one account.
+        For ease of use, account ID is not required if user has only one active account.
 
         You can only fetch all transactions within 5 minutes of authentication.
         After that, you can query your last 90 days.

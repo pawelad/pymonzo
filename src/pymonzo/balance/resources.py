@@ -19,8 +19,7 @@ class BalanceResource(BaseResource):
         """
         Return balance information for passed account.
 
-        For ease of use, it allows not passing an account ID if the user has only
-        one account.
+        For ease of use, account ID is not required if user has only one active account.
 
         Docs:
             https://docs.monzo.com/#read-balance

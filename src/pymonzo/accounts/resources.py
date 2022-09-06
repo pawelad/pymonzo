@@ -44,7 +44,7 @@ class AccountsResource(BaseResource):
         Return a list of user accounts.
 
         It's often used when deciding whether to require explicit account ID
-        or use the only available one, so we cache the response by default.
+        or use the only active one, so we cache the response by default.
 
         Docs:
             https://docs.monzo.com/#list-accounts

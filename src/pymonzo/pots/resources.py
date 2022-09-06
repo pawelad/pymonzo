@@ -27,8 +27,10 @@ class PotsResource(BaseResource):
         """
         Return a list of user pots.
 
-        For ease of use, it allows not passing an account ID if the user has only
-        one account.
+        For ease of use, account ID is not required if user has only one active account.
+
+        It's often used when deciding whether to require explicit pot ID
+        or use the only active one, so we cache the response by default.
 
         Docs:
             https://docs.monzo.com/#list-pots
