@@ -86,7 +86,7 @@ class PotsResource(BaseResource):
         dedupe_id: Optional[str] = None,
     ):
         """
-        Move money from account to pot.
+        Move money from an account to a pot.
 
         For ease of use, pot ID and/or account ID is not required if user has only
         one active pot/account.
@@ -106,6 +106,44 @@ class PotsResource(BaseResource):
         endpoint = f"/pots/{pot_id}/deposit"
         params = {
             "source_account_id": account_id,
+            "amount": amount,
+            "dedupe_id": dedupe_id,
+        }
+        response = self._get_response(method="put", endpoint=endpoint, params=params)
+
+        pot = MonzoPot(**response.json())
+
+        return pot
+
+    def withdraw(
+        self,
+        amount: Union[int, float],
+        pot_id: Optional[str] = None,
+        *,
+        account_id: Optional[str] = None,
+        dedupe_id: Optional[str] = None,
+    ):
+        """
+        Withdraw money from a pot to an account.
+
+        For ease of use, pot ID and/or account ID is not required if user has only
+        one active pot/account.
+
+        Docs:
+            https://docs.monzo.com/#withdraw-from-a-pot
+        """
+        if not account_id:
+            account_id = self.client.accounts.get_default_account().id
+
+        if not pot_id:
+            pot_id = self.get_default_pot(account_id)
+
+        if not dedupe_id:
+            dedupe_id = token_urlsafe(16)
+
+        endpoint = f"/pots/{pot_id}/withdraw"
+        params = {
+            "destination_account_id": account_id,
             "amount": amount,
             "dedupe_id": dedupe_id,
         }
