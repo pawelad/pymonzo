@@ -39,7 +39,7 @@ class AccountsResource(BaseResource):
             "You need to explicitly pass an 'account_id' argument."
         )
 
-    def list(self, refresh: bool = False) -> List[MonzoAccount]:
+    def list(self, *, refresh: bool = False) -> List[MonzoAccount]:
         """
         Return a list of user accounts.
 

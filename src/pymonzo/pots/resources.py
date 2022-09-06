@@ -22,6 +22,7 @@ class PotsResource(BaseResource):
     def list(
         self,
         account_id: Optional[str] = None,
+        *,
         refresh: bool = False,
     ) -> List[MonzoPot]:
         """
