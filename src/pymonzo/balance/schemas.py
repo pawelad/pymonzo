@@ -16,3 +16,9 @@ class MonzoBalance(BaseModel):
     total_balance: int
     currency: str
     spend_today: int
+
+    # Undocumented in API docs
+    balance_including_flexible_savings: int
+    local_currency: str
+    local_exchange_rate: int
+    local_spend: list
