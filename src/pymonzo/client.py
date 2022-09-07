@@ -4,6 +4,7 @@ pymonzo API client code.
 import webbrowser
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
 from authlib.integrations.httpx_client import OAuth2Client
 
@@ -91,7 +92,11 @@ class MonzoAPI:
         webbrowser.open(url)
 
         # Start a webserver and wait for the callback
-        authorization_response = get_authorization_response("localhost", 6600)
+        parsed_url = urlparse(redirect_uri)
+        authorization_response = get_authorization_response(
+            host=parsed_url.hostname,
+            port=parsed_url.port,
+        )
 
         token = client.fetch_token(
             cls.token_endpoint,
