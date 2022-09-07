@@ -98,7 +98,7 @@ class PotsResource(BaseResource):
             account_id = self.client.accounts.get_default_account().id
 
         if not pot_id:
-            pot_id = self.get_default_pot(account_id)
+            pot_id = self.get_default_pot(account_id).id
 
         if not dedupe_id:
             dedupe_id = token_urlsafe(16)
@@ -136,7 +136,7 @@ class PotsResource(BaseResource):
             account_id = self.client.accounts.get_default_account().id
 
         if not pot_id:
-            pot_id = self.get_default_pot(account_id)
+            pot_id = self.get_default_pot(account_id).id
 
         if not dedupe_id:
             dedupe_id = token_urlsafe(16)
