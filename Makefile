@@ -17,7 +17,7 @@ test: ## Run tests
 
 .PHONY: clean
 clean: ## Clean dev artifacts
-	rm -rf .pytest_cache/ .tox/
+	rm -rf .mypy_cache/ .pytest_cache/ .tox/
 
 # Source: https://www.client9.com/self-documenting-makefiles/
 .PHONY: help

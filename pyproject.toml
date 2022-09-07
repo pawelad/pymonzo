@@ -35,31 +35,52 @@ test = [
   "pytest-mock",
   "pytest-recording",
 ]
-lint = [
-  "flake8",
-  "interrogate",
-]
 dev = [
-  "pymonzo[test,lint]",
+  "pymonzo[test]",
+  # Checks
+  "bandit",
+  "interrogate",
+  # Code style
   "black",
   "isort",
+  # Linters
+  "flake8",
+  "flake8-bugbear",
+  "flake8-docstrings",
+  "flake8-print",
+  "pep8-naming",
+  # Type checking
+  "mypy",
+  # Other
   "tox",
 ]
 
 [project.urls]
 Home = "https://github.com/pawelad/pymonzo"
 
-[tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "-ra --verbose"
-testpaths = "tests"
+[tool.bandit]
+skips = ["B101"]
 
 [tool.black]
 target-version = ["py37"]
 
-[tool.isort]
-profile = "black"
-
 [tool.interrogate]
 ignore-init-module = true
 ignore-nested-classes = true
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = "3.7"
+
+[[tool.mypy.overrides]]
+module = [
+  "authlib.integrations.httpx_client",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra --verbose"
+testpaths = "tests"
