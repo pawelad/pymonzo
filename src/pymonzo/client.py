@@ -27,7 +27,7 @@ class MonzoAPI:
 
     api_url = "https://api.monzo.com"
     authorization_endpoint = "https://auth.monzo.com/"
-    token_endpoint = "https://api.monzo.com/oauth2/token"
+    token_endpoint = "https://api.monzo.com/oauth2/token"  # nosec B105
     settings_path = Path.home() / ".pymonzo"
 
     def __init__(
