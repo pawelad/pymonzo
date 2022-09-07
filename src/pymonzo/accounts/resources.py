@@ -1,13 +1,15 @@
 """
 Monzo API accounts resource.
 """
-from typing import List, Optional
+from dataclasses import dataclass, field
+from typing import List
 
 from pymonzo.accounts.schemas import MonzoAccount
 from pymonzo.exceptions import CannotDetermineDefaultAccount
 from pymonzo.resources import BaseResource
 
 
+@dataclass
 class AccountsResource(BaseResource):
     """
     Monzo API accounts resource.
@@ -16,7 +18,7 @@ class AccountsResource(BaseResource):
         https://docs.monzo.com/#accounts
     """
 
-    _cached_accounts: Optional[List[MonzoAccount]] = None
+    _cached_accounts: List[MonzoAccount] = field(default_factory=list)
 
     def get_default_account(self) -> MonzoAccount:
         """

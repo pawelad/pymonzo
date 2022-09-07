@@ -94,6 +94,8 @@ class MonzoAPI:
 
         # Start a webserver and wait for the callback
         parsed_url = urlparse(redirect_uri)
+        assert parsed_url.hostname is not None
+        assert parsed_url.port is not None
         authorization_response = get_authorization_response(
             host=parsed_url.hostname,
             port=parsed_url.port,

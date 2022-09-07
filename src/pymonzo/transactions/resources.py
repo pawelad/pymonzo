@@ -91,7 +91,7 @@ class TransactionsResource(BaseResource):
             params["before"] = before.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         if limit:
-            params["limit"] = limit
+            params["limit"] = str(limit)
 
         response = self._get_response(method="get", endpoint=endpoint, params=params)
 
