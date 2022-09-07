@@ -19,7 +19,6 @@ def n_days_ago(n: int) -> datetime:
 def empty_str_to_none(value: Any) -> Any:
     """
     Return passed string, unless it's empty, in which case return 'None'.
-    Used as a pydantic validator.
     """
     if value == "":
         return None
@@ -49,8 +48,9 @@ class WSGIApp:
 
 def get_authorization_response(host: str, port: int) -> str:
     """
-    Get OAuth authorization response by creating a bare-bones HTTP server and
-    retrieving the OAuth callback.
+    Get OAuth authorization response.
+
+    It's done by creating a bare-bones HTTP server and retrieving the OAuth callback.
     """
     wsgi_app = WSGIApp()
     with make_server(host, port, wsgi_app) as server:  # type: ignore

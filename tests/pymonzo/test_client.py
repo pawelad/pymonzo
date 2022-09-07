@@ -11,7 +11,11 @@ class TestMonzoAPI:
     """
 
     def test_init(self) -> None:
-        pass
+        """
+        Client is initialized with settings either explicitly or loaded from disk.
+        """
 
     def test_authorize(self) -> None:
-        pass
+        """
+        Auth flow is executed to get API access token.
+        """

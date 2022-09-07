@@ -30,7 +30,7 @@ class BaseResource:
         params: Optional[dict] = None,
     ) -> httpx.Response:
         """
-        Helper method to handle HTTP requests and catch API errors.
+        Handle HTTP requests and catch API errors.
         """
         response = getattr(self.client.session, method)(endpoint, params=params)
 

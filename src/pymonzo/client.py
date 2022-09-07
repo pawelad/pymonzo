@@ -88,7 +88,8 @@ class MonzoAPI:
         client = OAuth2Client(client_id, client_secret, redirect_uri=redirect_uri)
         url, state = client.create_authorization_url(cls.authorization_endpoint)
 
-        print(f"Please visit this URL to authorize this application: {url}")
+        # TODO: Should we switch this print to something else (logger?)
+        print(f"Please visit this URL to authorize this application: {url}")  # noqa
         webbrowser.open(url)
 
         # Start a webserver and wait for the callback
@@ -118,6 +119,5 @@ class MonzoAPI:
         """
         Update settings with refreshed token and save to disk.
         """
-
         self._settings.token = token
         self._settings.save_to_disk(self.settings_path)
