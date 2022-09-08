@@ -18,7 +18,7 @@ Implemented API endpoints:
 - [ ] GET /transaction-receipts
 - [ ] PUT /transaction-receipts
 - [ ] DELETE /transaction-receipts
-- [ ] GET /webhooks
+- [x] GET /webhooks
 - [x] POST /webhooks
 - [ ] DELETE /webhooks/$webhook_id
 """
