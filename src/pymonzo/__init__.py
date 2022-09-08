@@ -20,7 +20,7 @@ Implemented API endpoints:
 - [ ] DELETE /transaction-receipts
 - [x] GET /webhooks
 - [x] POST /webhooks
-- [ ] DELETE /webhooks/$webhook_id
+- [x] DELETE /webhooks/$webhook_id
 """
 from pymonzo.client import MonzoAPI  # noqa
 

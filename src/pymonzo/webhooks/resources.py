@@ -52,3 +52,14 @@ class WebhooksResource(BaseResource):
         webhook = MonzoWebhook(**response.json()["attachment"])
 
         return webhook
+
+    def delete(self, webhook_id: str) -> None:
+        """
+        Delete a webhook.
+
+        Docs:
+            https://docs.monzo.com/#deleting-a-webhook
+        """
+        endpoint = f"/webhooks/{webhook_id}"
+
+        self._get_response(method="delete", endpoint=endpoint)
