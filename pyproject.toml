@@ -53,6 +53,7 @@ dev = [
   # Type checking
   "mypy",
   # Other
+  "flit",
   "tox",
 ]
 
