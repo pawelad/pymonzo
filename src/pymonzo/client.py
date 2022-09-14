@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
 
+import structlog
 from authlib.integrations.httpx_client import OAuth2Client
 
 from pymonzo.accounts import AccountsResource
@@ -15,6 +16,8 @@ from pymonzo.settings import PyMonzoSettings
 from pymonzo.transactions import TransactionsResource
 from pymonzo.utils import get_authorization_response
 from pymonzo.whoami import WhoAmIResource
+
+log = structlog.get_logger()
 
 
 class MonzoAPI:
@@ -88,8 +91,7 @@ class MonzoAPI:
         client = OAuth2Client(client_id, client_secret, redirect_uri=redirect_uri)
         url, state = client.create_authorization_url(cls.authorization_endpoint)
 
-        # TODO: Should we switch this print to something else (logger?)
-        print(f"Please visit this URL to authorize this application: {url}")  # noqa
+        log.msg(f"Please visit this URL to authorize: {url}")
         webbrowser.open(url)
 
         # Start a webserver and wait for the callback
