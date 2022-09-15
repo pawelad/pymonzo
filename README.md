@@ -1,142 +1,117 @@
 # pymonzo
-[![Build status](https://img.shields.io/travis/pawelad/pymonzo.svg)][travis]
-[![Test coverage](https://img.shields.io/coveralls/pawelad/pymonzo.svg)][coveralls]
-[![PyPI version](https://img.shields.io/pypi/v/pymonzo.svg)][pypi]
-[![Python versions](https://img.shields.io/pypi/pyversions/pymonzo.svg)][pypi]
-[![License](https://img.shields.io/github/license/pawelad/pymonzo.svg)][license]
+[![Package Version](https://img.shields.io/pypi/v/pymonzo)][pypi pymonzo]
+[![Supported Python Versions](https://img.shields.io/pypi/pyversions/pymonzo)][pypi pymonzo]
+[![License](https://img.shields.io/pypi/l/pymonzo)](./LICENSE)
+[![py.typed](https://img.shields.io/badge/py-typed-green)][rickyroll]
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 
-An - dare I say it - awesome Python wrapper for [Monzo][monzo] public API.
+Modern Python API client for [Monzo][monzo] public [API][monzo docs].
 
-It creates a layer of abstraction and returns Python objects instead of just
-passing along received JSONs. It also deals with authentication and allows
-using either an access token or fully authenticate via OAuth 2 that's a
-[PITA to set up](#oauth-2) but automatically refreshes in the background.
-
-The library currently does not implement feed items, webhooks and attachments
-endpoints - they were't essential to my current needs and they could be 
-completely different in the future - per [docs][monzo docs introduction]:
-
-> The Monzo API is under active development. Breaking changes should be expected.
-
-With the above disclaimer from Monzo, `pymonzo` is as stable as it gets before
-the actual API becomes stable, at which point I'm planning to fully implement
-all of its endpoints and release version 1.0.
+- Works on Python 3.7+
+- Fully type annotated
+- Explicitly defined and validated API schemas (via [pydantic])
+- Easy [authentication](#authentication) with automatic access token refreshing
+- Nice defaults - don't specify account / pot ID if you only have one active
 
 ## Installation
-From PyPI:
+From [PyPI][pypi] (ideally, inside a [virtualenv]):
 
-```
-$ pip install pymonzo
-```
-
-## Authentication
-
-### Access token
-If you want to just play around then you can simply get the access token taken
-from [Monzo API Playground][monzo api playground], either pass it explicitly to
-`MonzoAPI()` class or save it as an environment variable
-(`$ export MONZO_ACCESS_TOKEN='...'`) and you're good to go. Everything works
-as expected _but_ the token is valid only for couple of hours.
-
-### OAuth 2
-The second authentication option is to go through OAuth 2, which doesn't sound
-bad (everyone is using it!) but from my experience is a PITA when setting up
-for server side applications. So.
-
-Some technical background: Monzo currently only allows OAuth 2 'authorization 
-code' grant type and automatic token refreshing is only allowed for
-'confidential' clients.
-
-First, you need to create an OAuth client [here][monzo api client]. Name and
-logo don't really matter but you need to set the redirect URL to this repo
-(`https://github.com/pawelad/pymonzo`) and make it confidential.
-
-Got it? Cool. You should be redirected to the overview of your new OAuth client
-(`https://developers.monzo.com/apps/oauthclient_XXX`). You need two things from
-that page, the 'Client ID' and 'Client secret'. The last required piece is the
-auth code, which you can get by creating a link like the one below but with your
-client ID:
-
-```
-https://auth.getmondo.co.uk/?response_type=code&redirect_uri=https://github.com/pawelad/pymonzo&client_id={{CLIENT_ID}}
+```console
+$ python -m pip install pymonzo
 ```
 
-You then go to the link and authorise the app. You should get an email with a
-link back to the GitHub repo which contains the authorization code as an URL
-parameter, something like:
+## Usage
+Here's an example of what `pymonzo` can do:
 
+```pycon
+>>> from pymonzo import MonzoAPI
+>>> monzo_api = MonzoAPI()
+>>> accounts = monzo_api.accounts.list()
+>>> len(accounts)
+2
+>>> # Only one active account, so we don't need to pass it explicitly
+>>> monzo_api.balance.get()
+MonzoBalance(balance=75000, total_balance=95012, currency='GBP', spend_today=0, balance_including_flexible_savings=95012, local_currency='', local_exchange_rate=0, local_spend=[])
+>>> from pymonzo.utils import n_days_ago
+>>> transactions = monzo_api.transactions.list(since=n_days_ago(5))
+>>> len(transactions)
+8
 ```
-https://github.com/pawelad/pymonzo?code={{AUTH_CODE}}&state=
-```
 
-You now have all three needed values - client ID, client secret and the auth
-code. You can now either pass them directly to `MonzoAPI()` class:
+### Authentication
+Monzo API implements OAuth 2.0 authorization code grant type. To use it, you need
+to first create an OAuth client in Monzo [developer tools][monzo developer tools].
+You should set the "Redirect URLs" to `http://localhost:6600/pymonzo` and set the
+client as confidential if you want the access token to be refreshed automatically
+(name, description and logo don't really matter).
 
-```python
->> from pymonzo import MonzoAPI
->> monzo = MonzoAPI(
-    client_id='...',
-    client_secret='...',
-    auth_code='...',
+That should give you a client ID and client secret, which you need to pass to
+`MonzoAPI.authorize()` function:
+
+```pycon
+>>> from pymonzo import MonzoAPI
+>>> MonzoAPI.authorize(
+    client_id="oauth2client_***",
+    client_secret="mnzconf.***",
 )
+2022-09-15 20:21.37 [info     ] Please visit this URL to authorize: https://auth.monzo.com/?response_type=code&client_id=oauth2client_***&redirect_uri=http%3A%2F%2Flocalhost%3A6600%2Fpymonzo&state=PY5VAKZwwrdOz8qyzzEojb90vFp78S
 ```
 
-or save them as environment variables and initialize `MonzoAPI()` without any
-arguments:
+This should open a new web browser tab (if it didn't, go to the link from the
+log message) that will let you authorize the OAuth client you just created. If
+everything goes well, you should be redirected to `http://localhost:6600/pymonzo`
+and greeted with `Monzo OAuth authorization complete.` message.
 
-```shell
-$ export MONZO_CLIENT_ID='...'
-$ export MONZO_CLIENT_SECRET='...'
-$ export MONZO_AUTH_CODE='...'
+Note that you might need to open your mobile app to allow full access to your account.
+
+That's it! The access token is saved locally at `~/.pymonzo` and - as long as you set
+the OAuth client as confidential - should be refreshed automatically when it expires.
+
+```pycon
+>>> monzo_api = MonzoAPI()
+>>> monzo_api.whoami()
+MonzoWhoAmI(authenticated=True, client_id='oauth2client_***', user_id='user_***')
 ```
 
-That's it! The token is then saved on the disk (`~/.pymonzo`) and is
-automatically refreshed when needed, so all this (_should_) be one time only.
+## Implemented endpoints
+Currently, only transaction receipts endpoints are not implemented:
 
-## Docs
-There's no proper documentation as of now, but the code is commented and
-*should* be pretty straightforward to use.
-
-That said - feel free to open a [GitHub issues][github add issue] if anything
-is unclear.
-
-## Tests
-Package was tested with the help of `py.test` and `tox` on Python 2.7, 3.4, 3.5
-and 3.6 (see `tox.ini`).
-
-Code coverage is available at [Coveralls][coveralls].
-
-To run tests yourself you need to run `tox` inside the repository:
-
-```shell
-$ git clone https://github.com/pawelad/pymonzo && cd pymonzo
-$ pip install tox
-$ tox
-```
-
-## Contributions
-Package source code is available at [GitHub][github].
-
-Feel free to use, ask, fork, star, report bugs, fix them, suggest enhancements, add
-functionality and point out any mistakes.
-
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.
+- [x] GET `/ping/whoami`
+- [x] GET `/accounts`
+- [x] GET `/balance`
+- [x] GET `/pots`
+- [x] PUT `/pots/$pot_id/deposit`
+- [x] PUT `/pots/$pot_id/withdraw`
+- [x] GET `/transactions`
+- [x] GET `/transactions/$transaction_id`
+- [x] PATCH `/transactions/$transaction_id`
+- [x] POST `/feed`
+- [x] POST `/attachment/upload`
+- [x] POST `/attachment/register`
+- [x] POST `/attachment/deregister`
+- [ ] GET `/transaction-receipts`
+- [ ] PUT `/transaction-receipts`
+- [ ] DELETE `/transaction-receipts`
+- [x] GET `/webhooks`
+- [x] POST `/webhooks`
+- [x] DELETE `/webhooks/$webhook_id`
 
 ## Authors
 Developed and maintained by [Paweł Adamczak][pawelad].
 
-Released under [Mozilla Public License 2.0][license].
+If you'd like to contribute, please take a look at [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Released under [Mozilla Public License 2.0](./LICENSE).
 
 
-[coveralls]: https://coveralls.io/github/pawelad/pymonzo
-[github add issue]: https://github.com/pawelad/pymonzo/issues/new
-[github]: https://github.com/pawelad/pymonzo
-[license]: https://github.com/pawelad/pymonzo/blob/master/LICENSE
-[monz]: https://github.com/pawelad/monz
+[black]: https://github.com/psf/black
+[github pymonzo]: https://github.com/pawelad/pymonzo
 [monzo]: https://monzo.com/
-[monzo api client]: https://developers.getmondo.co.uk/apps/home
-[monzo api playground]: https://developers.getmondo.co.uk/api/playground
-[monzo docs introduction]: https://monzo.com/docs/#introduction
-[pawelad]: https://github.com/pawelad
-[pypi]: https://pypi.python.org/pypi/pymonzo
-[travis]: https://travis-ci.org/pawelad/pymonzo
+[monzo developer tools]: https://developers.monzo.com/
+[monzo docs]: https://docs.monzo.com/
+[pawelad]: https://pawelad.me/
+[pydantic]: https://github.com/pydantic/pydantic
+[pypi]: https://pypi.org/
+[pypi pymonzo]: https://pypi.org/project/pymonzo/
+[rickyroll]: https://www.youtube.com/watch?v=I6OXjnBIW-4&t=15s
+[virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
