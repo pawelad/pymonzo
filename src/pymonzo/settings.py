@@ -2,6 +2,8 @@
 pymonzo settings related code.
 """
 import json
+import os
+from functools import partial
 from pathlib import Path
 
 from pydantic import BaseSettings
@@ -33,5 +35,8 @@ class PyMonzoSettings(BaseSettings):
         """
         Save pymonzo config on disk.
         """
-        with open(settings_path, "w") as f:
+        # Make sure the file is not publicly accessible
+        # Source: https://github.com/python/cpython/issues/73400
+        os.umask(0o077)
+        with open(settings_path, "w", opener=partial(os.open, mode=0o600)) as f:
             json.dump(self.dict(), f, indent=4)
