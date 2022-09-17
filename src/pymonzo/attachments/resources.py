@@ -3,7 +3,7 @@ Monzo API attachments resource.
 """
 from typing import Dict
 
-from pymonzo.attachments import MonzoAttachment
+from pymonzo.attachments.schemas import MonzoAttachment
 from pymonzo.resources import BaseResource
 
 
