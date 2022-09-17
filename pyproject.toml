@@ -31,13 +31,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = [
+tests = [
   "pytest",
   "pytest-mock",
   "pytest-recording",
 ]
 dev = [
-  "pymonzo[test]",
+  "pymonzo[tests]",
   # Checks
   "bandit",
   "interrogate",
