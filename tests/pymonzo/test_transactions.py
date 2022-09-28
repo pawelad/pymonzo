@@ -15,13 +15,13 @@ def transactions_resource(monzo_api: MonzoAPI) -> TransactionsResource:
     return TransactionsResource(client=monzo_api)
 
 
-@pytest.mark.skip
+@pytest.mark.skip()
 class TestTransactionsResource:
     """
     Test 'whoami.WhoAmIResource' class.
     """
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_get(self, transactions_resource: TransactionsResource) -> None:
         """
         API response is parsed into expected schema.
@@ -30,7 +30,7 @@ class TestTransactionsResource:
 
         assert isinstance(transaction, MonzoTransaction)
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_list(self, transactions_resource: TransactionsResource) -> None:
         """
         API response is parsed into expected schema.

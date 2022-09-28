@@ -20,7 +20,7 @@ class TestBalanceResource:
     Test 'balance.BalanceResource' class.
     """
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_list(self, balance_resource: BalanceResource) -> None:
         """
         API response is parsed into expected schema.

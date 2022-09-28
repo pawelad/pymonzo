@@ -9,7 +9,7 @@ import tempfile
 import pytest
 
 
-@pytest.mark.skip
+@pytest.mark.skip()
 class TestPyMonzoSettings:
     """
     Test 'settings.PyMonzoSettings' class.

@@ -21,7 +21,7 @@ class TestAccountsResource:
     Test 'accounts.AccountsResource' class.
     """
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_get_default_account(self, accounts_resource: AccountsResource) -> None:
         """
         Account is presented as default if there is only one (or one active) account.
@@ -48,7 +48,7 @@ class TestAccountsResource:
         assert default_account.id == "acc_00009superSecretAccountID1"
         assert default_account.closed is True
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_list(self, accounts_resource: AccountsResource) -> None:
         """
         API response is parsed into expected schema.

@@ -4,7 +4,7 @@ Test 'pymonzo.client' module.
 import pytest
 
 
-@pytest.mark.skip
+@pytest.mark.skip()
 class TestMonzoAPI:
     """
     Test 'monzo_api.MonzoAPI' class.

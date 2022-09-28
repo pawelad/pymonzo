@@ -20,7 +20,7 @@ class TestWhoAmIResource:
     Test 'whoami.WhoAmIResource' class.
     """
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_whoami(self, whoami_resource: WhoAmIResource) -> None:
         """
         API response is parsed into expected schema.

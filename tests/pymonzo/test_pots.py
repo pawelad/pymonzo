@@ -20,7 +20,7 @@ class TestPotsResource:
     Test 'pots.PotsResource' class.
     """
 
-    @pytest.mark.vcr
+    @pytest.mark.vcr()
     def test_list(self, pots_resource: PotsResource) -> None:
         """
         API response is parsed into expected schema.

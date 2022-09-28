@@ -59,6 +59,7 @@ dev = [
   "flake8-comprehensions",
   "flake8-docstrings",
   "flake8-print",
+  "flake8-pytest-style",
   "pep8-naming",
   # Type checking
   "mypy",
