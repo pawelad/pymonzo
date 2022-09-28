@@ -1,7 +1,7 @@
 # pymonzo
 [![Package Version](https://img.shields.io/pypi/v/pymonzo)][pypi pymonzo]
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/pymonzo)][pypi pymonzo]
-[![License](https://img.shields.io/pypi/l/pymonzo)](./LICENSE)
+[![License](https://img.shields.io/pypi/l/pymonzo)][license]
 [![py.typed](https://img.shields.io/badge/py-typed-green)][rickyroll]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 
@@ -99,13 +99,15 @@ Currently, only transaction receipts endpoints are not implemented:
 ## Authors
 Developed and maintained by [Paweł Adamczak][pawelad].
 
-If you'd like to contribute, please take a look at [CONTRIBUTING.md](CONTRIBUTING.md).
+If you'd like to contribute, please take a look at [CONTRIBUTING.md][contributing].
 
-Released under [Mozilla Public License 2.0](./LICENSE).
+Released under [Mozilla Public License 2.0][license].
 
 
 [black]: https://github.com/psf/black
+[contributing]: ./CONTRIBUTING.md
 [github pymonzo]: https://github.com/pawelad/pymonzo
+[license]: ./LICENSE
 [monzo]: https://monzo.com/
 [monzo developer tools]: https://developers.monzo.com/
 [monzo docs]: https://docs.monzo.com/

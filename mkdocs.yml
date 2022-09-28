@@ -1,0 +1,40 @@
+site_name: "pymonzo"
+site_description: "Modern Python API client for Monzo public API"
+site_url: "https://pymonzo.rtfd.io/"
+
+repo_name: "pawelad/pymonzo"
+repo_url: "https://github.com/pawelad/pymonzo"
+
+nav:
+  - Home: "index.md"
+  - Code Reference: "reference/"
+  - Contributing: "contributing.md"
+  - Changelog: "changelog.md"
+  - License: "license.md"
+
+theme:
+  name: "material"
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: "default"
+      toggle:
+        icon: "material/lightbulb-outline"
+        name: "Switch to dark mode"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: "slate"
+      toggle:
+        icon: "material/lightbulb"
+        name: "Switch to light mode"
+
+plugins:
+  - include-markdown
+  - search
+  - gen-files:
+      scripts:
+      - "docs/gen_ref_pages.py"
+  - literate-nav:
+      nav_file: "SUMMARY.md"
+  - section-index
+  - mkdocstrings:
+      watch:
+      - "src/pymonzo"

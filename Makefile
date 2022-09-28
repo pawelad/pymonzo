@@ -7,14 +7,6 @@ install: ## Install pymonzo in editable mode
 	python -m pip install --upgrade pip wheel
 	python -m pip install --editable ".[dev]"
 
-.PHONY: build
-build: ## Build pumonzo
-	python -m flit build
-
-.PHONY: publish
-publish: ## Pyblish pymonzo
-	python -m flit publish
-
 .PHONY: format
 format: ## Format code
 	black src tests && isort src tests
@@ -22,6 +14,18 @@ format: ## Format code
 .PHONY: test
 test: ## Run tests
 	tox --parallel
+
+.PHONY: docs
+docs: ## Build docs
+	mkdocs build
+
+.PHONY: build
+build: ## Build pymonzo
+	python -m flit build
+
+.PHONY: publish
+publish: ## Publish pymonzo
+	python -m flit publish
 
 .PHONY: clean
 clean: ## Clean dev artifacts

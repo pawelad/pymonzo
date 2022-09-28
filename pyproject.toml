@@ -36,8 +36,17 @@ tests = [
   "pytest-mock",
   "pytest-recording",
 ]
+docs = [
+  "mkdocs",
+  "mkdocs-gen-files",
+  "mkdocs-include-markdown-plugin",
+  "mkdocs-literate-nav",
+  "mkdocs-material",
+  "mkdocs-section-index",
+  "mkdocstrings[python]",
+]
 dev = [
-  "pymonzo[tests]",
+  "pymonzo[tests,docs]",
   # Checks
   "bandit",
   "interrogate",
