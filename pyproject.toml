@@ -54,6 +54,7 @@ dev = [
   "black",
   "isort",
   # Linters
+  "dlint",
   "flake8",
   "flake8-bugbear",
   "flake8-comprehensions",
