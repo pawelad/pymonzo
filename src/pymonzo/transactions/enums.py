@@ -1,15 +1,11 @@
-"""
-Monzo API transactions related enums.
-"""
+"""Monzo API 'transactions' related enums."""
 from enum import Enum
 
 
 class MonzoTransactionDeclineReason(str, Enum):
-    """
-    Monzo API transaction 'decline_reason' enum.
+    """Monzo API 'transaction decline reason' enum.
 
-    Docs:
-        https://docs.monzo.com/#transactions
+    Docs: https://docs.monzo.com/#transactions
     """
 
     INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS"
@@ -18,7 +14,7 @@ class MonzoTransactionDeclineReason(str, Enum):
     INVALID_CVC = "INVALID_CVC"
     OTHER = "OTHER"
 
-    # Undocumented
+    # Undocumented in Monzo API docs
     CARD_CLOSED = "CARD_CLOSED"
     INVALID_PIN = "INVALID_PIN"
     INVALID_EXPIRY_DATE = "INVALID_EXPIRY_DATE"
@@ -27,11 +23,9 @@ class MonzoTransactionDeclineReason(str, Enum):
 
 
 class MonzoTransactionCategory(str, Enum):
-    """
-    Monzo API transaction 'category' enum.
+    """Monzo API 'transaction category' enum.
 
-    Docs:
-        https://docs.monzo.com/#transactions
+    Docs: https://docs.monzo.com/#transactions
     """
 
     GENERAL = "general"

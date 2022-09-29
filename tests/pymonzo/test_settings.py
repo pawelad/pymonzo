@@ -1,6 +1,4 @@
-"""
-Test 'pymonzo.settings' module.
-"""
+"""Test `pymonzo.settings` module."""
 import codecs
 import json
 import os
@@ -11,24 +9,16 @@ import pytest
 
 @pytest.mark.skip()
 class TestPyMonzoSettings:
-    """
-    Test 'settings.PyMonzoSettings' class.
-    """
+    """Test `PyMonzoSettings` class."""
 
     def test_load_from_disk(self) -> None:
-        """
-        Settings are loaded from disk.
-        """
+        """Settings are loaded from disk."""
 
     def test_save_to_disk(self) -> None:
-        """
-        Settings are saved to disk.
-        """
+        """Settings are saved to disk."""
 
     def test_class_save_token_on_disk_method(self, monzo) -> None:
-        """
-        Test class `_save_token_on_disk` method.
-        """
+        """Test class `_save_token_on_disk` method."""
         path = os.path.join(
             tempfile.gettempdir(),
             "pymonzo_test",

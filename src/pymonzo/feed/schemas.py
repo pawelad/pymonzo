@@ -1,6 +1,4 @@
-"""
-Monzo API feeds related schemas.
-"""
+"""Monzo API 'feed' related schemas."""
 from typing import Optional
 
 from pydantic import BaseModel, HttpUrl
@@ -8,11 +6,9 @@ from pydantic.color import Color
 
 
 class MonzoBasicFeedItem(BaseModel):
-    """
-    API schema for a basic 'feed item' object.
+    """API schema for a 'basic feed item' object.
 
-    Docs:
-        https://docs.monzo.com/#feed-items
+    Docs: https://docs.monzo.com/#feed-items
     """
 
     title: str

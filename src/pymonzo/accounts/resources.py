@@ -1,6 +1,4 @@
-"""
-Monzo API accounts resource.
-"""
+"""Monzo API 'accounts' resource."""
 from dataclasses import dataclass, field
 from typing import List
 
@@ -11,18 +9,21 @@ from pymonzo.resources import BaseResource
 
 @dataclass
 class AccountsResource(BaseResource):
-    """
-    Monzo API accounts resource.
+    """Monzo API 'accounts' resource.
 
-    Docs:
-        https://docs.monzo.com/#accounts
+    Docs: https://docs.monzo.com/#accounts
     """
 
     _cached_accounts: List[MonzoAccount] = field(default_factory=list)
 
     def get_default_account(self) -> MonzoAccount:
-        """
-        If the user has only one active account, treat it as the default account.
+        """If the user has only one active account, treat it as the default account.
+
+        Returns:
+            User's active account.
+
+        Raises:
+            CannotDetermineDefaultAccount: If user has more than one active account.
         """
         accounts = self.list()
 
@@ -42,14 +43,18 @@ class AccountsResource(BaseResource):
         )
 
     def list(self, *, refresh: bool = False) -> List[MonzoAccount]:
-        """
-        Return a list of user accounts.
+        """Return a list of user's Monzo accounts.
 
         It's often used when deciding whether to require explicit account ID
         or use the only active one, so we cache the response by default.
 
-        Docs:
-            https://docs.monzo.com/#list-accounts
+        Docs: https://docs.monzo.com/#list-accounts
+
+        Arguments:
+            refresh: Whether to refresh the cached list of accounts.
+
+        Returns:
+            A list of user's Monzo accounts.
         """
         if not refresh and self._cached_accounts:
             return self._cached_accounts

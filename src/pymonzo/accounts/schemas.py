@@ -1,6 +1,4 @@
-"""
-Monzo API accounts related schemas.
-"""
+"""Monzo API 'accounts' related schemas."""
 from datetime import datetime
 from typing import List, Optional
 
@@ -10,8 +8,7 @@ from pymonzo.accounts.enums import MonzoAccountCurrency, MonzoAccountType
 
 
 class MonzoAccountOwner(BaseModel):
-    """
-    API schema for an 'account owner' object.
+    """API schema for an 'account owner' object.
 
     Currently undocumented in docs.
     """
@@ -23,20 +20,18 @@ class MonzoAccountOwner(BaseModel):
 
 
 class MonzoAccount(BaseModel):
-    """
-    API schema for an 'account' object.
+    """API schema for an 'account' object.
 
-    Most attributes are currently undocumented in docs.
+    Most attributes are currently undocumented in Monzo API docs.
 
-    Docs:
-        https://docs.monzo.com/#accounts
+    Docs: https://docs.monzo.com/#accounts
     """
 
     id: str
     description: str
     created: datetime
 
-    # Undocumented in API docs
+    # Undocumented in Monzo API docs
     closed: bool
     type: MonzoAccountType
     currency: MonzoAccountCurrency

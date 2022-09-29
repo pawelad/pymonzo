@@ -1,6 +1,4 @@
-"""
-pymonzo exceptions.
-"""
+"""pymonzo exceptions."""
 
 
 class PyMonzoException(Exception):

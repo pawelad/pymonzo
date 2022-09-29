@@ -1,6 +1,4 @@
-"""
-Modern Python API client for Monzo public API.
-"""
+"""Modern Python API client for Monzo public API."""
 from pymonzo.client import MonzoAPI  # noqa
 
 __title__ = "pymonzo"

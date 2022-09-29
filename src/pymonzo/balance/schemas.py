@@ -1,15 +1,11 @@
-"""
-Monzo API balance related schemas.
-"""
+"""Monzo API 'balance' related schemas."""
 from pydantic import BaseModel
 
 
 class MonzoBalance(BaseModel):
-    """
-    API schema for a 'balance' object.
+    """API schema for a 'balance' object.
 
-    Docs:
-        https://docs.monzo.com/#balance
+    Docs: https://docs.monzo.com/#balance
     """
 
     balance: int
@@ -17,7 +13,7 @@ class MonzoBalance(BaseModel):
     currency: str
     spend_today: int
 
-    # Undocumented in API docs
+    # Undocumented in Monzo API docs
     balance_including_flexible_savings: int
     local_currency: str
     local_exchange_rate: int

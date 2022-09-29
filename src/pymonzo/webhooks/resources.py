@@ -1,6 +1,4 @@
-"""
-Monzo API webhooks resource.
-"""
+"""Monzo API 'webhooks' resource."""
 from typing import List, Optional
 
 from pymonzo.resources import BaseResource
@@ -8,20 +6,26 @@ from pymonzo.webhooks.schemas import MonzoWebhook
 
 
 class WebhooksResource(BaseResource):
-    """
-    Monzo API webhooks resource.
+    """Monzo API 'webhooks' resource.
 
-    Docs:
-        https://docs.monzo.com/#webhooks
+    Docs: https://docs.monzo.com/#webhooks
     """
 
     def list(self, account_id: Optional[str] = None) -> List[MonzoWebhook]:
-        """
-        List all webhooks.
+        """List all webhooks.
 
-        Docs:
-            https://docs.monzo.com/#list-webhooks
+        Docs: https://docs.monzo.com/#list-webhooks
+
+        Arguments:
+            account_id: The account to list registered webhooks for. Can be omitted
+                if user has only one active account.
+
+        Returns:
+            List of Monzo webhooks.
         """
+        if not account_id:
+            account_id = self.client.accounts.get_default_account().id
+
         endpoint = "/webhooks"
         params = {"account_id": account_id}
 
@@ -36,12 +40,21 @@ class WebhooksResource(BaseResource):
         url: str,
         account_id: Optional[str] = None,
     ) -> MonzoWebhook:
-        """
-        Register a webhook.
+        """Register a webhook.
 
-        Docs:
-            https://docs.monzo.com/#registering-a-webhook
+        Docs: https://docs.monzo.com/#registering-a-webhook
+
+        Arguments:
+            account_id: The account to receive notifications for. Can be omitted
+                if user has only one active account.
+            url: The URL we will send notifications to.
+
+        Returns:
+            Registered Monzo webhook.
         """
+        if not account_id:
+            account_id = self.client.accounts.get_default_account().id
+
         endpoint = "/webhooks"
         params = {
             "account_id": account_id,
@@ -53,13 +66,19 @@ class WebhooksResource(BaseResource):
 
         return webhook
 
-    def delete(self, webhook_id: str) -> None:
-        """
-        Delete a webhook.
+    def delete(self, webhook_id: str) -> dict:
+        """Delete a webhook.
 
-        Docs:
-            https://docs.monzo.com/#deleting-a-webhook
+        Docs: https://docs.monzo.com/#deleting-a-webhook
+
+        Arguments:
+            webhook_id: The ID of the webhook.
+
+        Returns:
+            API response.
         """
         endpoint = f"/webhooks/{webhook_id}"
 
-        self._get_response(method="delete", endpoint=endpoint)
+        response = self._get_response(method="delete", endpoint=endpoint)
+
+        return response.json()

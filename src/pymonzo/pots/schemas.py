@@ -1,6 +1,4 @@
-"""
-Monzo API pots related schemas.
-"""
+"""Monzo API 'pots' related schemas."""
 from datetime import datetime
 from typing import Optional
 
@@ -8,11 +6,9 @@ from pydantic import BaseModel
 
 
 class MonzoPot(BaseModel):
-    """
-    API schema for a 'pot' object.
+    """API schema for a 'pot' object.
 
-    Docs:
-        https://docs.monzo.com/#pots
+    Docs: https://docs.monzo.com/#pots
     """
 
     id: str
@@ -24,7 +20,7 @@ class MonzoPot(BaseModel):
     updated: datetime
     deleted: bool
 
-    # Undocumented in API docs
+    # Undocumented in Monzo API docs
     goal_amount: int
     type: str
     product_id: str

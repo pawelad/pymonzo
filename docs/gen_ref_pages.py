@@ -1,8 +1,6 @@
-"""
-Generate the code reference pages and navigation.
+"""Generate the code reference pages and navigation.
 
-Source:
-    https://mkdocstrings.github.io/recipes/
+Source: https://mkdocstrings.github.io/recipes/
 """
 from pathlib import Path
 

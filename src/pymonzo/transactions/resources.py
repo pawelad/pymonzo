@@ -1,6 +1,4 @@
-"""
-Monzo API transactions resource.
-"""
+"""Monzo API 'transactions' resource."""
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -9,11 +7,9 @@ from pymonzo.transactions.schemas import MonzoTransaction
 
 
 class TransactionsResource(BaseResource):
-    """
-    Monzo API transactions resource.
+    """Monzo API 'transactions' resource.
 
-    Docs:
-        https://docs.monzo.com/#transactions
+    Docs: https://docs.monzo.com/#transactions
     """
 
     def get(
@@ -22,11 +18,16 @@ class TransactionsResource(BaseResource):
         *,
         expand_merchant: bool = False,
     ) -> MonzoTransaction:
-        """
-        Return single transaction.
+        """Return single transaction.
 
-        Docs:
-            https://docs.monzo.com/#retrieve-transaction
+        Docs: https://docs.monzo.com/#retrieve-transaction
+
+        Arguments:
+            transaction_id: The ID of the transaction.
+            expand_merchant: Whether to return expanded merchant information.
+
+        Returns:
+            A Monzo transaction.
         """
         endpoint = f"/transactions/{transaction_id}"
         params = {}
@@ -44,11 +45,17 @@ class TransactionsResource(BaseResource):
         transaction_id: str,
         metadata: Dict[str, str],
     ) -> MonzoTransaction:
-        """
-        Annotate transaction with extra metadata.
+        """Annotate transaction with extra metadata.
 
-        Docs:
-            https://docs.monzo.com/#annotate-transaction
+        Docs: https://docs.monzo.com/#annotate-transaction
+
+        Arguments:
+            transaction_id: The ID of the transaction.
+            metadata: Include each key you would like to modify. To delete a key,
+                set its value to an empty string.
+
+        Returns:
+            Annotated Monzo transaction.
         """
         endpoint = f"/transactions/{transaction_id}"
         params = {f"metadata[{key}]": value for key, value in metadata.items()}
@@ -67,16 +74,22 @@ class TransactionsResource(BaseResource):
         before: Optional[datetime] = None,
         limit: Optional[int] = None,
     ) -> List[MonzoTransaction]:
-        """
-        Return a list of passed account transactions.
-
-        For ease of use, account ID is not required if user has only one active account.
+        """Return a list of account transactions.
 
         You can only fetch all transactions within 5 minutes of authentication.
         After that, you can query your last 90 days.
 
-        Docs:
-            https://docs.monzo.com/#list-transactions
+        Docs: https://docs.monzo.com/#list-transactions
+
+        Arguments:
+            account_id: The ID of the account. Can be omitted if user has only one
+                active account.
+            since: Filter transactions by start time.
+            before: Filter transactions by end time.
+            limit: Limits the number of results per-page. Maximum: 100.
+
+        Returns:
+            List of Monzo transactions.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id

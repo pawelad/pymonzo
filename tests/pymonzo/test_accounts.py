@@ -1,6 +1,4 @@
-"""
-Test 'pymonzo.accounts' package.
-"""
+"""Test `pymonzo.accounts` module."""
 import pytest
 
 from pymonzo import MonzoAPI
@@ -10,24 +8,17 @@ from pymonzo.exceptions import CannotDetermineDefaultAccount
 
 @pytest.fixture(scope="module")
 def accounts_resource(monzo_api: MonzoAPI) -> AccountsResource:
-    """
-    Return a 'AccountsResource' instance.
-    """
+    """Initialize `AccountsResource` resource with `monzo_api` fixture."""
     return AccountsResource(client=monzo_api)
 
 
 class TestAccountsResource:
-    """
-    Test 'accounts.AccountsResource' class.
-    """
+    """Test `AccountsResource` class."""
 
+    # TODO: This probably needs a better (mocking?) testing approach
     @pytest.mark.vcr()
     def test_get_default_account(self, accounts_resource: AccountsResource) -> None:
-        """
-        Account is presented as default if there is only one (or one active) account.
-
-        TODO: This probably needs a better (mocking?) testing approach
-        """
+        """Account is presented as default if there is only one (active) account."""
         # Two accounts, one active
         default_account = accounts_resource.get_default_account()
 
@@ -50,9 +41,7 @@ class TestAccountsResource:
 
     @pytest.mark.vcr()
     def test_list(self, accounts_resource: AccountsResource) -> None:
-        """
-        API response is parsed into expected schema.
-        """
+        """API response is parsed into expected schema."""
         accounts_list = accounts_resource.list()
 
         assert isinstance(accounts_list, list)

@@ -1,6 +1,4 @@
-"""
-pymonzo API client code.
-"""
+"""pymonzo API client code."""
 import webbrowser
 from pathlib import Path
 from typing import Optional
@@ -21,11 +19,15 @@ log = structlog.get_logger()
 
 
 class MonzoAPI:
-    """
-    Monzo API client.
+    """Monzo API client.
 
-    Docs:
-        https://docs.monzo.com/
+    Docs: https://docs.monzo.com/
+
+    Attributes:
+        api_url: Monzo API URL.
+        authorization_endpoint: Monzo OAuth 2 authorization endpoint.
+        token_endpoint: Monzo OAuth 2 token fetching endpoint.
+        settings_path: Settings file path.
     """
 
     api_url = "https://api.monzo.com"
@@ -39,8 +41,16 @@ class MonzoAPI:
         client_secret: Optional[str] = None,
         token: Optional[dict] = None,
     ) -> None:
-        """
-        Initialize Monzo API client and load pymonzo config file.
+        """Initialize Monzo API client and load pymonzo config file.
+
+        Arguments:
+            client_id: OAuth client ID.
+            client_secret: OAuth client secret
+            token: OAuth access token. See `MonzoAPI.authorize` for more info.
+
+        Raises:
+            ValueError: When client ID and secret weren't passes explicitly and
+                settings file could not be loaded.
         """
         if all([client_id, client_secret, token]):
             self._settings = PyMonzoSettings(
@@ -85,8 +95,16 @@ class MonzoAPI:
         save_to_disk: bool = True,
         redirect_uri: str = "http://localhost:6600/pymonzo",
     ) -> dict:
-        """
-        Use OAuth 2 workflow to authorize and get the access token.
+        """Use OAuth 2 workflow to authorize and get the access token.
+
+        Arguments:
+            client_id: OAuth client ID.
+            client_secret: OAuth client secret
+            save_to_disk: Whether to save the token to disk.
+            redirect_uri: Redirect URI specified in OAuth client.
+
+        Returns:
+            OAuth access token.
         """
         client = OAuth2Client(client_id, client_secret, redirect_uri=redirect_uri)
         url, state = client.create_authorization_url(cls.authorization_endpoint)
@@ -119,9 +137,12 @@ class MonzoAPI:
 
         return token
 
-    def update_token(self, token: dict, **kwargs):
-        """
-        Update settings with refreshed token and save to disk.
+    def update_token(self, token: dict, **kwargs) -> None:
+        """Update settings with refreshed token and save to disk.
+
+        Arguments:
+            token: OAuth access token.
+            **kwargs: Extra kwargs.
         """
         self._settings.token = token
         self._settings.save_to_disk(self.settings_path)

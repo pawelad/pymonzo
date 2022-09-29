@@ -1,6 +1,4 @@
-"""
-Monzo API pots resource.
-"""
+"""Monzo API 'pots' resource."""
 from dataclasses import dataclass, field
 from secrets import token_urlsafe
 from typing import Dict, List, Optional, Union
@@ -12,18 +10,25 @@ from pymonzo.resources import BaseResource
 
 @dataclass
 class PotsResource(BaseResource):
-    """
-    Monzo API pots resource.
+    """Monzo API 'pots' resource.
 
-    Docs:
-        https://monzo.com/docs/#pots
+    Docs: https://monzo.com/docs/#pots
     """
 
     _cached_pots: Dict[str, List[MonzoPot]] = field(default_factory=dict)
 
     def get_default_pot(self, account_id: Optional[str] = None) -> MonzoPot:
-        """
-        If the user has only one active pot, treat it as the default account.
+        """If the user has only one active pot, treat it as the default pot.
+
+        Arguments:
+            account_id: The ID of the account. Can be omitted if user has only one
+                active account.
+
+        Returns:
+            User's active pot.
+
+        Raises:
+            CannotDetermineDefaultPot: If user has more than one active pot.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
@@ -51,16 +56,20 @@ class PotsResource(BaseResource):
         *,
         refresh: bool = False,
     ) -> List[MonzoPot]:
-        """
-        Return a list of user pots.
-
-        For ease of use, account ID is not required if user has only one active account.
+        """Return a list of user's pots.
 
         It's often used when deciding whether to require explicit pot ID
         or use the only active one, so we cache the response by default.
 
-        Docs:
-            https://docs.monzo.com/#list-pots
+        Docs: https://docs.monzo.com/#list-pots
+
+        Arguments:
+            account_id: The ID of the account. Can be omitted if user has only one
+                active account.
+            refresh: Whether to refresh the cached list of pots.
+
+        Returns:
+            A list of user's pots.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
@@ -84,15 +93,23 @@ class PotsResource(BaseResource):
         *,
         account_id: Optional[str] = None,
         dedupe_id: Optional[str] = None,
-    ):
-        """
-        Move money from an account to a pot.
+    ) -> MonzoPot:
+        """Move money from an account to a pot.
 
-        For ease of use, pot ID and/or account ID is not required if user has only
-        one active pot/account.
+        Docs: https://docs.monzo.com/#deposit-into-a-pot
 
-        Docs:
-            https://docs.monzo.com/#deposit-into-a-pot
+        Arguments:
+            amount: The amount to deposit, as a 64bit integer in minor units of
+                the currency, eg. pennies for GBP, or cents for EUR and USD.
+            pot_id: The ID of the pot to deposit into.
+            account_id: The ID of the account to withdraw from. Can be omitted if
+                user has only one active account.
+            dedupe_id: A unique string used to de-duplicate deposits. Ensure this
+                remains static between retries to ensure only one deposit is created.
+                If omitted, a random 16 character string will be generated.
+
+        Returns:
+            A Monzo pot.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
@@ -122,15 +139,23 @@ class PotsResource(BaseResource):
         *,
         account_id: Optional[str] = None,
         dedupe_id: Optional[str] = None,
-    ):
-        """
-        Withdraw money from a pot to an account.
+    ) -> MonzoPot:
+        """Withdraw money from a pot to an account.
 
-        For ease of use, pot ID and/or account ID is not required if user has only
-        one active pot/account.
+        Docs: https://docs.monzo.com/#withdraw-from-a-pot
 
-        Docs:
-            https://docs.monzo.com/#withdraw-from-a-pot
+        Arguments:
+            amount: The amount to deposit, as a 64bit integer in minor units of
+                the currency, eg. pennies for GBP, or cents for EUR and USD.
+            pot_id: The ID of the pot to withdraw from.
+            account_id: The ID of the account to deposit into. Can be omitted if
+                user has only one active account.
+            dedupe_id: A unique string used to de-duplicate deposits. Ensure this
+                remains static between retries to ensure only one deposit is created.
+                If omitted, a random 16 character string will be generated.
+
+        Returns:
+            A Monzo pot.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id

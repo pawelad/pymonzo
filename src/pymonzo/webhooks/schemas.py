@@ -1,17 +1,13 @@
-"""
-Monzo API webhooks related schemas.
-"""
+"""Monzo API 'webhooks' related schemas."""
 from pydantic import BaseModel
 
 from pymonzo.transactions import MonzoTransactionMerchant
 
 
 class MonzoWebhook(BaseModel):
-    """
-    API schema for a 'webhook' object.
+    """API schema for a 'webhook' object.
 
-    Docs:
-        https://docs.monzo.com/#webhooks
+    Docs: https://docs.monzo.com/#webhooks
     """
 
     id: str
@@ -20,13 +16,11 @@ class MonzoWebhook(BaseModel):
 
 
 class MonzoWebhookTransactionEvent(BaseModel):
-    """
-    API schema for a 'webhook event' object.
+    """API schema for a 'webhook event' object.
 
     For some reason it seems slight different from 'MonzoTransaction'.
 
-    Docs:
-        https://docs.monzo.com/#transaction-created
+    Docs: https://docs.monzo.com/#transaction-created
     """
 
     account_id: str
@@ -42,11 +36,9 @@ class MonzoWebhookTransactionEvent(BaseModel):
 
 
 class MonzoWebhookEvent(BaseModel):
-    """
-    API schema for a 'webhook event' object.
+    """API schema for a 'webhook event' object.
 
-    Docs:
-        https://docs.monzo.com/#transaction-created
+    Docs: https://docs.monzo.com/#transaction-created
     """
 
     type: str

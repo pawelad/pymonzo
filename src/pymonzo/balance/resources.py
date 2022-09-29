@@ -1,6 +1,4 @@
-"""
-Monzo API balance resource.
-"""
+"""Monzo API 'balance' resource."""
 from typing import Optional
 
 from pymonzo.balance.schemas import MonzoBalance
@@ -8,21 +6,22 @@ from pymonzo.resources import BaseResource
 
 
 class BalanceResource(BaseResource):
-    """
-    Monzo API balance resource.
+    """Monzo API 'balance' resource.
 
-    Docs:
-        https://docs.monzo.com/#balance
+    Docs: https://docs.monzo.com/#balance
     """
 
     def get(self, account_id: Optional[str] = None) -> MonzoBalance:
-        """
-        Return balance information for passed account.
+        """Return account balance information.
 
-        For ease of use, account ID is not required if user has only one active account.
+        Docs: https://docs.monzo.com/#read-balance
 
-        Docs:
-            https://docs.monzo.com/#read-balance
+        Arguments:
+            account_id: The ID of the account. Can be omitted if user has only one
+                active account.
+
+        Returns:
+             Monzo account balance information.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id

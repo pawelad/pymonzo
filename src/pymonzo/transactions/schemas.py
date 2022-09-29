@@ -1,6 +1,4 @@
-"""
-Monzo API transactions related schemas.
-"""
+"""Monzo API 'transactions' related schemas."""
 from datetime import datetime
 from typing import Optional, Union
 
@@ -14,11 +12,9 @@ from pymonzo.utils import empty_str_to_none
 
 
 class MonzoTransactionMerchantAddress(BaseModel):
-    """
-    API schema for a 'transaction merchant adress' object.
+    """API schema for a 'transaction merchant address' object.
 
-    Docs:
-        https://docs.monzo.com/#transactions
+    Docs: https://docs.monzo.com/#transactions
     """
 
     address: str
@@ -31,11 +27,9 @@ class MonzoTransactionMerchantAddress(BaseModel):
 
 
 class MonzoTransactionMerchant(BaseModel):
-    """
-    API schema for a 'transaction merchant' object.
+    """API schema for a 'transaction merchant' object.
 
-    Docs:
-        https://docs.monzo.com/#transactions
+    Docs: https://docs.monzo.com/#transactions
     """
 
     address: MonzoTransactionMerchantAddress
@@ -49,11 +43,9 @@ class MonzoTransactionMerchant(BaseModel):
 
 
 class MonzoTransaction(BaseModel):
-    """
-    API schema for a 'transaction' object.
+    """API schema for a 'transaction' object.
 
-    Docs:
-        https://docs.monzo.com/#transactions
+    Docs: https://docs.monzo.com/#transactions
     """
 
     amount: int

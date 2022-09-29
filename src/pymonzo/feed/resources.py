@@ -1,6 +1,4 @@
-"""
-Monzo API feed resource.
-"""
+"""Monzo API 'feed' resource."""
 from typing import Optional
 
 from pymonzo.feed.schemas import MonzoBasicFeedItem
@@ -8,11 +6,9 @@ from pymonzo.resources import BaseResource
 
 
 class FeedResource(BaseResource):
-    """
-    Monzo API feed resource.
+    """Monzo API 'feed' resource.
 
-    Docs:
-        https://docs.monzo.com/#feed-items
+    Docs: https://docs.monzo.com/#feed-items
     """
 
     def create(
@@ -22,13 +18,19 @@ class FeedResource(BaseResource):
         *,
         url: Optional[str] = None,
     ) -> dict:
-        """
-        Create a feed item.
+        """Create a feed item.
 
-        For ease of use, account ID is not required if user has only one active account.
+        Docs: https://docs.monzo.com/#create-feed-item
 
-        Docs:
-            https://docs.monzo.com/#create-feed-item
+        Arguments:
+            feed_item: Type of feed item. Currently only basic is supported.
+            account_id: The account to create a feed item for. Can be omitted if
+                user has only one active account.
+            url: A URL to open when the feed item is tapped. If no URL is provided,
+                the app will display a fallback view based on the title & body.
+
+        Returns:
+            API response.
         """
         params = {
             "account_id": account_id,

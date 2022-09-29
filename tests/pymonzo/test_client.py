@@ -1,21 +1,16 @@
-"""
-Test 'pymonzo.client' module.
-"""
+"""Test `pymonzo.client` module."""
 import pytest
 
 
 @pytest.mark.skip()
 class TestMonzoAPI:
-    """
-    Test 'monzo_api.MonzoAPI' class.
-    """
+    """Test `MonzoAPI` class."""
 
     def test_init(self) -> None:
-        """
-        Client is initialized with settings either explicitly or loaded from disk.
-        """
+        """Client is initialized with settings loaded from disk."""
+
+    def test_init_with_arguments(self) -> None:
+        """Client is initialized with settings from passed arguments."""
 
     def test_authorize(self) -> None:
-        """
-        Auth flow is executed to get API access token.
-        """
+        """Auth flow is executed to get API access token."""

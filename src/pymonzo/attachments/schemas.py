@@ -1,17 +1,13 @@
-"""
-Monzo API attachments related schemas.
-"""
+"""Monzo API 'attachments' related schemas."""
 from datetime import datetime
 
 from pydantic import BaseModel
 
 
 class MonzoAttachment(BaseModel):
-    """
-    API schema for an 'attachment' object.
+    """API schema for an 'attachment' object.
 
-    Docs:
-        https://docs.monzo.com/#attachments
+    Docs: https://docs.monzo.com/#attachments
     """
 
     id: str

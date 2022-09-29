@@ -1,6 +1,4 @@
-"""
-pymonzo resources related code.
-"""
+"""pymonzo resources related code."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -17,8 +15,10 @@ if TYPE_CHECKING:
 
 @dataclass
 class BaseResource:
-    """
-    Base Monzo API resource class.
+    """Base Monzo API resource class.
+
+    Attributes:
+        client: Monzo API client.
     """
 
     client: MonzoAPI
@@ -29,8 +29,19 @@ class BaseResource:
         endpoint: str,
         params: Optional[dict] = None,
     ) -> httpx.Response:
-        """
-        Handle HTTP requests and catch API errors.
+        """Handle HTTP requests and catch API errors.
+
+        Arguments:
+            method: HTTP method.
+            endpoint: HTTP endpoint.
+            params: HTTP params.
+
+        Returns:
+            HTTP response.
+
+        Raises:
+            MonzoAccessDenied: When access to Monzo API was denied.
+            MonzoAPIError: When Monzo API returned an error.
         """
         response = getattr(self.client.session, method)(endpoint, params=params)
 

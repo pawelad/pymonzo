@@ -1,14 +1,11 @@
-"""
-Monzo API accounts related enums.
-"""
+"""Monzo API 'accounts' related enums."""
 from enum import Enum
 
 
 class MonzoAccountType(str, Enum):
-    """
-    Monzo API account 'type' enum.
+    """Monzo API 'account type' enum.
 
-    Currently undocumented in docs.
+    Currently undocumented in Monzo API docs.
     """
 
     UK_PREPAID = "uk_prepaid"
@@ -16,10 +13,9 @@ class MonzoAccountType(str, Enum):
 
 
 class MonzoAccountCurrency(str, Enum):
-    """
-    Monzo API account 'currency' enum.
+    """Monzo API 'account currency' enum.
 
-    Currently undocumented in docs.
+    Currently undocumented in Monzo API docs.
     """
 
     GBP = "GBP"

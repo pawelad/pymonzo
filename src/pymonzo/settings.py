@@ -1,6 +1,4 @@
-"""
-pymonzo settings related code.
-"""
+"""pymonzo settings related code."""
 import json
 import os
 from functools import partial
@@ -10,8 +8,12 @@ from pydantic import BaseSettings
 
 
 class PyMonzoSettings(BaseSettings):
-    """
-    pymonzo settings schema.
+    """PyMonzo settings schema.
+
+    Attributes:
+        client_id: OAuth client ID.
+        client_secret: OAuth client secret
+        token: OAuth access token. See `MonzoAPI.authorize` for more info.
     """
 
     client_id: str
@@ -23,8 +25,13 @@ class PyMonzoSettings(BaseSettings):
 
     @classmethod
     def load_from_disk(cls, settings_path: Path) -> "PyMonzoSettings":
-        """
-        Load pymonzo settings from disk.
+        """Load pymonzo settings from disk.
+
+        Arguments:
+            settings_path: Settings file path.
+
+        Returns:
+            Loaded pymonzo settings.
         """
         with open(settings_path, "r") as f:
             settings = json.load(f)
@@ -32,8 +39,10 @@ class PyMonzoSettings(BaseSettings):
         return cls(**settings)
 
     def save_to_disk(self, settings_path: Path) -> None:
-        """
-        Save pymonzo config on disk.
+        """Save pymonzo config on disk.
+
+        Arguments:
+            settings_path: Settings file path.
         """
         # Make sure the file is not publicly accessible
         # Source: https://github.com/python/cpython/issues/73400

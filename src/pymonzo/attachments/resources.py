@@ -1,6 +1,4 @@
-"""
-Monzo API attachments resource.
-"""
+"""Monzo API 'attachments' resource."""
 from typing import Dict
 
 from pymonzo.attachments.schemas import MonzoAttachment
@@ -8,11 +6,9 @@ from pymonzo.resources import BaseResource
 
 
 class AttachmentsResource(BaseResource):
-    """
-    Monzo API attachments resource.
+    """Monzo API 'attachments' resource.
 
-    Docs:
-        https://docs.monzo.com/#attachments
+    Docs: https://docs.monzo.com/#attachments
     """
 
     def upload(
@@ -22,14 +18,22 @@ class AttachmentsResource(BaseResource):
         file_type: str,
         content_length: int,
     ) -> Dict[str, str]:
-        """
-        Upload an attachment.
+        """Upload an attachment.
 
-        The response will include a 'file_url' which will be the URL of the resulting
-        file, and an 'upload_url' to which the file should be uploaded to.
+        The response will include a `file_url` which will be the URL of the resulting
+        file, and an `upload_url` to which the file should be uploaded to.
 
-        Docs:
-            https://docs.monzo.com/#upload-attachment
+        Docs: https://docs.monzo.com/#upload-attachment
+
+        Arguments:
+            file_name: The name of the file to be uploaded.
+            file_type: The content type of the file.
+            content_length: The HTTP Content-Length of the upload request body,
+                in bytes.
+
+        Returns:
+            Dictionary with `file_url` which will be the URL of the resulting file,
+            and an `upload_url` to which the file should be uploaded to.
         """
         endpoint = "/attachment/upload"
         params = {
@@ -48,11 +52,17 @@ class AttachmentsResource(BaseResource):
         file_url: str,
         file_type: str,
     ) -> MonzoAttachment:
-        """
-        Register uploaded image to an attachment.
+        """Register uploaded image to an attachment.
 
-        Docs:
-            https://docs.monzo.com/#register-attachment
+        Docs: https://docs.monzo.com/#register-attachment
+
+        Arguments:
+            transaction_id: The ID of the transaction to associate the attachment with.
+            file_url: The URL of the uploaded attachment.
+            file_type: The content type of the attachment.
+
+        Returns:
+            A Monzo attachment.
         """
         endpoint = "/attachment/register"
         params = {
@@ -67,11 +77,15 @@ class AttachmentsResource(BaseResource):
         return attachment
 
     def deregister(self, attachment_id: str) -> dict:
-        """
-        Deregister an attachment.
+        """Deregister an attachment.
 
-        Docs:
-            https://docs.monzo.com/#deregister-attachment
+        Docs: https://docs.monzo.com/#deregister-attachment
+
+        Arguments:
+            attachment_id: The ID of the attachment to deregister.
+
+        Returns:
+            API response.
         """
         endpoint = "/attachment/deregister"
         params = {"id": attachment_id}
