@@ -75,7 +75,7 @@ class MonzoAPI:
             token=self._settings.token,
             authorization_endpoint=self.authorization_endpoint,
             token_endpoint=self.token_endpoint,
-            update_token=self.update_token,
+            update_token=self._update_token,
             base_url=self.api_url,
         )
 
@@ -137,7 +137,7 @@ class MonzoAPI:
 
         return token
 
-    def update_token(self, token: dict, **kwargs) -> None:
+    def _update_token(self, token: dict, **kwargs) -> None:
         """Update settings with refreshed token and save to disk.
 
         Arguments:
