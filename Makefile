@@ -15,9 +15,13 @@ format: ## Format code
 test: ## Run tests
 	tox --parallel
 
-.PHONY: docs
-docs: ## Build docs
+.PHONY: docs-build
+docs-build: ## Build docs
 	mkdocs build
+
+.PHONY: docs-serve
+docs-serve: ## Serve docs
+	mkdocs serve
 
 .PHONY: build
 build: ## Build pymonzo
@@ -29,7 +33,7 @@ publish: ## Publish pymonzo
 
 .PHONY: clean
 clean: ## Clean dev artifacts
-	rm -rf dist/ .mypy_cache/ .pytest_cache/ .tox/
+	rm -rf .mypy_cache/ .pytest_cache/ .tox/ dist/ site/
 
 # Source: https://www.client9.com/self-documenting-makefiles/
 .PHONY: help
