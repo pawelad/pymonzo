@@ -1,40 +1,53 @@
 site_name: "pymonzo"
 site_description: "Modern Python API client for Monzo public API"
-site_url: "https://pymonzo.rtfd.io/"
-
+site_url: "https://pymonzo.pawelad.dev/"
+site_author: "Paweł Adamczak"
 repo_name: "pawelad/pymonzo"
 repo_url: "https://github.com/pawelad/pymonzo"
 
+watch:
+  - "README.md"
+  - "CHANGELOG.md"
+  - "LICENSE"
+  - ".github/CONTRIBUTING.md"
+  - ".github/CODE_OF_CONDUCT.md"
+  - "src/pymonzo"
+
 nav:
-  - Home: "index.md"
+  - Home:
+    - Overview: "index.md"
+    - Changelog: "changelog.md"
+    - License: "license.md"
+  - Development:
+    - Contributing: "contributing.md"
+    - Code of Conduct: "code_of_conduct.md"
   - Code Reference: "reference/"
-  - Contributing: "contributing.md"
-  - Changelog: "changelog.md"
-  - License: "license.md"
 
 theme:
   name: "material"
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: "default"
+      primary: "pink"
       toggle:
         icon: "material/lightbulb-outline"
         name: "Switch to dark mode"
     - media: "(prefers-color-scheme: dark)"
       scheme: "slate"
+      primary: "pink"
       toggle:
         icon: "material/lightbulb"
         name: "Switch to light mode"
+  features:
+    - "navigation.tabs"
 
 plugins:
-  - include-markdown
-  - search
+  - "search"
+  - "include-markdown"
+  - "mkdocstrings"
   - gen-files:
       scripts:
       - "docs/gen_ref_pages.py"
   - literate-nav:
       nav_file: "SUMMARY.md"
-  - section-index
-  - mkdocstrings:
-      watch:
-      - "src/pymonzo"
+  - "section-index"

@@ -1,1 +1,1 @@
-{% include-markdown "../.github/CONTRIBUTING.md" %}
+{% include-markdown '../.github/CONTRIBUTING.md' %}
