@@ -151,4 +151,5 @@ class MonzoAPI:
             **kwargs: Extra kwargs.
         """
         self._settings.token = token
-        self._settings.save_to_disk(self.settings_path)
+        if self.settings_path.exists():
+            self._settings.save_to_disk(self.settings_path)
