@@ -8,12 +8,13 @@ from pydantic import BaseSettings
 
 
 class PyMonzoSettings(BaseSettings):
-    """PyMonzo settings schema.
+    """pymonzo settings schema.
 
     Attributes:
         client_id: OAuth client ID.
-        client_secret: OAuth client secret
-        token: OAuth access token. See `MonzoAPI.authorize` for more info.
+        client_secret: OAuth client secret.
+        token: OAuth access token. For more information see
+            [`pymonzo.MonzoAPI.authorize`][].
     """
 
     client_id: str
@@ -39,7 +40,7 @@ class PyMonzoSettings(BaseSettings):
         return cls(**settings)
 
     def save_to_disk(self, settings_path: Path) -> None:
-        """Save pymonzo config on disk.
+        """Save pymonzo settings on disk.
 
         Arguments:
             settings_path: Settings file path.

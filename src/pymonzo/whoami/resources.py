@@ -6,13 +6,15 @@ from pymonzo.whoami.schemas import MonzoWhoAmI
 class WhoAmIResource(BaseResource):
     """Monzo API 'whoami' resource.
 
-    Docs: https://docs.monzo.com/#authenticating-requests
+    Note:
+        Monzo API docs: https://docs.monzo.com/#authenticating-requests
     """
 
     def whoami(self) -> MonzoWhoAmI:
         """Return information about the access token.
 
-        Docs: https://docs.monzo.com/#authenticating-requests
+        Note:
+            Monzo API docs: https://docs.monzo.com/#authenticating-requests
 
         Returns:
             Information about the access token.

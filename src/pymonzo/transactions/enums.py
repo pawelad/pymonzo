@@ -5,7 +5,8 @@ from enum import Enum
 class MonzoTransactionDeclineReason(str, Enum):
     """Monzo API 'transaction decline reason' enum.
 
-    Docs: https://docs.monzo.com/#transactions
+    Note:
+        Monzo API docs: https://docs.monzo.com/#transactions
     """
 
     INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS"
@@ -25,7 +26,8 @@ class MonzoTransactionDeclineReason(str, Enum):
 class MonzoTransactionCategory(str, Enum):
     """Monzo API 'transaction category' enum.
 
-    Docs: https://docs.monzo.com/#transactions
+    Note:
+        Monzo API docs: https://docs.monzo.com/#transactions
     """
 
     GENERAL = "general"

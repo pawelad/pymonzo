@@ -8,7 +8,8 @@ from pymonzo.resources import BaseResource
 class AttachmentsResource(BaseResource):
     """Monzo API 'attachments' resource.
 
-    Docs: https://docs.monzo.com/#attachments
+    Note:
+        Monzo API docs: https://docs.monzo.com/#attachments
     """
 
     def upload(
@@ -23,7 +24,8 @@ class AttachmentsResource(BaseResource):
         The response will include a `file_url` which will be the URL of the resulting
         file, and an `upload_url` to which the file should be uploaded to.
 
-        Docs: https://docs.monzo.com/#upload-attachment
+        Note:
+            Monzo API docs: https://docs.monzo.com/#upload-attachment
 
         Arguments:
             file_name: The name of the file to be uploaded.
@@ -54,7 +56,8 @@ class AttachmentsResource(BaseResource):
     ) -> MonzoAttachment:
         """Register uploaded image to an attachment.
 
-        Docs: https://docs.monzo.com/#register-attachment
+        Note:
+            Monzo API docs: https://docs.monzo.com/#register-attachment
 
         Arguments:
             transaction_id: The ID of the transaction to associate the attachment with.
@@ -79,7 +82,8 @@ class AttachmentsResource(BaseResource):
     def deregister(self, attachment_id: str) -> dict:
         """Deregister an attachment.
 
-        Docs: https://docs.monzo.com/#deregister-attachment
+        Note:
+            Monzo API docs: https://docs.monzo.com/#deregister-attachment
 
         Arguments:
             attachment_id: The ID of the attachment to deregister.

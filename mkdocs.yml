@@ -51,3 +51,11 @@ plugins:
   - literate-nav:
       nav_file: "SUMMARY.md"
   - "section-index"
+
+markdown_extensions:
+  - "admonition"
+  - "pymdownx.details"
+  - "pymdownx.magiclink"
+  - "pymdownx.superfences"
+  - pymdownx.tasklist:
+      custom_checkbox: true

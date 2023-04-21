@@ -12,7 +12,8 @@ from pymonzo.resources import BaseResource
 class PotsResource(BaseResource):
     """Monzo API 'pots' resource.
 
-    Docs: https://monzo.com/docs/#pots
+    Note:
+        Monzo API docs: https://monzo.com/docs/#pots
     """
 
     _cached_pots: Dict[str, List[MonzoPot]] = field(default_factory=dict)
@@ -61,7 +62,8 @@ class PotsResource(BaseResource):
         It's often used when deciding whether to require explicit pot ID
         or use the only active one, so we cache the response by default.
 
-        Docs: https://docs.monzo.com/#list-pots
+        Note:
+            Monzo API docs: https://docs.monzo.com/#list-pots
 
         Arguments:
             account_id: The ID of the account. Can be omitted if user has only one
@@ -96,7 +98,8 @@ class PotsResource(BaseResource):
     ) -> MonzoPot:
         """Move money from an account to a pot.
 
-        Docs: https://docs.monzo.com/#deposit-into-a-pot
+        Note:
+            Monzo API docs: https://docs.monzo.com/#deposit-into-a-pot
 
         Arguments:
             amount: The amount to deposit, as a 64bit integer in minor units of
@@ -142,7 +145,8 @@ class PotsResource(BaseResource):
     ) -> MonzoPot:
         """Withdraw money from a pot to an account.
 
-        Docs: https://docs.monzo.com/#withdraw-from-a-pot
+        Note:
+            Monzo API docs: https://docs.monzo.com/#withdraw-from-a-pot
 
         Arguments:
             amount: The amount to deposit, as a 64bit integer in minor units of

@@ -57,8 +57,8 @@ def get_authorization_response(host: str, port: int) -> str:
     the OAuth callback.
 
     Arguments:
-        host: temporary HTTP server host name
-        port: temporary HTTP server port
+        host: temporary HTTP server host name.
+        port: temporary HTTP server port.
 
     Returns:
         URI of the OAuth authorization response.

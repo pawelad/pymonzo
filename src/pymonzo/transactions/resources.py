@@ -9,7 +9,8 @@ from pymonzo.transactions.schemas import MonzoTransaction
 class TransactionsResource(BaseResource):
     """Monzo API 'transactions' resource.
 
-    Docs: https://docs.monzo.com/#transactions
+    Note:
+        Monzo API docs: https://docs.monzo.com/#transactions
     """
 
     def get(
@@ -20,7 +21,8 @@ class TransactionsResource(BaseResource):
     ) -> MonzoTransaction:
         """Return single transaction.
 
-        Docs: https://docs.monzo.com/#retrieve-transaction
+        Note:
+            Monzo API docs: https://docs.monzo.com/#retrieve-transaction
 
         Arguments:
             transaction_id: The ID of the transaction.
@@ -47,7 +49,8 @@ class TransactionsResource(BaseResource):
     ) -> MonzoTransaction:
         """Annotate transaction with extra metadata.
 
-        Docs: https://docs.monzo.com/#annotate-transaction
+        Note:
+            Monzo API docs: https://docs.monzo.com/#annotate-transaction
 
         Arguments:
             transaction_id: The ID of the transaction.
@@ -79,7 +82,8 @@ class TransactionsResource(BaseResource):
         You can only fetch all transactions within 5 minutes of authentication.
         After that, you can query your last 90 days.
 
-        Docs: https://docs.monzo.com/#list-transactions
+        Note:
+            Monzo API docs: https://docs.monzo.com/#list-transactions
 
         Arguments:
             account_id: The ID of the account. Can be omitted if user has only one

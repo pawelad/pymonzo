@@ -8,7 +8,8 @@ from pymonzo.resources import BaseResource
 class FeedResource(BaseResource):
     """Monzo API 'feed' resource.
 
-    Docs: https://docs.monzo.com/#feed-items
+    Note:
+        Monzo API docs: https://docs.monzo.com/#feed-items
     """
 
     def create(
@@ -20,7 +21,8 @@ class FeedResource(BaseResource):
     ) -> dict:
         """Create a feed item.
 
-        Docs: https://docs.monzo.com/#create-feed-item
+        Note:
+            Monzo API docs: https://docs.monzo.com/#create-feed-item
 
         Arguments:
             feed_item: Type of feed item. Currently only basic is supported.

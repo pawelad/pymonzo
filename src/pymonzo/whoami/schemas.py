@@ -5,7 +5,13 @@ from pydantic import BaseModel
 class MonzoWhoAmI(BaseModel):
     """API schema for a 'whoami' object.
 
-    Docs: https://docs.monzo.com/#authenticating-requests
+    Note:
+        Monzo API docs: https://docs.monzo.com/#authenticating-requests
+
+    Attributes:
+        authenticated: Whether the user is authenticated.
+        client_id: Client ID.
+        user_id: User ID.
     """
 
     authenticated: bool

@@ -1,7 +1,7 @@
 """pymonzo API client code."""
 import webbrowser
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 from urllib.parse import urlparse
 
 import structlog
@@ -22,15 +22,20 @@ log = structlog.get_logger()
 
 
 class MonzoAPI:
-    """Monzo API client.
+    """Monzo public API client.
 
-    Docs: https://docs.monzo.com/
+    To use it, you need to create a new OAuth client in
+    [Monzo Developer Portal](https://developers.monzo.com/). The `Redirect URLs`
+    should be set to `http://localhost:6600/pymonzo` and `Confidentiality` should
+    be set to `Confidential` if you'd like to automatically refresh the access token
+    when it expires.
 
-    Attributes:
-        api_url: Monzo API URL.
-        authorization_endpoint: Monzo OAuth 2 authorization endpoint.
-        token_endpoint: Monzo OAuth 2 token fetching endpoint.
-        settings_path: Settings file path.
+    You can now use `Client ID` and `Client secret` in [`pymonzo.MonzoAPI.authorize`][]
+    to finish the OAuth 2 'Authorization Code Flow' and get the API access token
+    (which is by default saved to disk and refreshed when expired).
+
+    Note:
+        Monzo API docs: https://docs.monzo.com/
     """
 
     api_url = "https://api.monzo.com"
@@ -44,15 +49,18 @@ class MonzoAPI:
         client_secret: Optional[str] = None,
         token: Optional[dict] = None,
     ) -> None:
-        """Initialize Monzo API client and load pymonzo config file.
+        """Initialize Monzo API client using passed `client_id`, `client_secret`
+        and `token` or try and load the local settings file (created by calling
+        [`pymonzo.MonzoAPI.authorize`][] beforehand).
 
         Arguments:
             client_id: OAuth client ID.
-            client_secret: OAuth client secret
-            token: OAuth access token. See `MonzoAPI.authorize` for more info.
+            client_secret: OAuth client secret.
+            token: OAuth access token. For more information see
+                [`pymonzo.MonzoAPI.authorize`][].
 
         Raises:
-            ValueError: When client ID and secret weren't passes explicitly and
+            ValueError: When client ID and secret weren't passed explicitly and
                 settings file could not be loaded.
         """
         if all([client_id, client_secret, token]):
@@ -66,10 +74,9 @@ class MonzoAPI:
                 self._settings = PyMonzoSettings.load_from_disk(self.settings_path)
             except FileNotFoundError:
                 raise ValueError(
-                    "You either need to run "
-                    "`MonzoAPI.authorize(client_id, client_secret)` to get and save "
-                    "the authorization token or explicitly pass the client_id, "
-                    "client_secret and token arguments."
+                    "You need to run `MonzoAPI.authorize(client_id, client_secret)` "
+                    "to get the authorization token and save it to disk, or explicitly"
+                    "pass the `client_id`, `client_secret` and `token` arguments."
                 )
 
         self.session = OAuth2Client(
@@ -82,15 +89,53 @@ class MonzoAPI:
             base_url=self.api_url,
         )
 
-        # Add resources
         self.whoami = WhoAmIResource(client=self).whoami
+        """
+        Mounted Monzo `whoami` endpoint. For more information see
+        [`pymonzo.whoami.WhoAmIResource.whoami`][].
+        """
+
         self.accounts = AccountsResource(client=self)
+        """
+        Mounted Monzo `accounts` resource. For more information see
+        [`pymonzo.accounts.AccountsResource`][].
+        """
+
         self.attachments = AttachmentsResource(client=self)
+        """
+        Mounted Monzo `attachments` resource. For more information see
+        [`pymonzo.attachments.AttachmentsResource`][].
+        """
+
         self.balance = BalanceResource(client=self)
+        """
+        Mounted Monzo `balance` resource. For more information see
+        [`pymonzo.balance.BalanceResource`][].
+        """
+
         self.feed = FeedResource(client=self)
+        """
+        Mounted Monzo `feed` resource. For more information see
+        [`pymonzo.feed.FeedResource`][].
+        """
+
         self.pots = PotsResource(client=self)
+        """
+        Mounted Monzo `pots` resource. For more information see
+        [`pymonzo.pots.PotsResource`][].
+        """
+
         self.transactions = TransactionsResource(client=self)
+        """
+        Mounted Monzo `transactions` resource. For more information see
+        [`pymonzo.transactions.TransactionsResource`][].
+        """
+
         self.webhooks = WebhooksResource(client=self)
+        """
+        Mounted Monzo `webhooks` resource. For more information see
+        [`pymonzo.webhooks.WebhooksResource`][].
+        """
 
     @classmethod
     def authorize(
@@ -101,11 +146,16 @@ class MonzoAPI:
         save_to_disk: bool = True,
         redirect_uri: str = "http://localhost:6600/pymonzo",
     ) -> dict:
-        """Use OAuth 2 workflow to authorize and get the access token.
+        """Use OAuth 2 'Authorization Code Flow' get Monzo API access token and
+        (by default) save it to disk, so it can be loaded during [`pymonzo.MonzoAPI`][]
+        initialization.
+
+        Note:
+            Monzo API docs: https://docs.monzo.com/#authentication
 
         Arguments:
             client_id: OAuth client ID.
-            client_secret: OAuth client secret
+            client_secret: OAuth client secret.
             save_to_disk: Whether to save the token to disk.
             redirect_uri: Redirect URI specified in OAuth client.
 
@@ -132,7 +182,7 @@ class MonzoAPI:
             authorization_response=authorization_response,
         )
 
-        # Save config locally
+        # Save settings to disk
         if save_to_disk:
             settings = PyMonzoSettings(
                 client_id=client_id,
@@ -143,8 +193,9 @@ class MonzoAPI:
 
         return token
 
-    def _update_token(self, token: dict, **kwargs) -> None:
-        """Update settings with refreshed token and save to disk.
+    def _update_token(self, token: dict, **kwargs: Any) -> None:
+        """Update settings with refreshed access token and save it to disk (if
+        the file already exists).
 
         Arguments:
             token: OAuth access token.

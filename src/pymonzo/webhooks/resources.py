@@ -8,13 +8,15 @@ from pymonzo.webhooks.schemas import MonzoWebhook
 class WebhooksResource(BaseResource):
     """Monzo API 'webhooks' resource.
 
-    Docs: https://docs.monzo.com/#webhooks
+    Note:
+        Monzo API docs: https://docs.monzo.com/#webhooks
     """
 
     def list(self, account_id: Optional[str] = None) -> List[MonzoWebhook]:
         """List all webhooks.
 
-        Docs: https://docs.monzo.com/#list-webhooks
+        Note:
+            Monzo API docs: https://docs.monzo.com/#list-webhooks
 
         Arguments:
             account_id: The account to list registered webhooks for. Can be omitted
@@ -42,7 +44,8 @@ class WebhooksResource(BaseResource):
     ) -> MonzoWebhook:
         """Register a webhook.
 
-        Docs: https://docs.monzo.com/#registering-a-webhook
+        Note:
+            Monzo API docs: https://docs.monzo.com/#registering-a-webhook
 
         Arguments:
             account_id: The account to receive notifications for. Can be omitted
@@ -69,7 +72,8 @@ class WebhooksResource(BaseResource):
     def delete(self, webhook_id: str) -> dict:
         """Delete a webhook.
 
-        Docs: https://docs.monzo.com/#deleting-a-webhook
+        Note:
+            Monzo API docs: https://docs.monzo.com/#deleting-a-webhook
 
         Arguments:
             webhook_id: The ID of the webhook.

@@ -11,7 +11,8 @@ from pymonzo.resources import BaseResource
 class AccountsResource(BaseResource):
     """Monzo API 'accounts' resource.
 
-    Docs: https://docs.monzo.com/#accounts
+    Note:
+        Monzo API docs: https://docs.monzo.com/#accounts
     """
 
     _cached_accounts: List[MonzoAccount] = field(default_factory=list)
@@ -48,7 +49,8 @@ class AccountsResource(BaseResource):
         It's often used when deciding whether to require explicit account ID
         or use the only active one, so we cache the response by default.
 
-        Docs: https://docs.monzo.com/#list-accounts
+        Note:
+            Monzo API docs: https://docs.monzo.com/#list-accounts
 
         Arguments:
             refresh: Whether to refresh the cached list of accounts.

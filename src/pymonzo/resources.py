@@ -1,4 +1,4 @@
-"""pymonzo resources related code."""
+"""pymonzo base API resource related code."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -18,7 +18,7 @@ class BaseResource:
     """Base Monzo API resource class.
 
     Attributes:
-        client: Monzo API client.
+        client: Monzo API client instance.
     """
 
     client: MonzoAPI

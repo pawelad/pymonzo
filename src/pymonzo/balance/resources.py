@@ -8,13 +8,15 @@ from pymonzo.resources import BaseResource
 class BalanceResource(BaseResource):
     """Monzo API 'balance' resource.
 
-    Docs: https://docs.monzo.com/#balance
+    Note:
+        Monzo API docs: https://docs.monzo.com/#balance
     """
 
     def get(self, account_id: Optional[str] = None) -> MonzoBalance:
         """Return account balance information.
 
-        Docs: https://docs.monzo.com/#read-balance
+        Note:
+            Monzo API docs: https://docs.monzo.com/#read-balance
 
         Arguments:
             account_id: The ID of the account. Can be omitted if user has only one
