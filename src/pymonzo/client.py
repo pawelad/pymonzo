@@ -8,11 +8,14 @@ import structlog
 from authlib.integrations.httpx_client import OAuth2Client
 
 from pymonzo.accounts import AccountsResource
+from pymonzo.attachments import AttachmentsResource
 from pymonzo.balance import BalanceResource
+from pymonzo.feed import FeedResource
 from pymonzo.pots import PotsResource
 from pymonzo.settings import PyMonzoSettings
 from pymonzo.transactions import TransactionsResource
 from pymonzo.utils import get_authorization_response
+from pymonzo.webhooks import WebhooksResource
 from pymonzo.whoami import WhoAmIResource
 
 log = structlog.get_logger()
@@ -82,9 +85,12 @@ class MonzoAPI:
         # Add resources
         self.whoami = WhoAmIResource(client=self).whoami
         self.accounts = AccountsResource(client=self)
+        self.attachments = AttachmentsResource(client=self)
         self.balance = BalanceResource(client=self)
+        self.feed = FeedResource(client=self)
         self.pots = PotsResource(client=self)
         self.transactions = TransactionsResource(client=self)
+        self.webhooks = WebhooksResource(client=self)
 
     @classmethod
     def authorize(
