@@ -8,18 +8,20 @@ repo_url: "https://github.com/pawelad/pymonzo"
 watch:
   - "README.md"
   - "CHANGELOG.md"
+  - "CONTRIBUTING.md"
   - "LICENSE"
-  - ".github/CONTRIBUTING.md"
   - ".github/CODE_OF_CONDUCT.md"
   - "src/pymonzo"
 
 nav:
   - Home:
     - Overview: "index.md"
+    - Getting Started: "getting_started.md"
+    - Implemented Endpoints: "implemented_endpoints.md"
     - Changelog: "changelog.md"
     - License: "license.md"
   - Development:
-    - Contributing: "contributing.md"
+    - Contributing Guide: "contributing.md"
     - Code of Conduct: "code_of_conduct.md"
   - Code Reference: "reference/"
 
