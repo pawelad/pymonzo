@@ -27,7 +27,6 @@ dependencies = [
   "Authlib",
   "httpx",
   "pydantic",
-  "structlog",
 ]
 
 [project.optional-dependencies]
