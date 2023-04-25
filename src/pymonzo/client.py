@@ -18,7 +18,6 @@ from pymonzo.webhooks import WebhooksResource
 from pymonzo.whoami import WhoAmIResource
 
 
-
 class MonzoAPI:
     """Monzo public API client.
 
@@ -38,7 +37,7 @@ class MonzoAPI:
 
     api_url = "https://api.monzo.com"
     authorization_endpoint = "https://auth.monzo.com/"
-    token_endpoint = "https://api.monzo.com/oauth2/token"  # nosec B105
+    token_endpoint = "https://api.monzo.com/oauth2/token"  # noqa
     settings_path = Path.home() / ".pymonzo"
 
     def __init__(
@@ -47,9 +46,11 @@ class MonzoAPI:
         client_secret: Optional[str] = None,
         token: Optional[dict] = None,
     ) -> None:
-        """Initialize Monzo API client using passed `client_id`, `client_secret`
-        and `token` or try and load the local settings file (created by calling
-        [`pymonzo.MonzoAPI.authorize`][] beforehand).
+        """Initialize Monzo API client and mount all resources.
+
+        It expects [`pymonzo.MonzoAPI.authorize`][] to be called beforehand, so
+        it can load the local settings file containing the API access token. You
+        can also explicitly pass `client_id`, `client_secret` and `token` values.
 
         Arguments:
             client_id: OAuth client ID.
@@ -70,12 +71,12 @@ class MonzoAPI:
         else:
             try:
                 self._settings = PyMonzoSettings.load_from_disk(self.settings_path)
-            except FileNotFoundError:
+            except FileNotFoundError as e:
                 raise ValueError(
                     "You need to run `MonzoAPI.authorize(client_id, client_secret)` "
                     "to get the authorization token and save it to disk, or explicitly"
                     "pass the `client_id`, `client_secret` and `token` arguments."
-                )
+                ) from e
 
         self.session = OAuth2Client(
             client_id=self._settings.client_id,
@@ -144,9 +145,10 @@ class MonzoAPI:
         save_to_disk: bool = True,
         redirect_uri: str = "http://localhost:6600/pymonzo",
     ) -> dict:
-        """Use OAuth 2 'Authorization Code Flow' get Monzo API access token and
-        (by default) save it to disk, so it can be loaded during [`pymonzo.MonzoAPI`][]
-        initialization.
+        """Use OAuth 2 'Authorization Code Flow' to get Monzo API access token.
+
+        By default, it also saves the token to disk, so it can be loaded during
+        [`pymonzo.MonzoAPI`][] initialization.
 
         Note:
             Monzo API docs: https://docs.monzo.com/#authentication
@@ -163,7 +165,7 @@ class MonzoAPI:
         client = OAuth2Client(client_id, client_secret, redirect_uri=redirect_uri)
         url, state = client.create_authorization_url(cls.authorization_endpoint)
 
-        print(f"Please visit this URL to authorize: {url}")
+        print(f"Please visit this URL to authorize: {url}")  # noqa
         webbrowser.open(url)
 
         # Start a webserver and wait for the callback
@@ -192,8 +194,7 @@ class MonzoAPI:
         return token
 
     def _update_token(self, token: dict, **kwargs: Any) -> None:
-        """Update settings with refreshed access token and save it to disk (if
-        the file already exists).
+        """Update settings with refreshed access token and save it to disk.
 
         Arguments:
             token: OAuth access token.

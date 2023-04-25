@@ -34,7 +34,7 @@ class PyMonzoSettings(BaseSettings):
         Returns:
             Loaded pymonzo settings.
         """
-        with open(settings_path, "r") as f:
+        with open(settings_path) as f:
             settings = json.load(f)
 
         return cls(**settings)

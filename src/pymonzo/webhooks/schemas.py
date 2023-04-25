@@ -24,7 +24,8 @@ class MonzoWebhook(BaseModel):
 class MonzoWebhookTransactionEvent(BaseModel):
     """API schema for a 'webhook event' object.
 
-    For some reason it seems slight different from [`pymonzo.transactions.MonzoTransaction`][].
+    For some reason it seems slight different from
+    [`pymonzo.transactions.MonzoTransaction`][].
 
     Note:
         Monzo API docs: https://docs.monzo.com/#transaction-created

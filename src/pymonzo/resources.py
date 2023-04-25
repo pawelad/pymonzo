@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import httpx
 from httpx import codes
@@ -27,7 +27,7 @@ class BaseResource:
         self,
         method: str,
         endpoint: str,
-        params: Optional[dict] = None,
+        params: dict | None = None,
     ) -> httpx.Response:
         """Handle HTTP requests and catch API errors.
 
@@ -63,6 +63,6 @@ class BaseResource:
             else:
                 msg = f"Something went wrong: {e}"
 
-            raise MonzoAPIError(msg)
+            raise MonzoAPIError(msg) from e
 
         return response

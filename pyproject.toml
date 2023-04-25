@@ -32,6 +32,7 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
   "pytest",
+  "pytest-cov",
   "pytest-mock",
   "pytest-recording",
 ]
@@ -46,48 +47,40 @@ docs = [
 ]
 dev = [
   "pymonzo[tests,docs]",
-  # Checks
-  "bandit",
-  "interrogate",
   # Code style
+  "interrogate",
   "black",
   "isort",
-  # Linters
-  "darglint",
-  "dlint",
-  "flake8",
-  "flake8-bugbear",
-  "flake8-comprehensions",
-  "flake8-docstrings",
-  "flake8-print",
-  "flake8-pytest-style",
-  "flake8-simplify",
-  "pep8-naming",
+  "ruff",
   # Type checking
   "mypy",
-  # Other
+  # Misc
   "flit",
-  "tox",
+  "nox",
 ]
 
 [project.urls]
 Home = "https://github.com/pawelad/pymonzo"
 
-[tool.bandit]
-skips = ["B101"]
-
 [tool.black]
 target-version = ["py37"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
 
 [tool.interrogate]
 ignore-init-module = true
 ignore-nested-classes = true
+fail-under = 95
 
 [tool.isort]
 profile = "black"
+src_paths = ["src"]
 
 [tool.mypy]
 python_version = "3.7"
+mypy_path = "src"
 
 [[tool.mypy.overrides]]
 module = [
@@ -97,5 +90,42 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra --verbose"
+addopts = "-ra --cov --import-mode=importlib --verbose"
 testpaths = "tests"
+pythonpath = "src"
+
+
+[tool.ruff]
+target-version = "py37"
+select = [
+  "A",  # flake8-builtins
+  "ANN",  # flake8-annotations
+  "B",  # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "C90",  # mccabe
+  "D",  # pydocstyle
+  "DJ",  # flake8-django
+  "E",  # flake8
+  "F",  # flake8
+  "N",  # pep8-naming
+  "PT",  # flake8-pytest-style
+  "S",  # flake8-bandit
+  "SIM",  # flake8-simplify
+  "T20",  # flake8-print
+  "TRY",  # tryceratops
+  "UP",  # pyupgrade
+]
+ignore = [
+  "A003",  # Class attribute is shadowing a python builtin
+  "ANN101",  # Missing type annotation for `self` in method
+  "ANN102",  # Missing type annotation for `cls` in classmethod
+  "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
+  "D104",  # Missing docstring in public package
+  "D106",  # Missing docstring in public nested class
+  "N818",  #  Exception name should be named with an Error suffix
+  "S101",  # Use of `assert` detected
+  "TRY003",  # Avoid specifying long messages outside the exception class
+]
+
+[tool.ruff.pydocstyle]
+convention = "google"
