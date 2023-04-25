@@ -62,7 +62,7 @@ class MonzoAPI:
             ValueError: When client ID and secret weren't passed explicitly and
                 settings file could not be loaded.
         """
-        if all([client_id, client_secret, token]):
+        if client_id and client_secret and token:
             self._settings = PyMonzoSettings(
                 client_id=client_id,
                 client_secret=client_secret,
