@@ -33,13 +33,13 @@ Available `make` commands:
 
 ```console
 $ make help
-install                                   Install pymonzo in editable mode
+install                                   Install package in editable mode
 format                                    Format code
-test                                      Run tests
+test                                      Run the test suite
 docs-build                                Build docs
 docs-serve                                Serve docs
-build                                     Build pymonzo
-publish                                   Publish pymonzo
+build                                     Build package
+publish                                   Publish package
 clean                                     Clean dev artifacts
 help                                      Show help message
 ```

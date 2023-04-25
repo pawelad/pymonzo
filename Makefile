@@ -3,17 +3,19 @@ MAKEFLAGS += --warn-undefined-variables
 .DEFAULT_GOAL := help
 
 .PHONY: install
-install: ## Install pymonzo in editable mode
+install: ## Install package in editable mode
 	python -m pip install --upgrade pip wheel
 	python -m pip install --editable ".[dev]"
 
 .PHONY: format
 format: ## Format code
-	black src tests && isort src tests
+	black src/ tests/ noxfile.py
+	isort src/ tests/ noxfile.py
+	ruff --fix src/ tests/ noxfile.py
 
 .PHONY: test
-test: ## Run tests
-	tox --parallel
+test: ## Run the test suite
+	nox
 
 .PHONY: docs-build
 docs-build: ## Build docs
@@ -24,16 +26,16 @@ docs-serve: ## Serve docs
 	mkdocs serve
 
 .PHONY: build
-build: ## Build pymonzo
+build: ## Build package
 	python -m flit build
 
 .PHONY: publish
-publish: ## Publish pymonzo
+publish: ## Publish package
 	python -m flit publish
 
 .PHONY: clean
 clean: ## Clean dev artifacts
-	rm -rf .mypy_cache/ .pytest_cache/ .tox/ dist/ site/
+	rm -rf .coverage .mypy_cache/ .nox/ .pytest_cache/ .ruff_cache/ dist/ htmlcov/ site/
 
 # Source: https://www.client9.com/self-documenting-makefiles/
 .PHONY: help
