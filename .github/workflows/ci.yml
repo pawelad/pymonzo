@@ -1,0 +1,81 @@
+---
+name: "CI"
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main", "dev"]
+  workflow_call:
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  FORCE_COLOR: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  tests:
+    name: "Tests"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        python-version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Setup Python ${{ matrix.python-version }}"
+        uses: "actions/setup-python@v4"
+        with:
+          python-version: "${{ matrix.python-version }}"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Update pip and wheel"
+        run: "python -m pip install --upgrade pip wheel"
+
+      - name: "Install Nox"
+        run: "python -m pip install nox"
+
+      - name: "Run 'tests' Nox session"
+        run: "nox -s tests --python ${{ matrix.python-version }}"
+
+  checks:
+    name: "${{ matrix.name }}"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        include:
+          - name: "Code style checks"
+            nox_session: "code_style_checks"
+          - name: "Type checks"
+            nox_session: "type_checks"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Setup Python ${{ env.PYTHON_VERSION }}"
+        uses: "actions/setup-python@v4"
+        with:
+          python-version: "${{ env.PYTHON_VERSION }}"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Update pip and wheel"
+        run: "python -m pip install --upgrade pip wheel"
+
+      - name: "Install Nox"
+        run: "python -m pip install nox"
+
+      - name: "Run '${{ matrix.nox_session }}' Nox session"
+        run: "nox -s ${{ matrix.nox_session }}"
