@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 dynamic = ["version", "description"]
 
@@ -90,7 +91,7 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra --cov --import-mode=importlib --verbose"
+addopts = "-ra --import-mode=importlib --verbose"
 testpaths = "tests"
 pythonpath = "src"
 
