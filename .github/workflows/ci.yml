@@ -60,6 +60,8 @@ jobs:
             nox_session: "code_style_checks"
           - name: "Type checks"
             nox_session: "type_checks"
+          - name: "Docs"
+            nox_session: "docs"
     steps:
       - name: "Checkout code"
         uses: "actions/checkout@v3"
