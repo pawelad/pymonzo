@@ -7,7 +7,7 @@ nox.options.error_on_external_run = True
 DEFAULT_PATHS = ["src/", "tests/", "noxfile.py"]
 
 
-@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["3.8", "3.9", "3.10", "3.11", "3.12"])
 def tests(session: nox.Session) -> None:
     """Run tests."""
     dirs = session.posargs or ["tests/"]
