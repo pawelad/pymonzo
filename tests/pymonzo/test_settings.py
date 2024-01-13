@@ -1,39 +1,49 @@
 """Test `pymonzo.settings` module."""
-import codecs
 import json
-import os
-import tempfile
+from pathlib import Path
 
-import pytest
+from polyfactory.factories.pydantic_factory import ModelFactory
+
+from pymonzo.settings import PyMonzoSettings
 
 
-@pytest.mark.skip()
+class PyMonzoSettingsFactory(ModelFactory[PyMonzoSettings]):
+    """Factory for `PyMonzoSettings` schema."""
+
+
 class TestPyMonzoSettings:
     """Test `PyMonzoSettings` class."""
 
-    def test_load_from_disk(self) -> None:
+    def test_load_from_disk(self, tmp_path: Path) -> None:
         """Settings are loaded from disk."""
-
-    def test_save_to_disk(self) -> None:
-        """Settings are saved to disk."""
-
-    def test_class_save_token_on_disk_method(self, monzo) -> None:
-        """Test class `_save_token_on_disk` method."""
-        path = os.path.join(
-            tempfile.gettempdir(),
-            "pymonzo_test",
-        )
-
-        monzo._token = {
-            "foo": "UNICODE",
-            "bar": 1,
-            "baz": False,
+        # Save manually
+        settings = {
+            "client_id": "TEST_CLIENT_ID",
+            "client_secret": "TEST_CLIENT_SECRET",
+            "token": {
+                "access_token": "TEST_ACCESS_TOKEN",
+            },
         }
 
-        expected_token = monzo._token.copy()
-        expected_token.update(client_secret=monzo._client_secret)
+        settings_path = tmp_path / ".pymonzo-test"
+        with open(settings_path, "w") as f:
+            json.dump(settings, f, indent=4)
 
-        monzo._save_token_on_disk()
+        # Load
+        loaded_settings = PyMonzoSettings.load_from_disk(settings_path)
 
-        with codecs.open(path, "r", "utf-8") as f:
-            assert json.load(f) == expected_token
+        assert loaded_settings == PyMonzoSettings(**settings)
+
+    def test_save_to_disk(self, tmp_path: Path) -> None:
+        """Settings are saved to disk."""
+        # Save
+        settings = PyMonzoSettingsFactory.build()
+
+        settings_path = tmp_path / ".pymonzo-test"
+        settings.save_to_disk(settings_path)
+
+        # Load manually
+        with open(settings_path) as f:
+            loaded_settings = json.load(f)
+
+        assert loaded_settings == settings.dict()
