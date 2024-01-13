@@ -2,7 +2,6 @@
 import os
 
 import pytest
-from _pytest.config import Config
 from vcr import VCR
 from vcrpy_encrypt import BaseEncryptedPersister
 
@@ -17,7 +16,7 @@ class PyMonzoEncryptedPersister(BaseEncryptedPersister):
     encryption_key: bytes = VCRPY_ENCRYPTION_KEY
 
 
-def pytest_recording_configure(config: Config, vcr: VCR) -> None:
+def pytest_recording_configure(config: pytest.Config, vcr: VCR) -> None:
     """Register custom VCR persister that encrypts cassettes."""
     vcr.register_persister(PyMonzoEncryptedPersister)
 
