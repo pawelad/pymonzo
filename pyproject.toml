@@ -87,10 +87,14 @@ src_paths = ["src"]
 [tool.mypy]
 python_version = "3.8"
 mypy_path = "src"
+plugins = "pydantic.mypy"
 
 [[tool.mypy.overrides]]
 module = [
+  "authlib.integrations.base_client",
   "authlib.integrations.httpx_client",
+  "vcr",
+  "vcrpy_encrypt",
 ]
 ignore_missing_imports = true
 
