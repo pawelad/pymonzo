@@ -97,3 +97,22 @@ class TestAttachmentsResource:
 
         assert attachment_register_response == attachment
         assert mocked_route.called
+
+    @pytest.mark.respx(base_url=MonzoAPI.api_url)
+    def test_deregister_respx(
+        self,
+        respx_mock: respx.MockRouter,
+        attachments_resource: AttachmentsResource,
+    ) -> None:
+        """Correct API response is sent, API response is parsed into expected schema."""
+        attachment_id = "TEST_ATTACHMENT_ID"
+
+        mocked_route = respx_mock.post(
+            "/attachment/deregister",
+            params={"id": attachment_id},
+        ).mock(return_value=httpx.Response(200, json={}))
+
+        attachment_deregister_response = attachments_resource.deregister(attachment_id)
+
+        assert attachment_deregister_response == {}
+        assert mocked_route.called
