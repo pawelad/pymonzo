@@ -1,10 +1,17 @@
 """pymonzo settings related code."""
 import json
 import os
+import sys
 from functools import partial
 from pathlib import Path
+from typing import Dict
 
 from pydantic import BaseSettings
+
+if sys.version_info < (3, 11):
+    from typing_extensions import Self
+else:
+    from typing import Self
 
 
 class PyMonzoSettings(BaseSettings):
@@ -19,13 +26,13 @@ class PyMonzoSettings(BaseSettings):
 
     client_id: str
     client_secret: str
-    token: dict
+    token: Dict[str, str]
 
     class Config:
         env_prefix = "pymonzo_"
 
     @classmethod
-    def load_from_disk(cls, settings_path: Path) -> "PyMonzoSettings":
+    def load_from_disk(cls, settings_path: Path) -> Self:
         """Load pymonzo settings from disk.
 
         Arguments:
