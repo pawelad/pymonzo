@@ -50,8 +50,8 @@ class WSGIApp:
         return [msg.encode("utf-8")]
 
 
-def get_authorization_response(host: str, port: int) -> str:
-    """Get OAuth authorization response.
+def get_authorization_response_url(host: str, port: int) -> str:
+    """Get OAuth authorization response URL.
 
     It's done by creating a bare-bones HTTP server and retrieving a single request,
     the OAuth callback.
@@ -61,7 +61,7 @@ def get_authorization_response(host: str, port: int) -> str:
         port: temporary HTTP server port.
 
     Returns:
-        URI of the OAuth authorization response.
+        URL of the OAuth authorization response.
     """
     wsgi_app = WSGIApp()
     with make_server(host, port, wsgi_app) as server:  # type: ignore

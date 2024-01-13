@@ -16,7 +16,7 @@ from pymonzo.feed import FeedResource
 from pymonzo.pots import PotsResource
 from pymonzo.settings import PyMonzoSettings
 from pymonzo.transactions import TransactionsResource
-from pymonzo.utils import get_authorization_response
+from pymonzo.utils import get_authorization_response_url
 from pymonzo.webhooks import WebhooksResource
 from pymonzo.whoami import WhoAmIResource
 
@@ -180,7 +180,7 @@ class MonzoAPI:
         parsed_url = urlparse(redirect_uri)
         assert parsed_url.hostname is not None
         assert parsed_url.port is not None
-        authorization_response = get_authorization_response(
+        authorization_response = get_authorization_response_url(
             host=parsed_url.hostname,
             port=parsed_url.port,
         )
