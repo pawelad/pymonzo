@@ -162,7 +162,12 @@ class MonzoAPI:
         Returns:
             OAuth access token.
         """
-        client = OAuth2Client(client_id, client_secret, redirect_uri=redirect_uri)
+        client = OAuth2Client(
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=redirect_uri,
+            token_endpoint_auth_method="none",  # noqa
+        )
         url, state = client.create_authorization_url(cls.authorization_endpoint)
 
         print(f"Please visit this URL to authorize: {url}")  # noqa
@@ -178,8 +183,10 @@ class MonzoAPI:
         )
 
         token = client.fetch_token(
-            cls.token_endpoint,
+            url=cls.token_endpoint,
             authorization_response=authorization_response,
+            client_id=client_id,
+            client_secret=client_secret,
         )
 
         # Save settings to disk
