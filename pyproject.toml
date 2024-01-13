@@ -27,7 +27,7 @@ dynamic = ["version", "description"]
 dependencies = [
   "Authlib",
   "httpx",
-  "pydantic",
+  "pydantic<2",
 ]
 
 [project.optional-dependencies]
