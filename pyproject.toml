@@ -32,6 +32,7 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
+  "polyfactory",
   "pytest",
   "pytest-cov",
   "pytest-mock",
