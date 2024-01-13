@@ -1,7 +1,5 @@
 """Monzo API 'attachments' resource."""
-from typing import Dict
-
-from pymonzo.attachments.schemas import MonzoAttachment
+from pymonzo.attachments.schemas import MonzoAttachment, MonzoAttachmentResponse
 from pymonzo.resources import BaseResource
 
 
@@ -18,7 +16,7 @@ class AttachmentsResource(BaseResource):
         file_name: str,
         file_type: str,
         content_length: int,
-    ) -> Dict[str, str]:
+    ) -> MonzoAttachmentResponse:
         """Upload an attachment.
 
         The response will include a `file_url` which will be the URL of the resulting
@@ -34,7 +32,7 @@ class AttachmentsResource(BaseResource):
                 in bytes.
 
         Returns:
-            Dictionary with `file_url` which will be the URL of the resulting file,
+            Response with `file_url` which will be the URL of the resulting file,
             and an `upload_url` to which the file should be uploaded to.
         """
         endpoint = "/attachment/upload"
@@ -45,7 +43,9 @@ class AttachmentsResource(BaseResource):
         }
         response = self._get_response(method="post", endpoint=endpoint, params=params)
 
-        return response.json()
+        attachment_response = MonzoAttachmentResponse(**response.json())
+
+        return attachment_response
 
     def register(
         self,

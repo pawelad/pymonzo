@@ -25,3 +25,18 @@ class MonzoAttachment(BaseModel):
     file_url: str
     file_type: str
     created: datetime
+
+
+class MonzoAttachmentResponse(BaseModel):
+    """API schema for an 'attachment upload' API response.
+
+    Note:
+        Monzo API docs: https://docs.monzo.com/#upload-attachment
+
+    Attributes:
+        file_url: The URL of the file once it has been uploaded.
+        upload_url: The URL to `POST` the file to when uploading.
+    """
+
+    file_url: str
+    upload_url: str
