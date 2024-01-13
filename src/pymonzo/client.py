@@ -1,14 +1,17 @@
 """pymonzo API client code."""
 import webbrowser
+from json import JSONDecodeError
 from pathlib import Path
 from typing import Any, Optional
 from urllib.parse import urlparse
 
+from authlib.integrations.base_client import OAuthError
 from authlib.integrations.httpx_client import OAuth2Client
 
 from pymonzo.accounts import AccountsResource
 from pymonzo.attachments import AttachmentsResource
 from pymonzo.balance import BalanceResource
+from pymonzo.exceptions import MonzoAPIError
 from pymonzo.feed import FeedResource
 from pymonzo.pots import PotsResource
 from pymonzo.settings import PyMonzoSettings
@@ -182,12 +185,15 @@ class MonzoAPI:
             port=parsed_url.port,
         )
 
-        token = client.fetch_token(
-            url=cls.token_endpoint,
-            authorization_response=authorization_response,
-            client_id=client_id,
-            client_secret=client_secret,
-        )
+        try:
+            token = client.fetch_token(
+                url=cls.token_endpoint,
+                authorization_response=authorization_response,
+                client_id=client_id,
+                client_secret=client_secret,
+            )
+        except (OAuthError, JSONDecodeError) as e:
+            raise MonzoAPIError("Error while fetching API access token") from e
 
         # Save settings to disk
         if save_to_disk:
