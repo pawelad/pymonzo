@@ -37,6 +37,7 @@ tests = [
   "pytest-cov",
   "pytest-mock",
   "pytest-recording",
+  "python-dotenv",
   "vcrpy-encrypt",
 ]
 docs = [

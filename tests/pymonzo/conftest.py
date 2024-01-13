@@ -2,10 +2,13 @@
 import os
 
 import pytest
+from dotenv import load_dotenv
 from vcr import VCR
 from vcrpy_encrypt import BaseEncryptedPersister
 
 from pymonzo import MonzoAPI
+
+load_dotenv()
 
 VCRPY_ENCRYPTION_KEY = os.getenv("VCRPY_ENCRYPTION_KEY", "").encode("UTF-8")
 
