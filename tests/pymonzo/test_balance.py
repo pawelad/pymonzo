@@ -18,7 +18,7 @@ class MonzoBalanceFactory(ModelFactory[MonzoBalance]):
 
     # This is undocumented in Monzo API, and doesn't return anything for my account,
     # so I don't know its schema
-    local_spend = []
+    local_spend: list = []
 
 
 @pytest.fixture(scope="module")
