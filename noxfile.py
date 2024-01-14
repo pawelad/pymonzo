@@ -28,6 +28,7 @@ def coverage_report(session: nox.Session) -> None:
     session.install("coverage[toml]")
 
     session.run("coverage", "combine")
+    session.run("coverage", "xml")
     session.run("coverage", "report")
 
 
