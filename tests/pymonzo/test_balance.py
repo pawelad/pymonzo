@@ -61,6 +61,7 @@ class TestBalanceResource:
         balance_get_response = balance_resource.get()
 
         mocked_get_default_account.assert_called_once_with()
+        mocked_get_default_account.reset_mock()
 
         assert isinstance(balance_get_response, MonzoBalance)
         assert balance_get_response == balance
@@ -81,6 +82,9 @@ class TestBalanceResource:
         )
 
         balance_get_response = balance_resource.get(account_id=account_id)
+
+        mocked_get_default_account.assert_not_called()
+        mocked_get_default_account.reset_mock()
 
         assert isinstance(balance_get_response, MonzoBalance)
         assert balance_get_response == balance

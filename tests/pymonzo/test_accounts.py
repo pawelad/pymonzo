@@ -43,6 +43,7 @@ class TestAccountsResource:
         with pytest.raises(CannotDetermineDefaultAccount):
             accounts_resource.get_default_account()
 
+        mocked_accounts_list.assert_called_once_with()
         mocked_accounts_list.reset_mock()
 
         # One account, none active
@@ -75,6 +76,7 @@ class TestAccountsResource:
         with pytest.raises(CannotDetermineDefaultAccount):
             accounts_resource.get_default_account()
 
+        mocked_accounts_list.assert_called_once_with()
         mocked_accounts_list.reset_mock()
 
         # Two accounts, one active
@@ -94,6 +96,8 @@ class TestAccountsResource:
 
         with pytest.raises(CannotDetermineDefaultAccount):
             accounts_resource.get_default_account()
+
+        mocked_accounts_list.assert_called_once_with()
         mocked_accounts_list.reset_mock()
 
     @pytest.mark.vcr()

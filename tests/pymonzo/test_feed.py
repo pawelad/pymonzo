@@ -65,6 +65,7 @@ class TestFeedResource:
         feed_create_response = feed_resource.create(feed_item=feed_item)
 
         mocked_get_default_account.assert_called_once_with()
+        mocked_get_default_account.reset_mock()
 
         assert feed_create_response == {}
         assert mocked_route.called
@@ -99,6 +100,9 @@ class TestFeedResource:
             account_id=account_id,
             url=url,
         )
+
+        mocked_get_default_account.assert_not_called()
+        mocked_get_default_account.reset_mock()
 
         assert feed_create_response == {}
         assert mocked_route.called
