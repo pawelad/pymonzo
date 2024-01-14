@@ -73,7 +73,7 @@ class WebhooksResource(BaseResource):
         }
         response = self._get_response(method="post", endpoint=endpoint, params=params)
 
-        webhook = MonzoWebhook(**response.json()["attachment"])
+        webhook = MonzoWebhook(**response.json()["webhook"])
 
         return webhook
 
