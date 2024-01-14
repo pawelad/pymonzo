@@ -87,6 +87,7 @@ class MonzoAPI:
             token=self._settings.token,
             authorization_endpoint=self.authorization_endpoint,
             token_endpoint=self.token_endpoint,
+            token_endpoint_auth_method="client_secret_post",  # noqa
             update_token=self._update_token,
             base_url=self.api_url,
         )
@@ -169,7 +170,7 @@ class MonzoAPI:
             client_id=client_id,
             client_secret=client_secret,
             redirect_uri=redirect_uri,
-            token_endpoint_auth_method="none",  # noqa
+            token_endpoint_auth_method="client_secret_post",  # noqa
         )
         url, state = client.create_authorization_url(cls.authorization_endpoint)
 
@@ -189,8 +190,6 @@ class MonzoAPI:
             token = client.fetch_token(
                 url=cls.token_endpoint,
                 authorization_response=authorization_response,
-                client_id=client_id,
-                client_secret=client_secret,
             )
         except (OAuthError, JSONDecodeError) as e:
             raise MonzoAPIError("Error while fetching API access token") from e
