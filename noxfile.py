@@ -14,7 +14,18 @@ def tests(session: nox.Session) -> None:
 
     session.install(".[tests]")
 
-    session.run("pytest", *dirs)
+    session.run("coverage", "run", "-m", "pytest", *dirs)
+
+    session.notify("coverage_report")
+
+
+@nox.session()
+def coverage_report(session: nox.Session) -> None:
+    """Report test coverage. Can only be run after `tests` session."""
+    session.install("coverage[toml]")
+
+    session.run("coverage", "combine")
+    session.run("coverage", "report")
 
 
 @nox.session()

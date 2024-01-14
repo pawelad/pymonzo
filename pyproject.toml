@@ -33,9 +33,9 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
+  "coverage[toml]",
   "polyfactory",
   "pytest",
-  "pytest-cov",
   "pytest-mock",
   "pytest-recording",
   "python-dotenv",
@@ -73,6 +73,7 @@ target-version = ["py38"]
 
 [tool.coverage.run]
 branch = true
+parallel = true
 source = ["src"]
 
 [tool.interrogate]
