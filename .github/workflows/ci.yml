@@ -52,6 +52,44 @@ jobs:
         env:
           VCRPY_ENCRYPTION_KEY: ${{ secrets.VCRPY_ENCRYPTION_KEY }}
 
+      - name: "Upload coverage data"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "coverage-data-${{ matrix.python-version }}"
+          path: ".coverage.*"
+          if-no-files-found: "ignore"
+
+  coverage:
+    name: "Combine coverage and upload to CodeCov"
+    runs-on: "ubuntu-latest"
+    needs: "tests"
+
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v4"
+
+      - name: "Setup Python ${{ env.PYTHON_VERSION }}"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "${{ env.PYTHON_VERSION }}"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - uses: "actions/download-artifact@v4"
+        with:
+          pattern: "coverage-data-*"
+          merge-multiple: "true"
+
+      - name: "Combine coverage (via Nox)"
+        run: "nox -s coverage_report"
+
+      - name: "Save coverage report as step summary"
+        run: "python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY"
+
+      - name: "Upload coverage reports to Codecov"
+        uses: "codecov/codecov-action@v3"
+        env:
+          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
 
   checks:
     name: "${{ matrix.name }}"
