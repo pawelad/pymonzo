@@ -1,6 +1,6 @@
 """Monzo API 'transactions' related schemas."""
 from datetime import datetime
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 from pydantic import BaseModel, validator
 
@@ -108,7 +108,7 @@ class MonzoTransaction(BaseModel):
     description: str
     id: str
     merchant: Union[str, None, MonzoTransactionMerchant]
-    metadata: dict
+    metadata: Dict[str, str]
     notes: str
     is_load: bool
     settled: Optional[datetime]
