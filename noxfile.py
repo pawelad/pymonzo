@@ -1,4 +1,6 @@
 """pymonzo Nox sessions."""
+import os
+
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
@@ -16,7 +18,8 @@ def tests(session: nox.Session) -> None:
 
     session.run("coverage", "run", "-m", "pytest", *dirs)
 
-    session.notify("coverage_report")
+    if os.environ.get("CI") != "true":
+        session.notify("coverage_report")
 
 
 @nox.session()
