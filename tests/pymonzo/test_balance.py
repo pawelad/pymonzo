@@ -60,14 +60,14 @@ class TestBalanceResource:
 
         balance_get_response = balance_resource.get()
 
+        mocked_get_default_account.assert_called_once_with()
+
         assert isinstance(balance_get_response, MonzoBalance)
         assert balance_get_response == balance
         assert mocked_route.called
 
         # Explicitly passed account ID
         account_id = "TEST_ACCOUNT_ID"
-        account = MonzoAccountFactory.build(id=account_id)
-        mocked_get_default_account.return_value = account
 
         mocked_route = respx_mock.get(
             "/balance", params={"account_id": account_id}
