@@ -49,6 +49,9 @@ jobs:
 
       - name: "Run 'tests' Nox session"
         run: "nox -s tests --python ${{ matrix.python-version }}"
+        env:
+          VCRPY_ENCRYPTION_KEY: ${{ secrets.VCRPY_ENCRYPTION_KEY }}
+
 
   checks:
     name: "${{ matrix.name }}"
