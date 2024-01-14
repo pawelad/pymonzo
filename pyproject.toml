@@ -76,6 +76,12 @@ branch = true
 parallel = true
 source = ["src"]
 
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+  "if TYPE_CHECKING:",
+]
+
 [tool.interrogate]
 ignore-init-module = true
 ignore-nested-classes = true
