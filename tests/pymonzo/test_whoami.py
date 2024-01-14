@@ -15,7 +15,7 @@ class TestWhoAmIResource:
     """Test `WhoAmIResource` class."""
 
     @pytest.mark.vcr()
-    def test_whoami(self, whoami_resource: WhoAmIResource) -> None:
+    def test_whoami_vcr(self, whoami_resource: WhoAmIResource) -> None:
         """API response is parsed into expected schema."""
         whoami = whoami_resource.whoami()
 
