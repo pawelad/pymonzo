@@ -21,7 +21,7 @@ def tests(session: nox.Session) -> None:
 
 @nox.session()
 def coverage_report(session: nox.Session) -> None:
-    """Report test coverage. Can only be run after `tests` session."""
+    """Report coverage. Can only be run after `tests` session."""
     session.install("coverage[toml]")
 
     session.run("coverage", "combine")

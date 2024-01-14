@@ -50,7 +50,7 @@ jobs:
       - name: "Run 'tests' Nox session"
         run: "nox -s tests --python ${{ matrix.python-version }}"
         env:
-          VCRPY_ENCRYPTION_KEY: ${{ secrets.VCRPY_ENCRYPTION_KEY }}
+          VCRPY_ENCRYPTION_KEY: "${{ secrets.VCRPY_ENCRYPTION_KEY }}"
 
       - name: "Upload coverage data"
         uses: "actions/upload-artifact@v4"
@@ -60,7 +60,7 @@ jobs:
           if-no-files-found: "ignore"
 
   coverage:
-    name: "Combine coverage and upload to CodeCov"
+    name: "Coverage report"
     runs-on: "ubuntu-latest"
     needs: "tests"
 
