@@ -1,6 +1,7 @@
 # pymonzo
 [![Package Version](https://img.shields.io/pypi/v/pymonzo)][pypi pymonzo]
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/pymonzo)][pypi pymonzo]
+[![Read the Docs](https://img.shields.io/readthedocs/pymonzo)][rtfd pymonzo]
 [![Codecov](https://img.shields.io/codecov/c/github/pawelad/pymonzo)][codecov pymonzo]
 [![License](https://img.shields.io/pypi/l/pymonzo)][license]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
@@ -65,4 +66,5 @@ Released under [Mozilla Public License 2.0][license].
 [pypi pymonzo]: https://pypi.org/project/pymonzo/
 [pypi]: https://pypi.org/
 [rickroll]: https://www.youtube.com/watch?v=I6OXjnBIW-4&t=15s
+[rtfd pymonzo]: http://pymonzo.rtfd.io/
 [virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
