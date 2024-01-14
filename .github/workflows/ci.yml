@@ -89,11 +89,10 @@ jobs:
       - name: "Combine coverage (via Nox)"
         run: "nox -s coverage_report"
 
-      - name: "Save coverage report as step summary"
-        run: ".nox/coverage_report/bin/coverage report --format=markdown >> $GITHUB_STEP_SUMMARY"
-
       - name: "Upload coverage reports to Codecov"
         uses: "codecov/codecov-action@v3"
+        with:
+          verbose: "true"
         env:
           CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
 
