@@ -30,6 +30,8 @@ class PotsResource(BaseResource):
 
         Raises:
             CannotDetermineDefaultPot: If user has more than one active pot.
+            CannotDetermineDefaultAccount: If no account ID was passed and default
+                account cannot be determined.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
@@ -72,6 +74,10 @@ class PotsResource(BaseResource):
 
         Returns:
             A list of user's pots.
+
+        Raises:
+            CannotDetermineDefaultAccount: If no account ID was passed and default
+                account cannot be determined.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
@@ -113,6 +119,11 @@ class PotsResource(BaseResource):
 
         Returns:
             A Monzo pot.
+
+        Raises:
+            CannotDetermineDefaultPot: If user has more than one active pot.
+            CannotDetermineDefaultAccount: If no account ID was passed and default
+                account cannot be determined.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
@@ -160,6 +171,11 @@ class PotsResource(BaseResource):
 
         Returns:
             A Monzo pot.
+
+        Raises:
+            CannotDetermineDefaultPot: If user has more than one active pot.
+            CannotDetermineDefaultAccount: If no account ID was passed and default
+                account cannot be determined.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id

@@ -94,6 +94,10 @@ class TransactionsResource(BaseResource):
 
         Returns:
             List of Monzo transactions.
+
+        Raises:
+            CannotDetermineDefaultAccount: If no account ID was passed and default
+                account cannot be determined.
         """
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
