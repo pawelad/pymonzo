@@ -1,8 +1,7 @@
 """pymonzo base API resource related code."""
-from __future__ import annotations
-
+import json
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import httpx
 from httpx import codes
@@ -21,13 +20,13 @@ class BaseResource:
         client: Monzo API client instance.
     """
 
-    client: MonzoAPI
+    client: "MonzoAPI"
 
     def _get_response(
         self,
         method: str,
         endpoint: str,
-        params: dict | None = None,
+        params: Optional[dict] = None,
     ) -> httpx.Response:
         """Handle HTTP requests and catch API errors.
 
@@ -54,12 +53,16 @@ class BaseResource:
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as e:
-            content = response.json()
+            try:
+                content = response.json()
+            except json.decoder.JSONDecodeError:
+                content = {}
+
             error = content.get("message")
             code = content.get("code")
 
             if error and code:
-                msg = f"{error} ({code})."
+                msg = f"{error} ({code})"
             else:
                 msg = f"Something went wrong: {e}"
 
