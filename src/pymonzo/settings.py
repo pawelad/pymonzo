@@ -4,9 +4,9 @@ import os
 import sys
 from functools import partial
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Union
 
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 if sys.version_info < (3, 11):
     from typing_extensions import Self
@@ -24,12 +24,11 @@ class PyMonzoSettings(BaseSettings):
             [`pymonzo.MonzoAPI.authorize`][].
     """
 
+    model_config = SettingsConfigDict(env_prefix="pymonzo_")
+
     client_id: str
     client_secret: str
-    token: Dict[str, str]
-
-    class Config:
-        env_prefix = "pymonzo_"
+    token: Dict[str, Union[str, int]]
 
     @classmethod
     def load_from_disk(cls, settings_path: Path) -> Self:
@@ -56,4 +55,4 @@ class PyMonzoSettings(BaseSettings):
         # Source: https://github.com/python/cpython/issues/73400
         os.umask(0o077)
         with open(settings_path, "w", opener=partial(os.open, mode=0o600)) as f:
-            json.dump(self.dict(), f, indent=4)
+            f.write(self.model_dump_json(indent=2))

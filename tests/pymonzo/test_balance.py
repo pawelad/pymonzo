@@ -1,5 +1,4 @@
 """Test `pymonzo.balance` module."""
-import json
 
 import httpx
 import pytest
@@ -52,9 +51,7 @@ class TestBalanceResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `attachment.model_dump(mode='json')`
-                json=json.loads(balance.json()),
+                json=balance.model_dump(mode="json"),
             )
         )
 
@@ -75,9 +72,7 @@ class TestBalanceResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `attachment.model_dump(mode='json')`
-                json=json.loads(balance.json()),
+                json=balance.model_dump(mode="json"),
             )
         )
 

@@ -48,9 +48,12 @@ class TestWebhooksResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `webhook.model_dump(mode='json')`
-                json={"webhooks": [webhook.dict(), webhook2.dict()]},
+                json={
+                    "webhooks": [
+                        webhook.model_dump(mode="json"),
+                        webhook2.model_dump(mode="json"),
+                    ]
+                },
             )
         )
 
@@ -74,9 +77,7 @@ class TestWebhooksResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `webhook.model_dump(mode='json')`
-                json={"webhooks": [webhook.dict()]},
+                json={"webhooks": [webhook.model_dump(mode="json")]},
             )
         )
 
@@ -116,9 +117,7 @@ class TestWebhooksResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `webhook.model_dump(mode='json')`
-                json={"webhook": webhook.dict()},
+                json={"webhook": webhook.model_dump(mode="json")},
             )
         )
 
@@ -142,9 +141,7 @@ class TestWebhooksResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `webhook.model_dump(mode='json')`
-                json={"webhook": webhook.dict()},
+                json={"webhook": webhook.model_dump(mode="json")},
             )
         )
 

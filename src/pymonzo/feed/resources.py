@@ -46,7 +46,7 @@ class FeedResource(BaseResource):
             "type": "basic",
         }
 
-        for key, value in feed_item.dict(exclude_none=True).items():
+        for key, value in feed_item.model_dump(exclude_none=True).items():
             params[f"params[{key}]"] = value
 
         if url:

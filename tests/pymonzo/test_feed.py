@@ -33,7 +33,7 @@ class TestFeedResource:
         feed_resource: FeedResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        feed_item: MonzoBasicFeedItem = MonzoBasicFeedItemFactory.build()
+        feed_item = MonzoBasicFeedItemFactory.build()
 
         account = MonzoAccountFactory.build()
         mocked_get_default_account = mocker.patch.object(

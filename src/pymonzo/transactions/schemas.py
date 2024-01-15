@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Dict, Optional, Union
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from pymonzo.transactions.enums import (
     MonzoTransactionCategory,
@@ -115,7 +115,8 @@ class MonzoTransaction(BaseModel):
     category: Optional[MonzoTransactionCategory] = None
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
 
-    # Validators
-    _settled_empty_str_to_none = validator("settled", pre=True, allow_reuse=True)(
-        empty_str_to_none
-    )
+    @field_validator("settled")
+    @classmethod
+    def empty_str_to_none(cls, v: str) -> Optional[str]:
+        """Convert empty strings to `None`."""
+        return empty_str_to_none(v)

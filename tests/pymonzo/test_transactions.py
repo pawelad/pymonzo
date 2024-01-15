@@ -1,5 +1,4 @@
 """Test `pymonzo.transactions` module."""
-import json
 from datetime import datetime
 
 import httpx
@@ -46,9 +45,7 @@ class TestTransactionsResource:
         mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `transaction.model_dump(mode='json')`
-                json={"transaction": json.loads(transaction.json())},
+                json={"transaction": transaction.model_dump(mode="json")},
             )
         )
 
@@ -67,9 +64,7 @@ class TestTransactionsResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `transaction.model_dump(mode='json')`
-                json={"transaction": json.loads(transaction.json())},
+                json={"transaction": transaction.model_dump(mode="json")},
             )
         )
 
@@ -104,9 +99,7 @@ class TestTransactionsResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `transaction.model_dump(mode='json')`
-                json={"transaction": json.loads(transaction.json())},
+                json={"transaction": transaction.model_dump(mode="json")},
             )
         )
 
@@ -138,12 +131,10 @@ class TestTransactionsResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `transaction.model_dump(mode='json')`
                 json={
                     "transactions": [
-                        json.loads(transaction.json()),
-                        json.loads(transaction2.json()),
+                        transaction.model_dump(mode="json"),
+                        transaction2.model_dump(mode="json"),
                     ]
                 },
             )
@@ -177,9 +168,7 @@ class TestTransactionsResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `transaction.model_dump(mode='json')`
-                json={"transactions": [json.loads(transaction.json())]},
+                json={"transactions": [transaction.model_dump(mode="json")]},
             )
         )
 

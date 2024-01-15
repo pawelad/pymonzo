@@ -32,7 +32,9 @@ class TestPyMonzoSettings:
         # Load
         loaded_settings = PyMonzoSettings.load_from_disk(settings_path)
 
-        assert loaded_settings == PyMonzoSettings(**settings)
+        # TODO: Why does `mypy` fail here with
+        #   `Argument 1 to "PyMonzoSettings" has incompatible type`
+        assert loaded_settings == PyMonzoSettings(**settings)  # type: ignore
 
     def test_save_to_disk(self, tmp_path: Path) -> None:
         """Settings are saved to disk."""
@@ -46,4 +48,4 @@ class TestPyMonzoSettings:
         with open(settings_path) as f:
             loaded_settings = json.load(f)
 
-        assert loaded_settings == settings.dict()
+        assert loaded_settings == settings.model_dump(mode="json")

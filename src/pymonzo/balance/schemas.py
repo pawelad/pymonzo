@@ -31,5 +31,5 @@ class MonzoBalance(BaseModel):
     # Undocumented in Monzo API docs
     balance_including_flexible_savings: int
     local_currency: str
-    local_exchange_rate: int
+    local_exchange_rate: float
     local_spend: list

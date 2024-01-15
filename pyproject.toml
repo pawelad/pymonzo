@@ -27,7 +27,8 @@ dynamic = ["version", "description"]
 dependencies = [
   "Authlib",
   "httpx",
-  "pydantic<2",
+  "pydantic-settings",
+  "pydantic>2",
   "typing_extensions; python_version<'3.11'",
 ]
 

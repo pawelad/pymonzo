@@ -1,5 +1,4 @@
 """Test `pymonzo.attachments` module."""
-import json
 
 import httpx
 import pytest
@@ -50,7 +49,12 @@ class TestAttachmentsResource:
                 "file_type": file_type,
                 "content_length": content_length,
             },
-        ).mock(return_value=httpx.Response(200, json=attachment_response.dict()))
+        ).mock(
+            return_value=httpx.Response(
+                200,
+                json=attachment_response.model_dump(mode="json"),
+            )
+        )
 
         attachment_upload_response = attachments_resource.upload(
             file_name=file_name,
@@ -83,9 +87,7 @@ class TestAttachmentsResource:
         ).mock(
             return_value=httpx.Response(
                 200,
-                # TODO: Change when updating to Pydantic 2
-                #   `attachment.model_dump(mode='json')`
-                json={"attachment": json.loads(attachment.json())},
+                json={"attachment": attachment.model_dump(mode="json")},
             )
         )
 
