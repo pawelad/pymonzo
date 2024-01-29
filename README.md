@@ -66,5 +66,5 @@ Released under [Mozilla Public License 2.0][license].
 [pypi pymonzo]: https://pypi.org/project/pymonzo/
 [pypi]: https://pypi.org/
 [rickroll]: https://www.youtube.com/watch?v=I6OXjnBIW-4&t=15s
-[rtfd pymonzo]: http://pymonzo.rtfd.io/
+[rtfd pymonzo]: https://pymonzo.rtfd.io/
 [virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/

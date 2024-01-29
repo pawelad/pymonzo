@@ -68,7 +68,10 @@ dev = [
 ]
 
 [project.urls]
-Home = "https://github.com/pawelad/pymonzo"
+Homepage = "https://pymonzo.pawelad.dev/"
+Documentation = "https://pymonzo.readthedocs.io/"
+GitHub = "https://github.com/pawelad/pymonzo"
+Issues = "https://github.com/pawelad/pymonzo/issues"
 
 [tool.black]
 target-version = ["py38"]
