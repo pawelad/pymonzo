@@ -1,4 +1,5 @@
 """Test `pymonzo.client` module."""
+
 import pytest
 
 

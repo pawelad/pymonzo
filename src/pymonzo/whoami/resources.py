@@ -1,4 +1,5 @@
 """Monzo API 'whoami' resource."""
+
 from pymonzo.resources import BaseResource
 from pymonzo.whoami.schemas import MonzoWhoAmI
 

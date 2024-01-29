@@ -1,4 +1,5 @@
 """pymonzo pytest configuration and utils."""
+
 import os
 
 import pytest

@@ -1,4 +1,5 @@
 """Monzo API 'transactions' related enums."""
+
 from enum import Enum
 
 

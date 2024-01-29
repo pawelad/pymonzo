@@ -1,4 +1,5 @@
 """Test `pymonzo.transactions` module."""
+
 from datetime import datetime
 
 import httpx

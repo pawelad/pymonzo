@@ -1,4 +1,5 @@
 """Monzo API 'whoami' related schemas."""
+
 from pydantic import BaseModel
 
 

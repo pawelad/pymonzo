@@ -4,6 +4,7 @@ It exposes a [`pymonzo.MonzoAPI`][] class that can be used to access implemented
 endpoints. HTTP requests are made with [`httpx`](https://github.com/encode/httpx),
 data parsing and validation is done with [`pydantic`](https://github.com/pydantic/pydantic).
 """
+
 from pymonzo.client import MonzoAPI  # noqa
 
 __title__ = "pymonzo"

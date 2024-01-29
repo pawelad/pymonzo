@@ -1,4 +1,5 @@
 """Monzo API 'pots' resource."""
+
 from dataclasses import dataclass, field
 from secrets import token_urlsafe
 from typing import Dict, List, Optional, Union

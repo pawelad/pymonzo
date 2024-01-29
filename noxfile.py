@@ -1,4 +1,5 @@
 """pymonzo Nox sessions."""
+
 import os
 
 import nox

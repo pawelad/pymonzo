@@ -1,4 +1,5 @@
 """Monzo API 'feed' resource."""
+
 from typing import Optional
 
 from pymonzo.feed.schemas import MonzoBasicFeedItem

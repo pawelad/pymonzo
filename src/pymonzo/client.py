@@ -1,4 +1,5 @@
 """pymonzo API client code."""
+
 import webbrowser
 from json import JSONDecodeError
 from pathlib import Path

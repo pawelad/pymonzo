@@ -1,4 +1,5 @@
 """pymonzo base API resource related code."""
+
 import json
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional

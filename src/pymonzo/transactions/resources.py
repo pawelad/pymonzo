@@ -1,4 +1,5 @@
 """Monzo API 'transactions' resource."""
+
 from datetime import datetime
 from typing import Dict, List, Optional
 

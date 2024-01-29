@@ -1,4 +1,5 @@
 """Monzo API 'webhooks' resource."""
+
 from typing import List, Optional
 
 from pymonzo.resources import BaseResource

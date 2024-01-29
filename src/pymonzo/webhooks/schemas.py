@@ -1,4 +1,5 @@
 """Monzo API 'webhooks' related schemas."""
+
 from pydantic import BaseModel
 
 from pymonzo.transactions import MonzoTransactionMerchant

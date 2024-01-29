@@ -1,4 +1,5 @@
 """Test `pymonzo.whoami` module."""
+
 import pytest
 
 from pymonzo import MonzoAPI

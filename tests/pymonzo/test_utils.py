@@ -1,4 +1,5 @@
 """Test `pymonzo.utils` module."""
+
 from datetime import datetime
 
 import pytest

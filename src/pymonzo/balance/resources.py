@@ -1,4 +1,5 @@
 """Monzo API 'balance' resource."""
+
 from typing import Optional
 
 from pymonzo.balance.schemas import MonzoBalance

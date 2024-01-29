@@ -1,4 +1,5 @@
 """Monzo API 'attachments' related schemas."""
+
 from datetime import datetime
 
 from pydantic import BaseModel

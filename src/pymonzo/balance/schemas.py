@@ -1,4 +1,5 @@
 """Monzo API 'balance' related schemas."""
+
 from pydantic import BaseModel
 
 

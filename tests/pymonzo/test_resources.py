@@ -1,4 +1,5 @@
 """Test `pymonzo.resources` module."""
+
 import httpx
 import pytest
 import respx

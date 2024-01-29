@@ -1,4 +1,5 @@
 """pymonzo settings related code."""
+
 import json
 import os
 import sys

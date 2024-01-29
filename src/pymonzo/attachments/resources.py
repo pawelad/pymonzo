@@ -1,4 +1,5 @@
 """Monzo API 'attachments' resource."""
+
 from pymonzo.attachments.schemas import MonzoAttachment, MonzoAttachmentResponse
 from pymonzo.resources import BaseResource
 

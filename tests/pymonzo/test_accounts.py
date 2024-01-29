@@ -1,4 +1,5 @@
 """Test `pymonzo.accounts` module."""
+
 import pytest
 from polyfactory.factories.pydantic_factory import ModelFactory
 from pytest_mock import MockerFixture

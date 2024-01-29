@@ -1,4 +1,5 @@
 """Monzo API 'accounts' resource."""
+
 from dataclasses import dataclass, field
 from typing import List
 
