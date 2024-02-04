@@ -1,0 +1,66 @@
+---
+name: "Release package to PyPI"
+
+on:
+  release:
+    types: ["published"]
+  workflow_dispatch:
+
+concurrency:
+  group: "release-pypi"
+  cancel-in-progress: false
+
+permissions:
+  contents: "read"
+  id-token: "write"
+
+jobs:
+  tests:
+    name: "Run tests and checks"
+    uses: "./.github/workflows/ci.yml"
+
+  build-package:
+    name: "Build and verify package"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v4"
+        with:
+          fetch-depth: 0
+
+      - name: "Build and verify package"
+        uses: "hynek/build-and-inspect-python-package@v2"
+
+  release-test-pypi:
+    name: "Publish package to test.pypi.org"
+    runs-on: "ubuntu-latest"
+    environment: "release-test-pypi"
+    needs:
+      - "tests"
+      - "build-package"
+    steps:
+      - name: "Download packages built by `build-and-inspect-python-package`"
+        uses: "actions/download-artifact@v4"
+        with:
+          name: "Packages"
+          path: "dist"
+
+      - name: "Upload package to Test PyPI"
+        uses: "pypa/gh-action-pypi-publish@release/v1"
+        with:
+          repository-url: "https://test.pypi.org/legacy/"
+
+  release-pypi:
+    name: "Publish package to pypi.org"
+    runs-on: "ubuntu-latest"
+    environment: "release-pypi"
+    needs: "release-test-pypi"
+    steps:
+      - name: "Download packages built by `build-and-inspect-python-package`"
+        uses: "actions/download-artifact@v4"
+        with:
+          name: "Packages"
+          path: "dist"
+
+      - name: "Upload package to PyPI"
+        uses: "pypa/gh-action-pypi-publish@release/v1"
