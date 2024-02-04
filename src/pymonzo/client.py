@@ -75,7 +75,7 @@ class MonzoAPI:
         else:
             try:
                 self._settings = PyMonzoSettings.load_from_disk(self.settings_path)
-            except FileNotFoundError as e:
+            except (FileNotFoundError, JSONDecodeError) as e:
                 raise ValueError(
                     "You need to run `MonzoAPI.authorize(client_id, client_secret)` "
                     "to get the authorization token and save it to disk, or explicitly"
@@ -93,6 +93,7 @@ class MonzoAPI:
             base_url=self.api_url,
         )
 
+        # This is a shortcut to the underlying method
         self.whoami = WhoAmIResource(client=self).whoami
         """
         Mounted Monzo `whoami` endpoint. For more information see
