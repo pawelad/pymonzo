@@ -18,6 +18,7 @@ jobs:
   tests:
     name: "Run tests and checks"
     uses: "./.github/workflows/ci.yml"
+    secrets: "inherit"
 
   build-package:
     name: "Build and verify package"
