@@ -4,6 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pymonzo"
+description = "Modern Python API client for Monzo public API."
 authors = [{name = "Paweł Adamczak", email = "pawel.ad@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.8"
@@ -22,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dynamic = ["version", "description"]
+dynamic = ["version"]
 
 dependencies = [
   "Authlib",
