@@ -119,6 +119,8 @@ pythonpath = "src"
 
 [tool.ruff]
 target-version = "py38"
+
+[tool.ruff.lint]
 select = [
   "A",  # flake8-builtins
   "ANN",  # flake8-annotations
@@ -139,8 +141,6 @@ select = [
 ]
 ignore = [
   "A003",  # Class attribute is shadowing a python builtin
-  "ANN101",  # Missing type annotation for `self` in method
-  "ANN102",  # Missing type annotation for `cls` in classmethod
   "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
   "D104",  # Missing docstring in public package
   "D106",  # Missing docstring in public nested class
@@ -149,5 +149,5 @@ ignore = [
   "TRY003",  # Avoid specifying long messages outside the exception class
 ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
