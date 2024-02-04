@@ -20,7 +20,7 @@ class PotsResource(BaseResource):
     _cached_pots: Dict[str, List[MonzoPot]] = field(default_factory=dict)
 
     def get_default_pot(self, account_id: Optional[str] = None) -> MonzoPot:
-        """If the user has only one active pot, treat it as the default pot.
+        """If the user has only one (active) pot, treat it as the default pot.
 
         Arguments:
             account_id: The ID of the account. Can be omitted if user has only one

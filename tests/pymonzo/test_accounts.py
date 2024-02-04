@@ -28,9 +28,8 @@ class TestAccountsResource:
         accounts_resource: AccountsResource,
     ) -> None:
         """Account is presented as default if there is only one (active) account."""
-        mocked_accounts_list = mocker.patch.object(
-            accounts_resource, "list", autospec=True
-        )
+        # Mock `.list()` method
+        mocked_accounts_list = mocker.patch.object(accounts_resource, "list")
 
         active_account1 = MonzoAccountFactory.build(closed=False)
         active_account2 = MonzoAccountFactory.build(closed=False)
