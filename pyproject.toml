@@ -58,8 +58,8 @@ docs = [
 dev = [
   "pymonzo[tests,docs]",
   # Code style
-  "interrogate",
   "black",
+  "interrogate",
   "isort",
   "ruff",
   # Type checking
@@ -117,7 +117,6 @@ minversion = "6.0"
 addopts = "-ra --import-mode=importlib --verbose"
 testpaths = "tests"
 pythonpath = "src"
-
 
 [tool.ruff]
 target-version = "py38"
