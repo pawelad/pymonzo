@@ -11,6 +11,7 @@ from pymonzo.accounts import AccountsResource
 from pymonzo.attachments import AttachmentsResource
 from pymonzo.balance import BalanceResource
 from pymonzo.client import MonzoAPI
+from pymonzo.exceptions import NoSettingsFile
 from pymonzo.feed import FeedResource
 from pymonzo.pots import PotsResource
 from pymonzo.transactions import TransactionsResource
@@ -26,14 +27,14 @@ class TestMonzoAPI:
         MonzoAPI.settings_path = settings_path
 
         # Settings file doesn't exist
-        with pytest.raises(ValueError, match=r"You need to run `MonzoAPI\.authorize.*"):
+        with pytest.raises(NoSettingsFile, match=r"No settings file found.*"):
             MonzoAPI()
 
         # Settings file exists but is empty
         with open(settings_path, "w") as f:
             f.write("")
 
-        with pytest.raises(ValueError, match=r"You need to run `MonzoAPI\.authorize.*"):
+        with pytest.raises(NoSettingsFile, match=r"No settings file found.*"):
             MonzoAPI()
 
         # Settings file exists

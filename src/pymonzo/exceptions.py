@@ -5,6 +5,10 @@ class PyMonzoError(Exception):
     """Base pymonzo exception."""
 
 
+class NoSettingsFile(PyMonzoError):
+    """No settings file found."""
+
+
 class CannotDetermineDefaultAccount(PyMonzoError):
     """Cannot determine default account."""
 

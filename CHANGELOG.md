@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+### Added
+- Add custom `NoSettingsFile` exception. It's raised when the access token wasn't
+  passed explicitly to `MonzoAPI()` and the settings file couldn't be loaded.
+
 ### Changed
 - Simplify `MonzoAPI` initialization.
   This (unfortunately) needed an API change because the current attributes (in 

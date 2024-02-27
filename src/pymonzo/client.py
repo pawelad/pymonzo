@@ -12,7 +12,7 @@ from authlib.integrations.httpx_client import OAuth2Client
 from pymonzo.accounts import AccountsResource
 from pymonzo.attachments import AttachmentsResource
 from pymonzo.balance import BalanceResource
-from pymonzo.exceptions import MonzoAPIError
+from pymonzo.exceptions import MonzoAPIError, NoSettingsFile
 from pymonzo.feed import FeedResource
 from pymonzo.pots import PotsResource
 from pymonzo.settings import PyMonzoSettings
@@ -59,8 +59,8 @@ class MonzoAPI:
                 access token from the [Developer Portal](https://developers.monzo.com/).
 
         Raises:
-            ValueError: When client ID and secret weren't passed explicitly and
-                settings file could not be loaded.
+            NoSettingsFile: When the access token wasn't passed explicitly and the
+                settings file couldn't be loaded.
         """
         if access_token:
             self._settings = PyMonzoSettings(
@@ -70,10 +70,11 @@ class MonzoAPI:
             try:
                 self._settings = PyMonzoSettings.load_from_disk(self.settings_path)
             except (FileNotFoundError, JSONDecodeError) as e:
-                raise ValueError(
-                    "You need to run `MonzoAPI.authorize(client_id, client_secret)` "
-                    "to get the authorization token and save it to disk, or explicitly"
-                    "pass the `client_id`, `client_secret` and `token` arguments."
+                raise NoSettingsFile(
+                    "No settings file found. You need to either run "
+                    "`MonzoAPI.authorize(client_id, client_secret)` "
+                    "to get the authorization token (and save it to disk),"
+                    "or explicitly pass the `access_token`."
                 ) from e
 
         self.session = OAuth2Client(
