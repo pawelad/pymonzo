@@ -92,29 +92,23 @@ class TestMonzoAPI:
 
     def test_init_with_arguments(self, mocker: MockerFixture) -> None:
         """Client is initialized with settings from passed arguments."""
-        client_id = "EXPLICIT_TEST_CLIENT_ID"
-        client_secret = "EXPLICIT_TEST_CLIENT_SECRET"  # noqa
-        token = {"access_token": "EXPLICIT_TEST_ACCESS_TOKEN"}
+        access_token = "EXPLICIT_TEST_ACCESS_TOKEN"  # noqa
 
         mocked_OAuth2Client = mocker.patch("pymonzo.client.OAuth2Client")  # noqa
 
-        monzo_api = MonzoAPI(
-            client_id=client_id,
-            client_secret=client_secret,
-            token=token,
-        )
+        monzo_api = MonzoAPI(access_token=access_token)
 
         assert monzo_api._settings.model_dump() == {
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "token": token,
+            "client_id": None,
+            "client_secret": None,
+            "token": {"access_token": access_token},
         }
         assert monzo_api.session is mocked_OAuth2Client.return_value
 
         mocked_OAuth2Client.assert_called_once_with(
-            client_id=client_id,
-            client_secret=client_secret,
-            token=token,
+            client_id=None,
+            client_secret=None,
+            token={"access_token": access_token},
             authorization_endpoint=monzo_api.authorization_endpoint,
             token_endpoint=monzo_api.token_endpoint,
             token_endpoint_auth_method="client_secret_post",  # noqa

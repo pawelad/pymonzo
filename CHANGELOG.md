@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+### Changed
+- Simplify `MonzoAPI` initialization.
+  This (unfortunately) needed an API change because the current attributes (in 
+  hindsight) didn't really make sense.
+  Now, you can either use an already generated (and temporary) access
+  token, or generate it with `MonzoAPI.authorize()` and load from disk.
+
 ### Fixed
 - Remove Markdown links from PyPI package description.
 

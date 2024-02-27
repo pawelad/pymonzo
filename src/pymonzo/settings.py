@@ -5,7 +5,7 @@ import os
 import sys
 from functools import partial
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -19,17 +19,16 @@ class PyMonzoSettings(BaseSettings):
     """pymonzo settings schema.
 
     Attributes:
+        token: OAuth token. For more information see [`pymonzo.MonzoAPI.authorize`][].
         client_id: OAuth client ID.
         client_secret: OAuth client secret.
-        token: OAuth access token. For more information see
-            [`pymonzo.MonzoAPI.authorize`][].
     """
 
     model_config = SettingsConfigDict(env_prefix="pymonzo_")
 
-    client_id: str
-    client_secret: str
     token: Dict[str, Union[str, int]]
+    client_id: Optional[str] = None
+    client_secret: Optional[str] = None
 
     @classmethod
     def load_from_disk(cls, settings_path: Path) -> Self:

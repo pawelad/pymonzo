@@ -44,33 +44,27 @@ class MonzoAPI:
     token_endpoint = "https://api.monzo.com/oauth2/token"  # noqa
     settings_path = Path.home() / ".pymonzo"
 
-    def __init__(
-        self,
-        client_id: Optional[str] = None,
-        client_secret: Optional[str] = None,
-        token: Optional[dict] = None,
-    ) -> None:
+    def __init__(self, access_token: Optional[str] = None) -> None:
         """Initialize Monzo API client and mount all resources.
 
         It expects [`pymonzo.MonzoAPI.authorize`][] to be called beforehand, so
         it can load the local settings file containing the API access token. You
-        can also explicitly pass `client_id`, `client_secret` and `token` values.
+        can also explicitly pass the `access_token`, but it won't be able to
+        automatically refresh it once it expires.
 
         Arguments:
-            client_id: OAuth client ID.
-            client_secret: OAuth client secret.
-            token: OAuth access token. For more information see
-                [`pymonzo.MonzoAPI.authorize`][].
+            access_token: OAuth access token. You can obtain it (and by default, save it
+                to disk, so it can refresh automatically) by running
+                [`pymonzo.MonzoAPI.authorize`][]. Alternatively, you can get a temporary
+                access token from the [Developer Portal](https://developers.monzo.com/).
 
         Raises:
             ValueError: When client ID and secret weren't passed explicitly and
                 settings file could not be loaded.
         """
-        if client_id and client_secret and token:
+        if access_token:
             self._settings = PyMonzoSettings(
-                client_id=client_id,
-                client_secret=client_secret,
-                token=token,
+                token={"access_token": access_token},
             )
         else:
             try:
@@ -166,7 +160,7 @@ class MonzoAPI:
             redirect_uri: Redirect URI specified in OAuth client.
 
         Returns:
-            OAuth access token.
+            OAuth token.
         """
         client = OAuth2Client(
             client_id=client_id,

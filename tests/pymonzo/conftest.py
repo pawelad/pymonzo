@@ -28,8 +28,4 @@ def pytest_recording_configure(config: pytest.Config, vcr: VCR) -> None:
 @pytest.fixture(scope="module")
 def monzo_api() -> MonzoAPI:
     """Return a `MonzoAPI` instance."""
-    return MonzoAPI(
-        client_id="FIXTURE_TEST_CLIENT_ID",
-        client_secret="FIXTURE_TEST_CLIENT_SECRET",  # noqa
-        token={"access_token": "FIXTURE_TEST_TOKEN"},
-    )
+    return MonzoAPI(access_token="FIXTURE_TEST_TOKEN")  # noqa
