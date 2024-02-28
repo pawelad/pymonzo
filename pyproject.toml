@@ -142,6 +142,8 @@ select = [
 ]
 ignore = [
   "A003",  # Class attribute is shadowing a python builtin
+  "ANN101",  # ANN101 Missing type annotation for `self` in method
+  "ANN102",  # ANN102 Missing type annotation for `cls` in classmethod
   "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
   "D104",  # Missing docstring in public package
   "D106",  # Missing docstring in public nested class
