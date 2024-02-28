@@ -25,15 +25,16 @@ from pymonzo.whoami import WhoAmIResource
 class MonzoAPI:
     """Monzo public API client.
 
-    To use it, you need to create a new OAuth client in
-    [Monzo Developer Portal](https://developers.monzo.com/). The `Redirect URLs`
-    should be set to `http://localhost:6600/pymonzo` and `Confidentiality` should
-    be set to `Confidential` if you'd like to automatically refresh the access token
-    when it expires.
+    To use it, you need to create a new OAuth client in [Monzo Developer Portal].
+    The `Redirect URLs` should be set to `http://localhost:6600/pymonzo` and
+    `Confidentiality` should be set to `Confidential` if you'd like to automatically
+    refresh the access token when it expires.
 
     You can now use `Client ID` and `Client secret` in [`pymonzo.MonzoAPI.authorize`][]
     to finish the OAuth 2 'Authorization Code Flow' and get the API access token
     (which is by default saved to disk and refreshed when expired).
+
+    [Monzo Developer Portal]: https://developers.monzo.com/
 
     Note:
         Monzo API docs: https://docs.monzo.com/
@@ -53,14 +54,17 @@ class MonzoAPI:
         automatically refresh it once it expires.
 
         Arguments:
-            access_token: OAuth access token. You can obtain it (and by default, save it
-                to disk, so it can refresh automatically) by running
-                [`pymonzo.MonzoAPI.authorize`][]. Alternatively, you can get a temporary
-                access token from the [Developer Portal](https://developers.monzo.com/).
+            access_token: OAuth access token. You can obtain it (and by default, save
+                it to disk, so it can refresh automatically) by running
+                [`pymonzo.MonzoAPI.authorize`][]. Alternatively, you can get a
+                temporary access token from the [Monzo Developer Portal].
+
+                [Monzo Developer Portal]: https://developers.monzo.com/
 
         Raises:
             NoSettingsFile: When the access token wasn't passed explicitly and the
                 settings file couldn't be loaded.
+
         """
         if access_token:
             self._settings = PyMonzoSettings(

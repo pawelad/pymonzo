@@ -1,8 +1,13 @@
-"""Modern Python API client for [Monzo](https://monzo.com/) public [API](https://docs.monzo.com/).
+"""Modern Python API client for [Monzo] public [API][Monzo API].
 
 It exposes a [`pymonzo.MonzoAPI`][] class that can be used to access implemented
-endpoints. HTTP requests are made with [`httpx`](https://github.com/encode/httpx),
-data parsing and validation is done with [`pydantic`](https://github.com/pydantic/pydantic).
+endpoints. HTTP requests are made with [httpx], data parsing and validation is done
+with [pydantic].
+
+[Monzo API]: https://docs.monzo.com/
+[Monzo]: https://monzo.com/
+[httpx]: https://github.com/encode/httpx
+[pydantic]: https://github.com/pydantic/pydantic
 """
 
 from pymonzo.client import MonzoAPI  # noqa
