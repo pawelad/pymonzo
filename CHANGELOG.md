@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog], and this project adheres to
   token, or generate it with `MonzoAPI.authorize()` and load from disk.
 
 ### Fixed
+- Add new `MonzoTransactionCategory` values missing from Monzo API docs.
 - Remove Markdown links from PyPI package description.
 
 ## [v1.0.0](https://github.com/pawelad/pymonzo/releases/tag/v1.0.0) - 2024-02-04

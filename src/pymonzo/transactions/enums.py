@@ -41,3 +41,8 @@ class MonzoTransactionCategory(str, Enum):
     SHOPPING = "shopping"
     HOLIDAYS = "holidays"
     GROCERIES = "groceries"
+
+    # Undocumented in Monzo API docs
+    INCOME = "income"
+    SAVINGS = "savings"
+    TRANSFERS = "transfers"
