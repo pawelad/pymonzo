@@ -36,6 +36,12 @@ class MonzoTransactionMerchantAddress(BaseModel):
     postcode: str
     region: str
 
+    # Undocumented in API docs
+    formatted: str
+    short_formatted: str
+    zoom_level: int
+    approximate: bool
+
 
 class MonzoTransactionMerchant(BaseModel):
     """API schema for a 'transaction merchant' object.
@@ -44,29 +50,39 @@ class MonzoTransactionMerchant(BaseModel):
         Monzo API docs: https://docs.monzo.com/#transactions
 
     Attributes:
-        address: Merchant address.
-        created: Merchant creation date.
-        group_id: Merchant group ID.
         id: The ID of the merchant.
-        logo: Merchant logo URL.
-        emoji: Merchant emoji.
+        group_id: Merchant group ID.
         name: Merchant name.
+        logo: Merchant logo URL.
+        address: Merchant address.
+        emoji: Merchant emoji.
         category: The category can be set for each transaction by the user. Over
             time we learn which merchant goes in which category and auto-assign
             the category of a transaction. If the user hasn't set a category, we'll
             return the default category of the merchant on this transactions. Top-ups
             have category mondo. Valid values are general, eating_out, expenses,
             transport, cash, bills, entertainment, shopping, holidays, groceries.
+        address: Merchant address
+        created: Merchant creation date.
     """
 
-    address: MonzoTransactionMerchantAddress
-    created: datetime
-    group_id: str
     id: str
+    group_id: str
+    name: str
     logo: str
     emoji: str
-    name: str
     category: MonzoTransactionCategory
+    address: MonzoTransactionMerchantAddress
+
+    # Undocumented in API docs
+    online: bool
+    atm: bool
+    disable_feedback: bool
+    suggested_tags: str
+    metadata: Dict[str, str]
+
+    # Visible in API docs, not present in the API
+    created: Optional[datetime] = None
 
 
 class MonzoTransaction(BaseModel):
@@ -108,7 +124,7 @@ class MonzoTransaction(BaseModel):
     currency: str
     description: str
     id: str
-    merchant: Union[str, None, MonzoTransactionMerchant]
+    merchant: Union[MonzoTransactionMerchant, str, None]
     metadata: Dict[str, str]
     notes: str
     is_load: bool
