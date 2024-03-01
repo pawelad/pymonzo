@@ -14,6 +14,7 @@ Modern Python API client for [Monzo] public [API][monzo api docs].
 - Explicitly defined and validated API schemas (via [pydantic])
 - Easy authentication with automatic access token refreshing
 - Sensible defaults - don't specify account / pot ID if you only have one active
+- Optional `rich` support for pretty printing
 
 This project is not officially affiliated with [Monzo].
 

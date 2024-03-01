@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 ## Unreleased
 
 ### Added
+- Add (optional) `rich` and `babel` support.
 - Add `expand_merchant` parameter to `TransactionsResource.list`. It's not very 
   clear in the API docs, but it works on that endpoint as well.
 - Add custom `NoSettingsFile` exception. It's raised when the access token wasn't

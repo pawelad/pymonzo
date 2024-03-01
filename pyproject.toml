@@ -64,6 +64,7 @@ dev = [
   "ruff",
   # Type checking
   "mypy",
+  "rich",
   # Misc
   "flit",
   "nox",
@@ -87,6 +88,8 @@ source = ["src"]
 show_missing = true
 exclude_lines = [
   "if TYPE_CHECKING:",
+  # TODO: Test optional `rich` support
+  "if RICH_AVAILABLE:",
 ]
 
 [tool.interrogate]

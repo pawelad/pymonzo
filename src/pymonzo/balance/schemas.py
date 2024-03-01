@@ -2,6 +2,21 @@
 
 from pydantic import BaseModel
 
+# Optional `rich` support
+try:
+    from rich.table import Table
+
+    # Optional `babel` support
+    try:
+        from babel.numbers import format_currency
+    except ImportError:
+        from pymonzo.utils import format_currency  # type: ignore
+
+except ImportError:
+    RICH_AVAILABLE = False
+else:
+    RICH_AVAILABLE = True
+
 
 class MonzoBalance(BaseModel):
     """API schema for a 'balance' object.
@@ -34,3 +49,23 @@ class MonzoBalance(BaseModel):
     local_currency: str
     local_exchange_rate: float
     local_spend: list
+
+    if RICH_AVAILABLE:
+
+        def __rich__(self) -> Table:
+            """Pretty printing support for `rich`."""
+            balance = format_currency(self.balance / 100, self.currency)
+            total_balance = format_currency(self.total_balance / 100, self.currency)
+            spend_today = format_currency(self.spend_today / 100, self.currency)
+
+            grid = Table.grid(padding=(0, 5))
+            grid.add_column(style="bold magenta")
+            grid.add_column()
+            grid.add_row("Balance:", balance)
+            grid.add_row("Total balance:", total_balance)
+            grid.add_row("Currency:", self.currency)
+            grid.add_row("Spend today:", spend_today)
+            grid.add_row("Local currency:", self.local_currency)
+            grid.add_row("Local exchange rate:", str(self.local_exchange_rate))
+
+            return grid

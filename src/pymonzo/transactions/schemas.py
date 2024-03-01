@@ -11,6 +11,22 @@ from pymonzo.transactions.enums import (
 )
 from pymonzo.utils import empty_str_to_none
 
+# Optional `rich` support
+try:
+    from rich.table import Table
+
+    # Optional `babel` support
+    try:
+        from babel.dates import format_datetime
+        from babel.numbers import format_currency
+    except ImportError:
+        from pymonzo.utils import format_currency, format_datetime  # type: ignore
+
+except ImportError:
+    RICH_AVAILABLE = False
+else:
+    RICH_AVAILABLE = True
+
 
 class MonzoTransactionMerchantAddress(BaseModel):
     """API schema for a 'transaction merchant address' object.
@@ -84,6 +100,27 @@ class MonzoTransactionMerchant(BaseModel):
     # Visible in API docs, not present in the API
     created: Optional[datetime] = None
 
+    if RICH_AVAILABLE:
+
+        def __rich__(self) -> Table:
+            """Pretty printing support for `rich`."""
+            grid = Table.grid(padding=(0, 5))
+            grid.title = f"{self.emoji} | {self.name}"
+            grid.title_style = "bold yellow"
+            grid.add_column(style="bold cyan")
+            grid.add_column()
+            grid.add_row("ID:", self.id)
+            grid.add_row("Group ID:", self.group_id)
+            grid.add_row("Name:", self.name)
+            grid.add_row("Address:", self.address.short_formatted)
+            grid.add_row("Category:", self.category)
+            if self.online:
+                grid.add_row("Online:", "Yes")
+            if self.atm:
+                grid.add_row("ATM:", "Yes")
+
+            return grid
+
 
 class MonzoTransaction(BaseModel):
     """API schema for a 'transaction' object.
@@ -137,3 +174,35 @@ class MonzoTransaction(BaseModel):
     def empty_str_to_none(cls, v: str) -> Optional[str]:
         """Convert empty strings to `None`."""
         return empty_str_to_none(v)
+
+    if RICH_AVAILABLE:
+
+        def __rich__(self) -> Table:
+            """Pretty printing support for `rich`."""
+            amount = format_currency(self.amount / 100, self.currency)
+
+            grid = Table.grid(padding=(0, 5))
+            grid.title = f"{amount} | {self.description}"
+            grid.title_style = (
+                "bold green" if not self.decline_reason else "bold green dim"
+            )
+            grid.add_column(style="bold cyan")
+            grid.add_column(
+                style="" if not self.decline_reason else "dim",
+                max_width=50,
+            )
+            grid.add_row("ID:", self.id)
+            grid.add_row("Description:", self.description)
+            grid.add_row("Amount:", amount)
+            grid.add_row("Currency:", self.currency)
+            grid.add_row("Category:", self.category)
+            if self.notes:
+                grid.add_row("Notes:", self.notes)
+            if self.decline_reason:
+                grid.add_row("Decline reason:", self.decline_reason)
+            grid.add_row("Created:", format_datetime(self.created))
+            grid.add_row("Settled:", format_datetime(self.settled))
+            if isinstance(self.merchant, MonzoTransactionMerchant):
+                grid.add_row("Merchant:", self.merchant)
+
+            return grid

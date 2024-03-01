@@ -7,6 +7,23 @@ from pydantic import BaseModel
 
 from pymonzo.accounts.enums import MonzoAccountCurrency, MonzoAccountType
 
+# Optional `rich` support
+try:
+    from textwrap import wrap
+
+    from rich.table import Table
+
+    # Optional `babel` support
+    try:
+        from babel.dates import format_datetime
+    except ImportError:
+        from pymonzo.utils import format_datetime  # type: ignore
+
+except ImportError:
+    RICH_AVAILABLE = False
+else:
+    RICH_AVAILABLE = True
+
 
 class MonzoAccountOwner(BaseModel):
     """API schema for an 'account owner' object.
@@ -63,3 +80,25 @@ class MonzoAccount(BaseModel):
     account_number: Optional[str] = None
     sort_code: Optional[str] = None
     payment_details: Optional[dict] = None
+
+    if RICH_AVAILABLE:
+
+        def __rich__(self) -> Table:
+            """Pretty printing support for `rich`."""
+            grid = Table.grid(padding=(0, 5))
+            grid.title = f"Account '{self.id}' ({self.country_code})"
+            grid.title_style = "bold green"
+            grid.add_column(style="bold cyan")
+            grid.add_column(style="" if not self.closed else "dim")
+            grid.add_row("ID:", self.id)
+            grid.add_row("Description:", self.description)
+            grid.add_row("Currency:", f"{self.currency} ")
+            if self.account_number:
+                grid.add_row("Account Number:", self.account_number)
+            if self.sort_code:
+                grid.add_row("Sort Code:", "-".join(wrap(self.sort_code, 2)))
+            grid.add_row("Type:", self.type)
+            grid.add_row("Closed:", "Yes" if self.closed else "No")
+            grid.add_row("Created:", format_datetime(self.created))
+
+            return grid

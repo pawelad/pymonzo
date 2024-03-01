@@ -1,5 +1,6 @@
 """pymonzo utils."""
 
+import locale
 from datetime import datetime, timedelta
 from typing import Callable, List, Optional, Tuple
 from wsgiref.simple_server import make_server
@@ -27,11 +28,41 @@ def empty_str_to_none(s: str) -> Optional[str]:
         s: String to check.
 
     Returns:
-        Passed string, unless it's empty, in which case return `None`
+        Passed string, unless it's empty, in which case return `None`.
     """
     if s == "":
         return None
     return s
+
+
+def format_datetime(dt: datetime) -> str:
+    """Format passed `datetime` in user locale.
+
+    Used as a fallback when `babel` isn't available.
+
+    Arguments:
+        dt: Datetime to format.
+
+    Returns:
+        Passed `datetime` formatted in user locale.
+    """
+    return dt.strftime(locale.nl_langinfo(locale.D_T_FMT))
+
+
+def format_currency(amount: float, currency: str) -> str:
+    """Format passed amount with two decimal places.
+
+    Used as a fallback when `babel` isn't available.
+
+    Arguments:
+        amount: Amount of money.
+        currency: Money currency. Unused here, but needed to match the signature
+            with `babel.numbers.format_currency`.
+
+    Returns:
+        Passed amount with two decimal places.
+    """
+    return f"{amount:.2f}"
 
 
 class WSGIApp:
