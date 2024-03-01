@@ -116,7 +116,7 @@ class MonzoTransaction(BaseModel):
     category: Optional[MonzoTransactionCategory] = None
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
 
-    @field_validator("settled")
+    @field_validator("settled", mode="before")
     @classmethod
     def empty_str_to_none(cls, v: str) -> Optional[str]:
         """Convert empty strings to `None`."""
