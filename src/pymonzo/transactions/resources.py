@@ -74,6 +74,7 @@ class TransactionsResource(BaseResource):
         self,
         account_id: Optional[str] = None,
         *,
+        expand_merchant: bool = False,
         since: Optional[datetime] = None,
         before: Optional[datetime] = None,
         limit: Optional[int] = None,
@@ -89,6 +90,7 @@ class TransactionsResource(BaseResource):
         Arguments:
             account_id: The ID of the account. Can be omitted if user has only one
                 active account.
+            expand_merchant: Whether to return expanded merchant information.
             since: Filter transactions by start time.
             before: Filter transactions by end time.
             limit: Limits the number of results per-page. Maximum: 100.
@@ -105,6 +107,9 @@ class TransactionsResource(BaseResource):
 
         endpoint = "/transactions"
         params = {"account_id": account_id}
+
+        if expand_merchant:
+            params["expand[]"] = "merchant"
 
         if since:
             params["since"] = since.strftime("%Y-%m-%dT%H:%M:%SZ")

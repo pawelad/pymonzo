@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 ## Unreleased
 
 ### Added
+- Add `expand_merchant` parameter to `TransactionsResource.list`. It's not very 
+  clear in the API docs, but it works on that endpoint as well.
 - Add custom `NoSettingsFile` exception. It's raised when the access token wasn't
   passed explicitly to `MonzoAPI()` and the settings file couldn't be loaded.
 
