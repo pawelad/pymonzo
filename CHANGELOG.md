@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+## [v2.0.0](https://github.com/pawelad/pymonzo/releases/tag/v2.0.0) - 2024-03-07
 ### Added
 - Add (optional) `rich` and `babel` support.
 - Add `expand_merchant` parameter to `TransactionsResource.list`. It's not very 
