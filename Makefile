@@ -11,7 +11,7 @@ install: ## Install package in editable mode
 format: ## Format code
 	black src/ tests/ noxfile.py
 	isort src/ tests/ noxfile.py
-	ruff --fix src/ tests/ noxfile.py
+	ruff check --fix src/ tests/ noxfile.py
 
 .PHONY: test
 test: ## Run the test suite
