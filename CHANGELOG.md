@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+### Fixed
+- Add missing space to `NoSettingsFile` exception message.
+
 ## [v2.0.0](https://github.com/pawelad/pymonzo/releases/tag/v2.0.0) - 2024-03-07
 ### Added
 - Add (optional) `rich` and `babel` support.

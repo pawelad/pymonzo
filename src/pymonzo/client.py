@@ -77,7 +77,7 @@ class MonzoAPI:
                 raise NoSettingsFile(
                     "No settings file found. You need to either run "
                     "`MonzoAPI.authorize(client_id, client_secret)` "
-                    "to get the authorization token (and save it to disk),"
+                    "to get the authorization token (and save it to disk), "
                     "or explicitly pass the `access_token`."
                 ) from e
 
