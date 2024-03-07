@@ -165,7 +165,10 @@ class TestPotsResource:
 
         # Mock `token_urlsafe`
         token = "TEST_TOKEN"  # noqa
-        mocked_token_urlsafe = mocker.patch("pymonzo.pots.resources.token_urlsafe")
+        mocked_token_urlsafe = mocker.patch(
+            "pymonzo.pots.resources.token_urlsafe",
+            autospec=True,
+        )
         mocked_token_urlsafe.return_value = token
 
         # Mock `httpx`
@@ -261,7 +264,10 @@ class TestPotsResource:
 
         # Mock `token_urlsafe`
         token = "TEST_TOKEN"  # noqa
-        mocked_token_urlsafe = mocker.patch("pymonzo.pots.resources.token_urlsafe")
+        mocked_token_urlsafe = mocker.patch(
+            "pymonzo.pots.resources.token_urlsafe",
+            autospec=True,
+        )
         mocked_token_urlsafe.return_value = token
 
         # Mock `httpx`

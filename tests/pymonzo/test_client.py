@@ -49,7 +49,10 @@ class TestMonzoAPI:
         with open(settings_path, "w") as f:
             json.dump(settings, f, indent=4)
 
-        mocked_OAuth2Client = mocker.patch("pymonzo.client.OAuth2Client")  # noqa
+        mocked_OAuth2Client = mocker.patch(  # noqa
+            "pymonzo.client.OAuth2Client",
+            autospec=True,
+        )
 
         monzo_api = MonzoAPI()
 
@@ -95,7 +98,10 @@ class TestMonzoAPI:
         """Client is initialized with settings from passed arguments."""
         access_token = "EXPLICIT_TEST_ACCESS_TOKEN"  # noqa
 
-        mocked_OAuth2Client = mocker.patch("pymonzo.client.OAuth2Client")  # noqa
+        mocked_OAuth2Client = mocker.patch(  # noqa
+            "pymonzo.client.OAuth2Client",
+            autospec=True,
+        )
 
         monzo_api = MonzoAPI(access_token=access_token)
 
@@ -153,7 +159,10 @@ class TestMonzoAPI:
         state = "TEST_STATE"
         test_token = {"access_token": "TEST_TOKEN"}
 
-        mocked_OAuth2Client = mocker.patch("pymonzo.client.OAuth2Client")  # noqa
+        mocked_OAuth2Client = mocker.patch(  # noqa
+            "pymonzo.client.OAuth2Client",
+            autospec=True,
+        )
         mocked_create_authorization_url = (
             mocked_OAuth2Client.return_value.create_authorization_url
         )
@@ -161,10 +170,11 @@ class TestMonzoAPI:
         mocked_fetch_token = mocked_OAuth2Client.return_value.fetch_token
         mocked_fetch_token.return_value = test_token
 
-        mocked_open = mocker.patch("pymonzo.client.webbrowser.open")
+        mocked_open = mocker.patch("pymonzo.client.webbrowser.open", autospec=True)
 
         mocked_get_authorization_response_url = mocker.patch(
-            "pymonzo.client.get_authorization_response_url"
+            "pymonzo.client.get_authorization_response_url",
+            autospec=True,
         )
 
         token = MonzoAPI.authorize(
