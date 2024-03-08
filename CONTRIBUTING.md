@@ -9,7 +9,10 @@ By participating in this project you agree to abide by its terms.
 ## Tools used
 **Language:** [Python 3.8+][python]  
 **CI:** [GitHub Actions]  
+**Docs:** [mkdocs], [mkdocs-material], [mkdocstrings], [Read The Docs]  
 **Testing:** [pytest], [nox]  
+**Coverage:** [Coverage.py], [Codecov]  
+**Type checks:** [mypy]  
 **Code style:** [black], [isort], [ruff], [interrogate]  
 **Other:** Makefile  
 
@@ -46,12 +49,19 @@ help                                      Show help message
 
 
 [black]: https://black.readthedocs.io/
+[codecov]: https://codecov.io/
 [contributor code of conduct]: ./.github/CODE_OF_CONDUCT.md
+[coverage.py]: https://coverage.readthedocs.io
 [github actions]: https://github.com/features/actions
 [github new issue]: https://github.com/pawelad/pymonzo/issues/new/choose
 [interrogate]: https://github.com/econchick/interrogate
 [isort]: https://github.com/timothycrosley/isort
+[mkdocs-material]: https://squidfunk.github.io/mkdocs-material/
+[mkdocs]: https://www.mkdocs.org/
+[mkdocstrings]: https://mkdocstrings.github.io/
+[mypy]: https://mypy-lang.org/
 [nox]: https://nox.readthedocs.io/
 [pytest]: https://pytest.org/
 [python]: https://www.python.org/
-[ruff]: https://github.com/charliermarsh/ruff
+[read the docs]: https://readthedocs.com/
+[ruff]: https://docs.astral.sh/ruff
