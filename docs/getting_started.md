@@ -82,6 +82,4 @@ looking at [`pymonzo.MonzoAPI`][] docs.
 [monzo developer tools]: https://developers.monzo.com/
 [monzo api docs]: https://docs.monzo.com/
 [pypi]: https://pypi.org/
-[pypi pymonzo]: https://pypi.org/project/pymonzo/
-[rickroll]: https://www.youtube.com/watch?v=I6OXjnBIW-4&t=15s
 [virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
