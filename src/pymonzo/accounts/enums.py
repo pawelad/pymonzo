@@ -12,6 +12,9 @@ class MonzoAccountType(str, Enum):
 
     UK_PREPAID = "uk_prepaid"
     UK_RETAIL = "uk_retail"
+    UK_REWARDS = "uk_rewards"
+    UK_BUSINESS = "uk_business"
+    UK_LOAN = "uk_loan"
 
 
 class MonzoAccountCurrency(str, Enum):
