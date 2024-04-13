@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+## [v2.0.1](https://github.com/pawelad/pymonzo/releases/tag/v2.0.1) - 2024-04-13
 ### Fixed
 - Monzo pot `goal_amount` is not always present (by [@csogilvie](https://github.com/csogilvie)).
   [[#32](https://github.com/pawelad/pymonzo/pull/32)]
