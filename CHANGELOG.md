@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 ## Unreleased
 
 ### Fixed
+- Add missing account types (by [@csogilvie](https://github.com/csogilvie)).
+  [[#31](https://github.com/pawelad/pymonzo/pull/31)]
 - Add missing space to `NoSettingsFile` exception message.
 
 ## [v2.0.0](https://github.com/pawelad/pymonzo/releases/tag/v2.0.0) - 2024-03-07
