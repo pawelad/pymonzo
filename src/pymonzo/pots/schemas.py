@@ -47,7 +47,7 @@ class MonzoPot(BaseModel):
     deleted: bool
 
     # Undocumented in Monzo API docs
-    goal_amount: int
+    goal_amount: Optional[int] = None
     type: str
     product_id: str
     current_account_id: str

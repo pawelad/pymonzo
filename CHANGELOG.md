@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 ## Unreleased
 
 ### Fixed
+- Monzo pot `goal_amount` is not always present (by [@csogilvie](https://github.com/csogilvie)).
+  [[#32](https://github.com/pawelad/pymonzo/pull/32)]
 - Add missing account types (by [@csogilvie](https://github.com/csogilvie)).
   [[#31](https://github.com/pawelad/pymonzo/pull/31)]
 - Add missing space to `NoSettingsFile` exception message.
