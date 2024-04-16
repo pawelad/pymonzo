@@ -180,11 +180,14 @@ class MonzoTransaction(BaseModel):
         def __rich__(self) -> Table:
             """Pretty printing support for `rich`."""
             amount = format_currency(self.amount / 100, self.currency)
+            amount_color = "green" if self.amount > 0 else "red"
 
             grid = Table.grid(padding=(0, 5))
             grid.title = f"{amount} | {self.description}"
             grid.title_style = (
-                "bold green" if not self.decline_reason else "bold green dim"
+                f"bold {amount_color}"
+                if not self.decline_reason
+                else f"bold {amount_color} dim"
             )
             grid.add_column(style="bold cyan")
             grid.add_column(
