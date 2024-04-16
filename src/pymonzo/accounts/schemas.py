@@ -92,7 +92,7 @@ class MonzoAccount(BaseModel):
             grid.add_column(style="" if not self.closed else "dim")
             grid.add_row("ID:", self.id)
             grid.add_row("Description:", self.description)
-            grid.add_row("Currency:", f"{self.currency} ")
+            grid.add_row("Currency:", self.currency)
             if self.account_number:
                 grid.add_row("Account Number:", self.account_number)
             if self.sort_code:
