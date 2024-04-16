@@ -81,7 +81,6 @@ class MonzoPot(BaseModel):
         def __rich__(self) -> Table:
             """Pretty printing support for `rich`."""
             balance = format_currency(self.balance / 100, self.currency)
-            goal_amount = format_currency(self.goal_amount / 100, self.currency)
 
             grid = Table.grid(padding=(0, 5))
             grid.title = f"Pot '{self.name}' | {balance}"
@@ -91,7 +90,9 @@ class MonzoPot(BaseModel):
             grid.add_row("ID:", self.id)
             grid.add_row("Name:", self.name)
             grid.add_row("Balance:", balance)
-            grid.add_row("Goal:", goal_amount)
+            if self.goal_amount:
+                goal_amount = format_currency(self.goal_amount / 100, self.currency)
+                grid.add_row("Goal:", goal_amount)
             grid.add_row("Currency:", self.currency)
             grid.add_row("Type:", self.type)
             grid.add_row("Deleted:", "Yes" if self.deleted else "No")
