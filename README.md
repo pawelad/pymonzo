@@ -14,7 +14,7 @@ Modern Python API client for [Monzo] public [API][monzo api docs].
 - Explicitly defined and validated API schemas (via [pydantic])
 - Easy authentication with automatic access token refreshing
 - Sensible defaults - don't specify account / pot ID if you only have one active
-- Optional `rich` support for pretty printing
+- Optional [rich] support for pretty printing
 
 This project is not officially affiliated with [Monzo].
 
@@ -66,6 +66,7 @@ Released under [Mozilla Public License 2.0][license].
 [pydantic]: https://github.com/pydantic/pydantic
 [pypi pymonzo]: https://pypi.org/project/pymonzo/
 [pypi]: https://pypi.org/
+[rich]: https://github.com/Textualize/rich
 [rickroll]: https://www.youtube.com/watch?v=I6OXjnBIW-4&t=15s
 [rtfd pymonzo]: https://pymonzo.rtfd.io/
 [virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
