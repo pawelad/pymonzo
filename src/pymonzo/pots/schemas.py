@@ -5,6 +5,22 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+# Optional `rich` support
+try:
+    from rich.table import Table
+
+    # Optional `babel` support
+    try:
+        from babel.dates import format_datetime
+        from babel.numbers import format_currency
+    except ImportError:
+        from pymonzo.utils import format_currency, format_datetime  # type: ignore
+
+except ImportError:
+    RICH_AVAILABLE = False
+else:
+    RICH_AVAILABLE = True
+
 
 class MonzoPot(BaseModel):
     """API schema for a 'pot' object.
@@ -59,3 +75,33 @@ class MonzoPot(BaseModel):
     locked: bool
     available_for_bills: bool
     has_virtual_cards: bool
+
+    if RICH_AVAILABLE:
+
+        def __rich__(self) -> Table:
+            """Pretty printing support for `rich`."""
+            balance = format_currency(self.balance / 100, self.currency)
+            goal_amount = format_currency(self.goal_amount / 100, self.currency)
+
+            grid = Table.grid(padding=(0, 5))
+            grid.title = f"Pot '{self.name}' | {balance}"
+            grid.title_style = "bold green"
+            grid.add_column(style="bold cyan")
+            grid.add_column(style="" if not self.deleted else "dim")
+            grid.add_row("ID:", self.id)
+            grid.add_row("Name:", self.name)
+            grid.add_row("Balance:", balance)
+            grid.add_row("Goal:", goal_amount)
+            grid.add_row("Currency:", self.currency)
+            grid.add_row("Type:", self.type)
+            grid.add_row("Deleted:", "Yes" if self.deleted else "No")
+            if self.round_up:
+                grid.add_row("Round up:", "Yes" if self.round_up else "No")
+            if self.round_up_multiplier:
+                grid.add_row("Round up multiplier:", str(self.round_up_multiplier))
+            if self.locked:
+                grid.add_row("Locked:", "Yes" if self.locked else "No")
+            grid.add_row("Created:", format_datetime(self.created))
+            grid.add_row("Updated:", format_datetime(self.updated))
+
+            return grid

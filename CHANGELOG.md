@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+### Added
+- Add `rich` support to `MonzoPot`.
+
 ### Changed
-- When using Rich, make transaction title red if the amount is negative.
+- When using `rich`, make transaction title red if the amount is negative.
 - Update `codecov/codecov-action` GitHub Action to v4.
 
 ## [v2.0.1](https://github.com/pawelad/pymonzo/releases/tag/v2.0.1) - 2024-04-13
