@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+## [v2.1.0](https://github.com/pawelad/pymonzo/releases/tag/v2.1.0) - 2024-04-16
 ### Added
 - Add `rich` support to `MonzoPot`.
 
