@@ -104,7 +104,9 @@ src_paths = ["src"]
 [tool.mypy]
 python_version = "3.8"
 mypy_path = "src"
-plugins = "pydantic.mypy"
+plugins = [
+  "pydantic.mypy",
+]
 
 [[tool.mypy.overrides]]
 module = [
