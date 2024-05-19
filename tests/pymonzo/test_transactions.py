@@ -64,7 +64,9 @@ class TestTransactionsResource:
         # Expand merchant
         merchant = MonzoTransactionMerchantFactory.build()
         counterparty = MonzoTransactionCounterpartyFactory.build()
-        transaction = MonzoTransactionFactory.build(merchant=merchant, counterparty=counterparty)
+        transaction = MonzoTransactionFactory.build(
+            merchant=merchant, counterparty=counterparty
+        )
 
         mocked_route = respx_mock.get(
             f"/transactions/{transaction.id}", params={"expand[]": "merchant"}
@@ -92,7 +94,9 @@ class TestTransactionsResource:
         transactions_resource: TransactionsResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        transaction = MonzoTransactionFactory.build(merchant="TEST_MERCHANT", counterparty={})
+        transaction = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT", counterparty={}
+        )
         metadata = {
             "foo": "TEST_FOO",
             "bar": "TEST_BAR",
@@ -124,8 +128,12 @@ class TestTransactionsResource:
         transactions_resource: TransactionsResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        transaction = MonzoTransactionFactory.build(merchant="TEST_MERCHANT", counterparty={})
-        transaction2 = MonzoTransactionFactory.build(merchant="TEST_MERCHANT", counterparty={})
+        transaction = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT", counterparty={}
+        )
+        transaction2 = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT", counterparty={}
+        )
 
         account = MonzoAccountFactory.build()
         mocked_get_default_account = mocker.patch.object(

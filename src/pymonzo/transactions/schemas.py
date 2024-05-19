@@ -141,6 +141,7 @@ class MonzoTransactionCounterparty(BaseModel):
     user_id: Optional[str] = None
 
     if RICH_AVAILABLE:
+
         def __rich__(self) -> Table:
             """Pretty printing support for `rich`."""
             grid = Table.grid(padding=(0, 5))
