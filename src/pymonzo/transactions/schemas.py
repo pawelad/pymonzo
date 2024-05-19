@@ -94,8 +94,8 @@ class MonzoTransactionMerchant(BaseModel):
     online: bool
     atm: bool
     disable_feedback: bool
-    suggested_tags: Optional[str] = None
     metadata: Dict[str, str]
+    suggested_tags: Optional[str] = None
 
     # Visible in API docs, not present in the API
     created: Optional[datetime] = None
