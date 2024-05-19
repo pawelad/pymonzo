@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
 ## Unreleased
+### Fixed
+- Allow transaction category to be any string. Monzo supports custom categories
+  as part of their "Plus" plan.
 
 ## [v2.1.0](https://github.com/pawelad/pymonzo/releases/tag/v2.1.0) - 2024-04-16
 ### Added

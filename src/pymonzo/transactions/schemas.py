@@ -87,7 +87,7 @@ class MonzoTransactionMerchant(BaseModel):
     name: str
     logo: str
     emoji: str
-    category: MonzoTransactionCategory
+    category: Union[MonzoTransactionCategory, str]
     address: MonzoTransactionMerchantAddress
 
     # Undocumented in API docs
@@ -166,7 +166,7 @@ class MonzoTransaction(BaseModel):
     notes: str
     is_load: bool
     settled: Optional[datetime]
-    category: Optional[MonzoTransactionCategory] = None
+    category: Union[MonzoTransactionCategory, str, None] = None
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
 
     @field_validator("settled", mode="before")
