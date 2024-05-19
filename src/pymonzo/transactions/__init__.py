@@ -10,4 +10,5 @@ from .schemas import (  # noqa
     MonzoTransaction,
     MonzoTransactionMerchant,
     MonzoTransactionMerchantAddress,
+    MonzoTransactionCounterparty,
 )

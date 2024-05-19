@@ -35,6 +35,23 @@ def empty_str_to_none(s: str) -> Optional[str]:
     return s
 
 
+def empty_dict_to_none(d: dict) -> Optional[dict]:
+    """Return passed dict, unless it's empty, in which case return `None`.
+
+    Arguments:
+        d: dict to check.
+
+    Returns:
+        Passed dict, unless it's empty, in which case return `None`.
+    """
+    if not isinstance(d, dict):
+        return None
+
+    if len(d.values()) == 0:
+        return None
+    return d
+
+
 def format_datetime(dt: datetime) -> str:
     """Format passed `datetime` in user locale.
 
