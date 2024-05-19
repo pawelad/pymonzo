@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
 ## Unreleased
+### Added
+- Add Counterparty Support to Monzo Transactions (by [@csogilvie](https://github.com/csogilvie))
 
 ## [v2.1.0](https://github.com/pawelad/pymonzo/releases/tag/v2.1.0) - 2024-04-16
 ### Added
