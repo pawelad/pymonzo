@@ -6,10 +6,10 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 ### Fixed
-- Transactions List (with expand_merchants=True) fails pydantic Checks (Issue [#34](https://github.com/pawelad/pymonzo/issues/34))
+- Listing transactions with `expand_merchants=True`  fails when `suggested_tags` aren't present (by [@csogilvie](https://github.com/csogilvie)) [[#34](https://github.com/pawelad/pymonzo/issues/34)]
 
 ### Added
-- Add Counterparty Support to Monzo Transactions (by [@csogilvie](https://github.com/csogilvie))
+- Add `counterparty` field support to Monzo transactions (by [@csogilvie](https://github.com/csogilvie)) [[#34](https://github.com/pawelad/pymonzo/issues/34)]
 
 ## [v2.1.0](https://github.com/pawelad/pymonzo/releases/tag/v2.1.0) - 2024-04-16
 ### Added
