@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
 ## Unreleased
+### Fixed
+- Transactions List (with expand_merchants=True) fails pydantic Checks (Issue [#34](https://github.com/pawelad/pymonzo/issues/34))
+
 ### Added
 - Add Counterparty Support to Monzo Transactions (by [@csogilvie](https://github.com/csogilvie))
 
