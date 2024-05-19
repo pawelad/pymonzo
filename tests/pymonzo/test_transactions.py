@@ -11,8 +11,8 @@ from pytest_mock import MockerFixture
 from pymonzo import MonzoAPI
 from pymonzo.transactions import (
     MonzoTransaction,
-    MonzoTransactionMerchant,
     MonzoTransactionCounterparty,
+    MonzoTransactionMerchant,
     TransactionsResource,
 )
 

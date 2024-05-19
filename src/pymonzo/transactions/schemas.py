@@ -9,7 +9,7 @@ from pymonzo.transactions.enums import (
     MonzoTransactionCategory,
     MonzoTransactionDeclineReason,
 )
-from pymonzo.utils import empty_str_to_none, empty_dict_to_none
+from pymonzo.utils import empty_dict_to_none, empty_str_to_none
 
 # Optional `rich` support
 try:
