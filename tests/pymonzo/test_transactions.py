@@ -46,7 +46,9 @@ class TestTransactionsResource:
         transactions_resource: TransactionsResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        transaction = MonzoTransactionFactory.build(merchant="TEST_MERCHANT", counterparty={})
+        transaction = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT", counterparty={}
+        )
 
         mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
             return_value=httpx.Response(
