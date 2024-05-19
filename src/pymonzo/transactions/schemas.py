@@ -135,10 +135,10 @@ class MonzoTransactionCounterparty(BaseModel):
         user_id: Monzo internal User ID of the other party
     """
 
-    account_number: Optional[str] = None
-    name: Optional[str] = None
-    sort_code: Optional[str] = None
-    user_id: Optional[str] = None
+    account_number: str
+    name: str
+    sort_code: str
+    user_id: str
 
     if RICH_AVAILABLE:
 
@@ -197,13 +197,15 @@ class MonzoTransaction(BaseModel):
     description: str
     id: str
     merchant: Union[MonzoTransactionMerchant, str, None]
-    counterparty: Union[MonzoTransactionCounterparty, dict, None] = None
     metadata: Dict[str, str]
     notes: str
     is_load: bool
     settled: Optional[datetime]
     category: Optional[MonzoTransactionCategory] = None
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
+
+    # Undocumented in the API Documentation
+    counterparty: Union[MonzoTransactionCounterparty, dict, None] = None
 
     @field_validator("settled", mode="before")
     @classmethod
