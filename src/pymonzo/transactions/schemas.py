@@ -205,7 +205,7 @@ class MonzoTransaction(BaseModel):
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
 
     # Undocumented in the API Documentation
-    counterparty: Union[MonzoTransactionCounterparty, dict, None] = None
+    counterparty: Optional[MonzoTransactionCounterparty] = None
 
     @field_validator("settled", mode="before")
     @classmethod
