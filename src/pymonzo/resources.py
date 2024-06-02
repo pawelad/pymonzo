@@ -44,7 +44,11 @@ class BaseResource:
             MonzoAccessDenied: When access to Monzo API was denied.
             MonzoAPIError: When Monzo API returned an error.
         """
-        response = getattr(self.client.session, method)(endpoint, params=params, data=data)
+        kwargs = {"params": params}
+        if method in ["post", "put", "delete"]:
+            kwargs["data"] = data
+
+        response = getattr(self.client.session, method)(endpoint, **kwargs)
 
         if response.status_code == codes.FORBIDDEN:
             raise MonzoAccessDenied(
