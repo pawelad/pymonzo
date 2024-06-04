@@ -6,14 +6,14 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 ### Added
-- Add `counterparty` field support to Monzo transactions
-  (by [@csogilvie](https://github.com/csogilvie)).
-  [[#34](https://github.com/pawelad/pymonzo/issues/34)]
+- Add `counterparty` field support to Monzo transactions.
+  (by [@csogilvie](https://github.com/csogilvie)
+  in [#34](https://github.com/pawelad/pymonzo/issues/34))
 
 ### Fixed
-- Fix listing transactions with `expand_merchants=True` when `suggested_tags`
-  aren't present (by [@csogilvie](https://github.com/csogilvie)).
-  [[#34](https://github.com/pawelad/pymonzo/issues/34)]
+- Fix listing transactions with `expand_merchants=True` when `suggested_tags` isn't
+  present. (by [@csogilvie](https://github.com/csogilvie)
+  in [#34](https://github.com/pawelad/pymonzo/issues/34))
 - Allow transaction category to be any string. Monzo supports custom categories
   as part of their "Plus" plan.
 
@@ -27,10 +27,12 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## [v2.0.1](https://github.com/pawelad/pymonzo/releases/tag/v2.0.1) - 2024-04-13
 ### Fixed
-- Monzo pot `goal_amount` is not always present (by [@csogilvie](https://github.com/csogilvie)).
-  [[#32](https://github.com/pawelad/pymonzo/pull/32)]
-- Add missing account types (by [@csogilvie](https://github.com/csogilvie)).
-  [[#31](https://github.com/pawelad/pymonzo/pull/31)]
+- Monzo pot `goal_amount` is not always present.
+  (by [@csogilvie](https://github.com/csogilvie)
+  in [#32](https://github.com/pawelad/pymonzo/pull/32))
+- Add missing account types.
+  (by [@csogilvie](https://github.com/csogilvie)
+  in [#31](https://github.com/pawelad/pymonzo/pull/31))
 - Add missing space to `NoSettingsFile` exception message.
 
 ## [v2.0.0](https://github.com/pawelad/pymonzo/releases/tag/v2.0.0) - 2024-03-07
@@ -62,19 +64,21 @@ The format is based on [Keep a Changelog], and this project adheres to
 ## [v0.11.0](https://github.com/pawelad/pymonzo/releases/tag/v0.11.0) - 2018-02-16
 ### Added
 - Made redirect URI, token file name and token path configurable via
-  environment variables. (#14)
-- Added Monzo Pots API endpoint - thanks @Sheaffy! (#13)
+  environment variables. ([#14](https://github.com/pawelad/pymonzo/pull/14))
+- Added Monzo Pots API endpoint. (by [@Sheaffy](https://github.com/Sheaffy)
+  in [#13](https://github.com/pawelad/pymonzo/pull/13))
 
 ### Changed
 - Renamed `config.PYMONZO_REDIRECT_URI` to `config.REDIRECT_URI`.
 
 ## [v0.10.3](https://github.com/pawelad/pymonzo/releases/tag/v0.10.3) - 2017-10-15
 ### Fixed
-- Fixed saving token file to disk. (#9)
+- Fixed saving token file to disk. ([#9](https://github.com/pawelad/pymonzo/pull/9))
 
 ## [v0.10.2](https://github.com/pawelad/pymonzo/releases/tag/v0.10.2) - 2017-10-05
 ### Fixed
-- Fixed automatic token refreshing - thanks @bartonp! (#5)
+- Fixed automatic token refreshing. (by [@bartonp](https://github.com/bartonp)
+  in [#5](https://github.com/pawelad/pymonzo/pull/5))
 
 ### Changed
 - `MonzoAPI()._refresh_oath_token()` now doesn't return anything, replaces
@@ -85,20 +89,20 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## [v0.10.1](https://github.com/pawelad/pymonzo/releases/tag/v0.10.1) - 2017-09-24
 ### Fixed
-- Try to refresh token if API request returned HTTP 401 (which could mean that
-  the token is expired). (#6)
+- Try to refresh token if API request returned HTTP 401, which could mean that
+  the token is expired. ([#6](https://github.com/pawelad/pymonzo/pull/6))
 
 ## [v0.10.0](https://github.com/pawelad/pymonzo/releases/tag/v0.10.0) - 2017-09-22
 ### Changed
  - Changed token file format from `shelve` to JSON. Because of that the file
-   will need to be regenerated. (#3)
+   will need to be regenerated. ([#3](https://github.com/pawelad/pymonzo/pull/3))
  - Updated `six` library to version 1.11.0.
 
 ## [v0.9.1](https://github.com/pawelad/pymonzo/releases/tag/v0.9.1) - 2017-09-21
 ### Deprecated
  - Added deprecation warning about changing token file format from `shelve`
    to JSON in next release. Because of that the file will need to be
-   regenerated. (#4)
+   regenerated. ([#4](https://github.com/pawelad/pymonzo/pull/4))
 
 ## [v0.9.0](https://github.com/pawelad/pymonzo/releases/tag/v0.9.0) - 2017-09-17
 ### Added
