@@ -129,16 +129,16 @@ class MonzoTransactionCounterparty(BaseModel):
         This is undocumented in the Monzo API docs: https://docs.monzo.com/#transactions
 
     Attributes:
-        account_number: The account number of the other party
-        name: The name of the other party
-        sort_code: The sort code of the other party
-        user_id: Monzo internal User ID of the other party
+        user_id: Monzo internal User ID of the other party.
+        name: The name of the other party.
+        sort_code: The sort code of the other party.
+        account_number: The account number of the other party.
     """
 
-    account_number: str
+    user_id: str
     name: str
     sort_code: str
-    user_id: str
+    account_number: str
 
     if RICH_AVAILABLE:
 
