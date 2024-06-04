@@ -11,6 +11,7 @@ from pytest_mock import MockerFixture
 from pymonzo import MonzoAPI
 from pymonzo.transactions import (
     MonzoTransaction,
+    MonzoTransactionCounterparty,
     MonzoTransactionMerchant,
     TransactionsResource,
 )
@@ -24,6 +25,10 @@ class MonzoTransactionFactory(ModelFactory[MonzoTransaction]):
 
 class MonzoTransactionMerchantFactory(ModelFactory[MonzoTransactionMerchant]):
     """Factory for `MonzoTransactionMerchant` schema."""
+
+
+class MonzoTransactionCounterpartyFactory(ModelFactory[MonzoTransactionCounterparty]):
+    """Factory for `MonzoTransactionCounterparty` schema."""
 
 
 @pytest.fixture(scope="module")
@@ -95,6 +100,29 @@ class TestTransactionsResource:
         transaction_response = transactions_resource.get(transaction.id)
 
         assert isinstance(transaction_response, MonzoTransaction)
+        assert transaction_response == transaction
+        assert mocked_route.called
+
+        # Counterparty details are present
+        counterparty = MonzoTransactionCounterpartyFactory.build()
+        transaction = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT",
+            counterparty=counterparty,
+        )
+
+        mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
+            return_value=httpx.Response(
+                200,
+                json={"transaction": transaction.model_dump(mode="json")},
+            )
+        )
+
+        transaction_response = transactions_resource.get(transaction.id)
+
+        assert isinstance(transaction_response, MonzoTransaction)
+        assert isinstance(
+            transaction_response.counterparty, MonzoTransactionCounterparty
+        )
         assert transaction_response == transaction
         assert mocked_route.called
 

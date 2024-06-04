@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog], and this project adheres to
 [Semantic Versioning].
 
 ## Unreleased
+### Added
+- Add `counterparty` field support to Monzo transactions
+  (by [@csogilvie](https://github.com/csogilvie)).
+  [[#34](https://github.com/pawelad/pymonzo/issues/34)]
+
 ### Fixed
+- Fix listing transactions with `expand_merchants=True` when `suggested_tags`
+  aren't present (by [@csogilvie](https://github.com/csogilvie)).
+  [[#34](https://github.com/pawelad/pymonzo/issues/34)]
 - Allow transaction category to be any string. Monzo supports custom categories
   as part of their "Plus" plan.
 

@@ -8,6 +8,7 @@ from .enums import MonzoTransactionCategory, MonzoTransactionDeclineReason  # no
 from .resources import TransactionsResource  # noqa
 from .schemas import (  # noqa
     MonzoTransaction,
+    MonzoTransactionCounterparty,
     MonzoTransactionMerchant,
     MonzoTransactionMerchantAddress,
 )

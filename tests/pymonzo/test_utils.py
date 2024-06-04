@@ -1,11 +1,12 @@
 """Test `pymonzo.utils` module."""
 
 from datetime import datetime
+from typing import Any
 
 import pytest
 from freezegun import freeze_time
 
-from pymonzo.utils import empty_str_to_none, n_days_ago
+from pymonzo.utils import empty_dict_to_none, empty_str_to_none, n_days_ago
 
 
 @pytest.mark.parametrize(
@@ -33,3 +34,18 @@ def test_n_days_ago(today: datetime, n: int, output: datetime) -> None:
 def test_empty_str_to_none(s: str, output: str) -> None:
     """Should return `None` if string is empty, do nothing otherwise."""
     assert empty_str_to_none(s) == output
+
+
+@pytest.mark.parametrize(
+    ("value", "output"),
+    [
+        ({"foo": 1, "bar": True}, {"foo": 1, "bar": True}),
+        ({}, None),
+        ("", ""),
+        ("Lorem ipsum", "Lorem ipsum"),
+        (1, 1),
+    ],
+)
+def test_empty_dict_to_none(value: Any, output: Any) -> None:
+    """Should return `None` if value is an empty dict, do nothing otherwise."""
+    assert empty_dict_to_none(value) == output

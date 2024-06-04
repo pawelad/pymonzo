@@ -9,7 +9,7 @@ from pymonzo.transactions.enums import (
     MonzoTransactionCategory,
     MonzoTransactionDeclineReason,
 )
-from pymonzo.utils import empty_str_to_none
+from pymonzo.utils import empty_dict_to_none, empty_str_to_none
 
 # Optional `rich` support
 try:
@@ -94,8 +94,8 @@ class MonzoTransactionMerchant(BaseModel):
     online: bool
     atm: bool
     disable_feedback: bool
-    suggested_tags: str
     metadata: Dict[str, str]
+    suggested_tags: Optional[str] = None
 
     # Visible in API docs, not present in the API
     created: Optional[datetime] = None
@@ -118,6 +118,41 @@ class MonzoTransactionMerchant(BaseModel):
                 grid.add_row("Online:", "Yes")
             if self.atm:
                 grid.add_row("ATM:", "Yes")
+
+            return grid
+
+
+class MonzoTransactionCounterparty(BaseModel):
+    """API schema for a 'transaction counterparty' object.
+
+    Note:
+        This is undocumented in the Monzo API docs: https://docs.monzo.com/#transactions
+
+    Attributes:
+        user_id: Monzo internal User ID of the other party.
+        name: The name of the other party.
+        sort_code: The sort code of the other party.
+        account_number: The account number of the other party.
+    """
+
+    user_id: str
+    name: str
+    sort_code: str
+    account_number: str
+
+    if RICH_AVAILABLE:
+
+        def __rich__(self) -> Table:
+            """Pretty printing support for `rich`."""
+            grid = Table.grid(padding=(0, 5))
+            grid.title = f"{self.name}"
+            grid.title_style = "bold yellow"
+            grid.add_column(style="bold cyan")
+            grid.add_column()
+            grid.add_row("ID:", self.user_id)
+            grid.add_row("Name:", self.name)
+            grid.add_row("Sort Code:", self.sort_code)
+            grid.add_row("Account Number:", self.account_number)
 
             return grid
 
@@ -169,11 +204,20 @@ class MonzoTransaction(BaseModel):
     category: Union[MonzoTransactionCategory, str, None] = None
     decline_reason: Optional[MonzoTransactionDeclineReason] = None
 
+    # Undocumented in the API Documentation
+    counterparty: Optional[MonzoTransactionCounterparty] = None
+
     @field_validator("settled", mode="before")
     @classmethod
     def empty_str_to_none(cls, v: str) -> Optional[str]:
         """Convert empty strings to `None`."""
         return empty_str_to_none(v)
+
+    @field_validator("counterparty", mode="before")
+    @classmethod
+    def empty_dict_to_none(cls, v: dict) -> Optional[dict]:
+        """Convert empty dict to `None`."""
+        return empty_dict_to_none(v)
 
     if RICH_AVAILABLE:
 
