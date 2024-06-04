@@ -2,7 +2,7 @@
 
 import locale
 from datetime import datetime, timedelta
-from typing import Any, Callable, List, Optional, Tuple
+from typing import Any, Callable, List, Tuple
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
@@ -21,18 +21,19 @@ def n_days_ago(n: int) -> datetime:
     return today - delta
 
 
-def empty_str_to_none(s: str) -> Optional[str]:
-    """Return passed string, unless it's empty, in which case return `None`.
+def empty_str_to_none(v: Any) -> Any:
+    """Return `None` passed value is an empty string, otherwise do nothing.
 
     Arguments:
-        s: String to check.
+        v: Value to check.
 
     Returns:
-        Passed string, unless it's empty, in which case return `None`.
+        Passed value or `None` if it's an empty string.
     """
-    if s == "":
+    if isinstance(v, str) and v == "":
         return None
-    return s
+
+    return v
 
 
 def empty_dict_to_none(v: Any) -> Any:

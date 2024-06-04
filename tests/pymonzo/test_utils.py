@@ -24,23 +24,25 @@ def test_n_days_ago(today: datetime, n: int, output: datetime) -> None:
 
 
 @pytest.mark.parametrize(
-    ("s", "output"),
+    ("value", "output"),
     [
         ("", None),
         ("Lorem ipsum", "Lorem ipsum"),
         ("TEST", "TEST"),
+        ({"foo": 1, "bar": True}, {"foo": 1, "bar": True}),
+        (1, 1),
     ],
 )
-def test_empty_str_to_none(s: str, output: str) -> None:
-    """Should return `None` if string is empty, do nothing otherwise."""
-    assert empty_str_to_none(s) == output
+def test_empty_str_to_none(value: Any, output: Any) -> None:
+    """Should return `None` if value is an empty string, do nothing otherwise."""
+    assert empty_str_to_none(value) == output
 
 
 @pytest.mark.parametrize(
     ("value", "output"),
     [
-        ({"foo": 1, "bar": True}, {"foo": 1, "bar": True}),
         ({}, None),
+        ({"foo": 1, "bar": True}, {"foo": 1, "bar": True}),
         ("", ""),
         ("Lorem ipsum", "Lorem ipsum"),
         (1, 1),

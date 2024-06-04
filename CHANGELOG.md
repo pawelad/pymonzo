@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog], and this project adheres to
   (by [@csogilvie](https://github.com/csogilvie)
   in [#34](https://github.com/pawelad/pymonzo/issues/34))
 
+### Changed
+- Changed `empty_str_to_none` logic to be in line with `empty_dict_to_none`.
+
 ### Fixed
 - Add (more) missing account types. (by [@m-roberts](https://github.com/m-roberts)
   in [#38](https://github.com/pawelad/pymonzo/pull/38))
