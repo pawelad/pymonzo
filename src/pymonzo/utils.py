@@ -2,7 +2,7 @@
 
 import locale
 from datetime import datetime, timedelta
-from typing import Callable, List, Optional, Tuple
+from typing import Any, Callable, List, Optional, Tuple
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
@@ -35,21 +35,19 @@ def empty_str_to_none(s: str) -> Optional[str]:
     return s
 
 
-def empty_dict_to_none(d: dict) -> Optional[dict]:
-    """Return passed dict, unless it's empty, in which case return `None`.
+def empty_dict_to_none(v: Any) -> Any:
+    """Return `None` if the passed value is an empty dict, otherwise do nothing.
 
     Arguments:
-        d: dict to check.
+        v: Value to check.
 
     Returns:
-        Passed dict, unless it's empty, in which case return `None`.
+        Passed value or `None` if it's an empty dict.
     """
-    if not isinstance(d, dict):
+    if isinstance(v, dict) and not bool(v):
         return None
 
-    if len(d.values()) == 0:
-        return None
-    return d
+    return v
 
 
 def format_datetime(dt: datetime) -> str:
