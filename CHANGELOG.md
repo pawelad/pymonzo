@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog], and this project adheres to
   in [#34](https://github.com/pawelad/pymonzo/issues/34))
 
 ### Fixed
+- Add (more) missing account types. (by [@m-roberts](https://github.com/m-roberts)
+  in [#38](https://github.com/pawelad/pymonzo/pull/38))
 - Fix listing transactions with `expand_merchants=True` when `suggested_tags` isn't
   present. (by [@csogilvie](https://github.com/csogilvie)
   in [#34](https://github.com/pawelad/pymonzo/issues/34))
