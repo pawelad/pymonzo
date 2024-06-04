@@ -90,6 +90,25 @@ class TestTransactionsResource:
         assert transaction_response == transaction
         assert mocked_route.called
 
+        # Custom transaction category
+        transaction = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT",
+            category="TEST_CATEGORY",
+        )
+
+        mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
+            return_value=httpx.Response(
+                200,
+                json={"transaction": transaction.model_dump(mode="json")},
+            )
+        )
+
+        transaction_response = transactions_resource.get(transaction.id)
+
+        assert isinstance(transaction_response, MonzoTransaction)
+        assert transaction_response == transaction
+        assert mocked_route.called
+
     def test_annotate_respx(
         self,
         respx_mock: respx.MockRouter,
