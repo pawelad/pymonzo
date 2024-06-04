@@ -1,5 +1,7 @@
 """Test `pymonzo.pots` module."""
 
+import os
+
 import httpx
 import pytest
 import respx
@@ -131,6 +133,10 @@ class TestPotsResource:
         mocked_pots_list.reset_mock()
 
     @pytest.mark.vcr()
+    @pytest.mark.skipif(
+        os.getenv("VCRPY_ENCRYPTION_KEY") is None,
+        reason="`VCRPY_ENCRYPTION_KEY` is not available on GitHub PRs.",
+    )
     def test_list_vcr(self, pots_resource: PotsResource) -> None:
         """API response is parsed into expected schema."""
         pots_list = pots_resource.list()

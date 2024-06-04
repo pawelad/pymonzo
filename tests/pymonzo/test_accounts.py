@@ -1,5 +1,7 @@
 """Test `pymonzo.accounts` module."""
 
+import os
+
 import pytest
 from polyfactory.factories.pydantic_factory import ModelFactory
 from pytest_mock import MockerFixture
@@ -101,6 +103,10 @@ class TestAccountsResource:
         mocked_accounts_list.reset_mock()
 
     @pytest.mark.vcr()
+    @pytest.mark.skipif(
+        os.getenv("VCRPY_ENCRYPTION_KEY") is None,
+        reason="`VCRPY_ENCRYPTION_KEY` is not available on GitHub PRs.",
+    )
     def test_list_vcr(
         self,
         mocker: MockerFixture,

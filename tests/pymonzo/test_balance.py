@@ -1,5 +1,7 @@
 """Test `pymonzo.balance` module."""
 
+import os
+
 import httpx
 import pytest
 import respx
@@ -86,6 +88,10 @@ class TestBalanceResource:
         assert mocked_route.called
 
     @pytest.mark.vcr()
+    @pytest.mark.skipif(
+        os.getenv("VCRPY_ENCRYPTION_KEY") is None,
+        reason="`VCRPY_ENCRYPTION_KEY` is not available on GitHub PRs.",
+    )
     def test_list_vcr(self, balance_resource: BalanceResource) -> None:
         """API response is parsed into expected schema."""
         balance = balance_resource.get()
