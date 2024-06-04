@@ -46,9 +46,7 @@ class TestTransactionsResource:
         transactions_resource: TransactionsResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        transaction = MonzoTransactionFactory.build(
-            merchant="TEST_MERCHANT", counterparty={}
-        )
+        transaction = MonzoTransactionFactory.build(merchant="TEST_MERCHANT")
 
         mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
             return_value=httpx.Response(
@@ -65,10 +63,7 @@ class TestTransactionsResource:
 
         # Expand merchant
         merchant = MonzoTransactionMerchantFactory.build()
-        counterparty = MonzoTransactionCounterpartyFactory.build()
-        transaction = MonzoTransactionFactory.build(
-            merchant=merchant, counterparty=counterparty
-        )
+        transaction = MonzoTransactionFactory.build(merchant=merchant)
 
         mocked_route = respx_mock.get(
             f"/transactions/{transaction.id}", params={"expand[]": "merchant"}
@@ -86,7 +81,6 @@ class TestTransactionsResource:
 
         assert isinstance(transaction_response, MonzoTransaction)
         assert isinstance(transaction_response.merchant, MonzoTransactionMerchant)
-        assert transaction_response.counterparty is None
         assert transaction_response == transaction
         assert mocked_route.called
 
@@ -109,15 +103,36 @@ class TestTransactionsResource:
         assert transaction_response == transaction
         assert mocked_route.called
 
+        # Counterparty details are present
+        counterparty = MonzoTransactionCounterpartyFactory.build()
+        transaction = MonzoTransactionFactory.build(
+            merchant="TEST_MERCHANT",
+            counterparty=counterparty,
+        )
+
+        mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
+            return_value=httpx.Response(
+                200,
+                json={"transaction": transaction.model_dump(mode="json")},
+            )
+        )
+
+        transaction_response = transactions_resource.get(transaction.id)
+
+        assert isinstance(transaction_response, MonzoTransaction)
+        assert isinstance(
+            transaction_response.counterparty, MonzoTransactionCounterparty
+        )
+        assert transaction_response == transaction
+        assert mocked_route.called
+
     def test_annotate_respx(
         self,
         respx_mock: respx.MockRouter,
         transactions_resource: TransactionsResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        transaction = MonzoTransactionFactory.build(
-            merchant="TEST_MERCHANT", counterparty={}
-        )
+        transaction = MonzoTransactionFactory.build(merchant="TEST_MERCHANT")
         metadata = {
             "foo": "TEST_FOO",
             "bar": "TEST_BAR",
@@ -149,12 +164,8 @@ class TestTransactionsResource:
         transactions_resource: TransactionsResource,
     ) -> None:
         """Correct API response is sent, API response is parsed into expected schema."""
-        transaction = MonzoTransactionFactory.build(
-            merchant="TEST_MERCHANT", counterparty={}
-        )
-        transaction2 = MonzoTransactionFactory.build(
-            merchant="TEST_MERCHANT", counterparty={}
-        )
+        transaction = MonzoTransactionFactory.build(merchant="TEST_MERCHANT")
+        transaction2 = MonzoTransactionFactory.build(merchant="TEST_MERCHANT")
 
         account = MonzoAccountFactory.build()
         mocked_get_default_account = mocker.patch.object(
