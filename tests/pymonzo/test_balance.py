@@ -32,7 +32,7 @@ class TestBalanceResource:
     """Test `BalanceResource` class."""
 
     @pytest.mark.respx(base_url=MonzoAPI.api_url)
-    def test_list_respx(
+    def test_get_respx(
         self,
         mocker: MockerFixture,
         respx_mock: respx.MockRouter,
@@ -92,7 +92,7 @@ class TestBalanceResource:
         os.getenv("VCRPY_ENCRYPTION_KEY") is None,
         reason="`VCRPY_ENCRYPTION_KEY` is not available on GitHub PRs.",
     )
-    def test_list_vcr(self, balance_resource: BalanceResource) -> None:
+    def test_get_vcr(self, balance_resource: BalanceResource) -> None:
         """API response is parsed into expected schema."""
         balance = balance_resource.get()
 
