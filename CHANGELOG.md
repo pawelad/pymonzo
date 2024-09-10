@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog], and this project adheres to
   in [#34](https://github.com/pawelad/pymonzo/issues/34))
 
 ### Changed
+- Stop being strict with certain Monzo enums and allow any string values.
+  Specifically, account's `type`, `currency` and transaction's `decline_reason`.
 - Changed `empty_str_to_none` logic to be in line with `empty_dict_to_none`.
 
 ### Fixed

@@ -1,9 +1,9 @@
 """Monzo API 'accounts' related schemas."""
 
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from pymonzo.accounts.enums import MonzoAccountCurrency, MonzoAccountType
 
@@ -71,8 +71,8 @@ class MonzoAccount(BaseModel):
 
     # Undocumented in Monzo API docs
     closed: bool
-    type: MonzoAccountType
-    currency: MonzoAccountCurrency
+    type: Union[MonzoAccountType, str] = Field(union_mode="left_to_right")
+    currency: Union[MonzoAccountCurrency, str] = Field(union_mode="left_to_right")
     country_code: str
     owners: List[MonzoAccountOwner]
 

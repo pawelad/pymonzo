@@ -84,10 +84,11 @@ class TestTransactionsResource:
         assert transaction_response == transaction
         assert mocked_route.called
 
-        # Custom transaction category
+        # Custom transaction `category` and `decline_reason`
         transaction = MonzoTransactionFactory.build(
             merchant="TEST_MERCHANT",
             category="TEST_CATEGORY",
+            decline_reason="TEST_DECLINE_REASON",
         )
 
         mocked_route = respx_mock.get(f"/transactions/{transaction.id}").mock(
@@ -102,6 +103,9 @@ class TestTransactionsResource:
         assert isinstance(transaction_response, MonzoTransaction)
         assert transaction_response == transaction
         assert mocked_route.called
+
+        assert transaction_response.category == "TEST_CATEGORY"
+        assert transaction_response.decline_reason == "TEST_DECLINE_REASON"
 
         # Counterparty details are present
         counterparty = MonzoTransactionCounterpartyFactory.build()

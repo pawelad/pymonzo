@@ -2,12 +2,19 @@
 
 import os
 
+import httpx
 import pytest
+import respx
 from polyfactory.factories.pydantic_factory import ModelFactory
 from pytest_mock import MockerFixture
 
 from pymonzo import MonzoAPI
-from pymonzo.accounts import AccountsResource, MonzoAccount
+from pymonzo.accounts import (
+    AccountsResource,
+    MonzoAccount,
+    MonzoAccountCurrency,
+    MonzoAccountType,
+)
 from pymonzo.exceptions import CannotDetermineDefaultAccount
 
 
@@ -15,7 +22,9 @@ class MonzoAccountFactory(ModelFactory[MonzoAccount]):
     """Factory for `MonzoAccount` schema."""
 
 
-@pytest.fixture(scope="module")
+# TODO: What should be resources fixture scope?
+#   With `module`, `_cached_accounts` value persisted between functions / tests.
+@pytest.fixture()
 def accounts_resource(monzo_api: MonzoAPI) -> AccountsResource:
     """Initialize `AccountsResource` resource with `monzo_api` fixture."""
     return AccountsResource(client=monzo_api)
@@ -101,6 +110,65 @@ class TestAccountsResource:
 
         mocked_accounts_list.assert_called_once_with()
         mocked_accounts_list.reset_mock()
+
+    def test_list_respx(
+        self,
+        mocker: MockerFixture,
+        respx_mock: respx.MockRouter,
+        accounts_resource: AccountsResource,
+    ) -> None:
+        """Correct API response is sent, API response is parsed into expected schema."""
+        account = MonzoAccountFactory.build(payment_details=None)
+        # Account `type` and `currency` should be converted to en enum
+        account2 = MonzoAccountFactory.build(
+            payment_details=None,
+            type=MonzoAccountType.UK_RETAIL,
+            currency=MonzoAccountCurrency.GBP,
+        )
+        # Account `type` and `currency` should be taken as in as a string
+        account3 = MonzoAccountFactory.build(
+            payment_details=None,
+            type="TEST_TYPE",
+            currency="TEST_CURRENCY",
+        )
+        # Account `type` should be taken as in as a string, but `currency` should be
+        # converted to en enum because of casting priority
+        account4 = MonzoAccountFactory.build(
+            payment_details=None,
+            type="TEST_TYPE",
+            currency="GBP",
+        )
+
+        mocked_route = respx_mock.get("/accounts").mock(
+            return_value=httpx.Response(
+                200,
+                json={
+                    "accounts": [
+                        account.model_dump(mode="json"),
+                        account2.model_dump(mode="json"),
+                        account3.model_dump(mode="json"),
+                        account4.model_dump(mode="json"),
+                    ]
+                },
+            )
+        )
+
+        accounts_list_response = accounts_resource.list()
+
+        assert isinstance(accounts_list_response, list)
+        for item in accounts_list_response:
+            assert isinstance(item, MonzoAccount)
+        assert accounts_list_response == [account, account2, account3, account4]
+        assert mocked_route.called
+
+        assert accounts_list_response[1].type == MonzoAccountType.UK_RETAIL
+        assert accounts_list_response[1].currency == MonzoAccountCurrency.GBP
+
+        assert accounts_list_response[2].type == "TEST_TYPE"
+        assert accounts_list_response[2].currency == "TEST_CURRENCY"
+
+        assert accounts_list_response[3].type == "TEST_TYPE"
+        assert accounts_list_response[3].currency == MonzoAccountCurrency.GBP
 
     @pytest.mark.vcr()
     @pytest.mark.skipif(

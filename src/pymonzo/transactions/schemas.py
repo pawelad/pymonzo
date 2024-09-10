@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Dict, Optional, Union
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 from pymonzo.transactions.enums import (
     MonzoTransactionCategory,
@@ -87,7 +87,7 @@ class MonzoTransactionMerchant(BaseModel):
     name: str
     logo: str
     emoji: str
-    category: Union[MonzoTransactionCategory, str]
+    category: Union[MonzoTransactionCategory, str] = Field(union_mode="left_to_right")
     address: MonzoTransactionMerchantAddress
 
     # Undocumented in API docs
@@ -201,8 +201,14 @@ class MonzoTransaction(BaseModel):
     notes: str
     is_load: bool
     settled: Optional[datetime]
-    category: Union[MonzoTransactionCategory, str, None] = None
-    decline_reason: Optional[MonzoTransactionDeclineReason] = None
+    category: Union[MonzoTransactionCategory, str, None] = Field(
+        default=None,
+        union_mode="left_to_right",
+    )
+    decline_reason: Union[MonzoTransactionDeclineReason, str, None] = Field(
+        default=None,
+        union_mode="left_to_right",
+    )
 
     # Undocumented in the API Documentation
     counterparty: Optional[MonzoTransactionCounterparty] = None
