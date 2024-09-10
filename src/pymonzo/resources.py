@@ -35,7 +35,8 @@ class BaseResource:
         Arguments:
             method: HTTP method.
             endpoint: HTTP endpoint.
-            params: HTTP params.
+            params: URL query parameters.
+            data: form encoded data.
 
         Returns:
             HTTP response.
