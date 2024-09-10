@@ -63,7 +63,7 @@ dev = [
   "isort",
   "ruff",
   # Type checking
-  "mypy",
+  "mypy<1.11.0",  # https://github.com/python/mypy/issues/17535
   "rich",
   # Misc
   "flit",
