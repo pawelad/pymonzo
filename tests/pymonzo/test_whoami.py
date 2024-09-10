@@ -19,7 +19,7 @@ class TestWhoAmIResource:
 
     @pytest.mark.vcr()
     @pytest.mark.skipif(
-        os.getenv("VCRPY_ENCRYPTION_KEY") is None,
+        not bool(os.getenv("VCRPY_ENCRYPTION_KEY")),
         reason="`VCRPY_ENCRYPTION_KEY` is not available on GitHub PRs.",
     )
     def test_whoami_vcr(self, whoami_resource: WhoAmIResource) -> None:
