@@ -68,11 +68,11 @@ class WebhooksResource(BaseResource):
             account_id = self.client.accounts.get_default_account().id
 
         endpoint = "/webhooks"
-        params = {
+        data = {
             "account_id": account_id,
             "url": url,
         }
-        response = self._get_response(method="post", endpoint=endpoint, params=params)
+        response = self._get_response(method="post", endpoint=endpoint, data=data)
 
         webhook = MonzoWebhook(**response.json()["webhook"])
 

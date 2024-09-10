@@ -37,12 +37,12 @@ class AttachmentsResource(BaseResource):
             and an `upload_url` to which the file should be uploaded to.
         """
         endpoint = "/attachment/upload"
-        params = {
+        data = {
             "file_name": file_name,
             "file_type": file_type,
             "content_length": content_length,
         }
-        response = self._get_response(method="post", endpoint=endpoint, params=params)
+        response = self._get_response(method="post", endpoint=endpoint, data=data)
 
         attachment_response = MonzoAttachmentResponse(**response.json())
 
@@ -69,12 +69,12 @@ class AttachmentsResource(BaseResource):
             A Monzo attachment.
         """
         endpoint = "/attachment/register"
-        params = {
+        data = {
             "external_id": transaction_id,
             "file_url": file_url,
             "file_type": file_type,
         }
-        response = self._get_response(method="post", endpoint=endpoint, params=params)
+        response = self._get_response(method="post", endpoint=endpoint, data=data)
 
         attachment = MonzoAttachment(**response.json()["attachment"])
 
@@ -93,7 +93,7 @@ class AttachmentsResource(BaseResource):
             API response.
         """
         endpoint = "/attachment/deregister"
-        params = {"id": attachment_id}
-        response = self._get_response(method="post", endpoint=endpoint, params=params)
+        data = {"id": attachment_id}
+        response = self._get_response(method="post", endpoint=endpoint, data=data)
 
         return response.json()

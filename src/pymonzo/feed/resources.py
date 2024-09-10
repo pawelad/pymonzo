@@ -42,18 +42,18 @@ class FeedResource(BaseResource):
         if not account_id:
             account_id = self.client.accounts.get_default_account().id
 
-        params = {
+        data = {
             "account_id": account_id,
             "type": "basic",
         }
 
         for key, value in feed_item.model_dump(exclude_none=True).items():
-            params[f"params[{key}]"] = value
+            data[f"params[{key}]"] = value
 
         if url:
-            params["url"] = url
+            data["url"] = url
 
         endpoint = "/feed"
-        response = self._get_response(method="post", endpoint=endpoint, params=params)
+        response = self._get_response(method="post", endpoint=endpoint, data=data)
 
         return response.json()
