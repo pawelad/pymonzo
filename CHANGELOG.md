@@ -16,6 +16,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 - Changed `empty_str_to_none` logic to be in line with `empty_dict_to_none`.
 
 ### Fixed
+- Add (more) missing transaction decline reasons.
+  (by [chris987p](https://github.com/chris987p)
+  in [#42](https://github.com/pawelad/pymonzo/pull/42))
 - Add (more) missing account types. (by [@m-roberts](https://github.com/m-roberts)
   in [#38](https://github.com/pawelad/pymonzo/pull/38))
 - Fix listing transactions with `expand_merchants=True` when `suggested_tags` isn't
