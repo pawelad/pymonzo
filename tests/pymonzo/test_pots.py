@@ -180,12 +180,12 @@ class TestPotsResource:
         # Mock `httpx`
         amount = 42
         endpoint = f"/pots/{pot.id}/deposit"
-        params = {
+        data = {
             "source_account_id": account.id,
             "amount": amount,
             "dedupe_id": token,
         }
-        mocked_route = respx_mock.put(endpoint, params=params).mock(
+        mocked_route = respx_mock.put(endpoint, data=data).mock(
             return_value=httpx.Response(
                 200,
                 json=pot.model_dump(mode="json"),
@@ -213,12 +213,12 @@ class TestPotsResource:
 
         amount = 42
         endpoint = f"/pots/{pot_id}/deposit"
-        params = {
+        data = {
             "source_account_id": account_id,
             "amount": amount,
             "dedupe_id": dedupe_id,
         }
-        mocked_route = respx_mock.put(endpoint, params=params).mock(
+        mocked_route = respx_mock.put(endpoint, data=data).mock(
             return_value=httpx.Response(
                 200,
                 json=pot.model_dump(mode="json"),
@@ -279,12 +279,12 @@ class TestPotsResource:
         # Mock `httpx`
         amount = 42
         endpoint = f"/pots/{pot.id}/withdraw"
-        params = {
+        data = {
             "destination_account_id": account.id,
             "amount": amount,
             "dedupe_id": token,
         }
-        mocked_route = respx_mock.put(endpoint, params=params).mock(
+        mocked_route = respx_mock.put(endpoint, data=data).mock(
             return_value=httpx.Response(
                 200,
                 json=pot.model_dump(mode="json"),
@@ -312,12 +312,12 @@ class TestPotsResource:
 
         amount = 42
         endpoint = f"/pots/{pot_id}/withdraw"
-        params = {
+        data = {
             "destination_account_id": account_id,
             "amount": amount,
             "dedupe_id": dedupe_id,
         }
-        mocked_route = respx_mock.put(endpoint, params=params).mock(
+        mocked_route = respx_mock.put(endpoint, data=data).mock(
             return_value=httpx.Response(
                 200,
                 json=pot.model_dump(mode="json"),
