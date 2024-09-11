@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+## [v2.2.1](https://github.com/pawelad/pymonzo/releases/tag/v2.2.1) - 2024-09-11
 ### Changed
 - Make extra API schema fields accessible through Pydantic `model_extra` attribute.
 
