@@ -12,10 +12,23 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ### Changed
 - Stop being strict with certain Monzo enums and allow any string values.
+
   Specifically, account's `type`, `currency` and transaction's `decline_reason`.
 - Changed `empty_str_to_none` logic to be in line with `empty_dict_to_none`.
 
 ### Fixed
+- Use 'form data' instead of 'query params' for relevant Monzo API endpoints.
+
+  Previously, these endpoints (incorrectly) sent request arguments through 'query
+  params' and not 'form data':
+  - `AttachmentsResource.upload()` (`POST /attachment/upload`)
+  - `AttachmentsResource.register()` (`POST /attachment/register`)
+  - `AttachmentsResource.deregister()` (`POST /attachment/deregister`)
+  - `FeedResource.create()` (`POST /feed`)
+  - `PotsResource.deposit()` (`PUT /pots/{pot_id}/deposit`)
+  - `PotsResource.withdraw()` (`PUT /pots/{pot_id}/withdraw`)
+  - `TransactionsResource.annotate()` (`PATCH /transactions/{transaction_id}`)
+  - `WebhooksResource.register()` (`POST /webhooks`)
 - Add (more) missing transaction decline reasons.
   (by [chris987p](https://github.com/chris987p)
   in [#42](https://github.com/pawelad/pymonzo/pull/42))
