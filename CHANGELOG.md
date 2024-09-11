@@ -17,7 +17,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 - Changed `empty_str_to_none` logic to be in line with `empty_dict_to_none`.
 
 ### Fixed
-- Use 'form data' instead of 'query params' for relevant Monzo API endpoints.
+- Use 'form data' instead of 'query params' for relevant Monzo API endpoints
+  (by [m-roberts](https://github.com/m-roberts)
+  in [#39](https://github.com/pawelad/pymonzo/pull/39))
 
   Previously, these endpoints (incorrectly) sent request arguments through 'query
   params' and not 'form data':
