@@ -28,13 +28,15 @@ class BaseResource:
         method: str,
         endpoint: str,
         params: Optional[dict] = None,
+        data: Optional[dict] = None,
     ) -> httpx.Response:
         """Handle HTTP requests and catch API errors.
 
         Arguments:
             method: HTTP method.
             endpoint: HTTP endpoint.
-            params: HTTP params.
+            params: URL query parameters.
+            data: form encoded data.
 
         Returns:
             HTTP response.
@@ -43,7 +45,11 @@ class BaseResource:
             MonzoAccessDenied: When access to Monzo API was denied.
             MonzoAPIError: When Monzo API returned an error.
         """
-        response = getattr(self.client.session, method)(endpoint, params=params)
+        httpx_kwargs = {"params": params}
+        if method in ["post", "put", "patch"]:
+            httpx_kwargs["data"] = data
+
+        response = getattr(self.client.session, method)(endpoint, **httpx_kwargs)
 
         if response.status_code == codes.FORBIDDEN:
             raise MonzoAccessDenied(

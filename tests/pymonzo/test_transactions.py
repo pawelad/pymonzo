@@ -141,13 +141,14 @@ class TestTransactionsResource:
             "foo": "TEST_FOO",
             "bar": "TEST_BAR",
         }
+        data = {
+            "metadata[foo]": "TEST_FOO",
+            "metadata[bar]": "TEST_BAR",
+        }
 
         mocked_route = respx_mock.patch(
             f"/transactions/{transaction.id}",
-            params={
-                "metadata[foo]": "TEST_FOO",
-                "metadata[bar]": "TEST_BAR",
-            },
+            data=data,
         ).mock(
             return_value=httpx.Response(
                 200,

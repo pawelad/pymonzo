@@ -44,7 +44,7 @@ class TestAttachmentsResource:
 
         mocked_route = respx_mock.post(
             "/attachment/upload",
-            params={
+            data={
                 "file_name": file_name,
                 "file_type": file_type,
                 "content_length": content_length,
@@ -79,7 +79,7 @@ class TestAttachmentsResource:
 
         mocked_route = respx_mock.post(
             "/attachment/register",
-            params={
+            data={
                 "external_id": transaction_id,
                 "file_url": file_url,
                 "file_type": file_type,
@@ -111,7 +111,7 @@ class TestAttachmentsResource:
 
         mocked_route = respx_mock.post(
             "/attachment/deregister",
-            params={"id": attachment_id},
+            data={"id": attachment_id},
         ).mock(return_value=httpx.Response(200, json={}))
 
         attachment_deregister_response = attachments_resource.deregister(attachment_id)

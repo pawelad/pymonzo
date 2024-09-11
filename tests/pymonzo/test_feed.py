@@ -42,23 +42,23 @@ class TestFeedResource:
         )
         mocked_get_default_account.return_value = account
 
-        params = {
+        data = {
             "account_id": account.id,
             "type": "basic",
             "params[title]": feed_item.title,
             "params[image_url]": feed_item.image_url,
             "params[body]": feed_item.body,
         }
-        optional_params = {
+        optional_data = {
             "params[background_color]": feed_item.background_color,
             "params[title_color]": feed_item.title_color,
             "params[body_color]": feed_item.body_color,
         }
-        for key, value in optional_params.items():
+        for key, value in optional_data.items():
             if value is not None:
-                params[key] = str(value)
+                data[key] = str(value)
 
-        mocked_route = respx_mock.post("/feed", params=params).mock(
+        mocked_route = respx_mock.post("/feed", data=data).mock(
             return_value=httpx.Response(200, json={})
         )
 
@@ -74,7 +74,7 @@ class TestFeedResource:
         account_id = "TEST_ACCOUNT_ID"
         url = "TEST_URL"
 
-        params = {
+        data = {
             "account_id": account_id,
             "type": "basic",
             "url": url,
@@ -82,16 +82,16 @@ class TestFeedResource:
             "params[image_url]": feed_item.image_url,
             "params[body]": feed_item.body,
         }
-        optional_params = {
+        optional_data = {
             "params[background_color]": feed_item.background_color,
             "params[title_color]": feed_item.title_color,
             "params[body_color]": feed_item.body_color,
         }
-        for key, value in optional_params.items():
+        for key, value in optional_data.items():
             if value is not None:
-                params[key] = str(value)
+                data[key] = str(value)
 
-        mocked_route = respx_mock.post("/feed", params=params).mock(
+        mocked_route = respx_mock.post("/feed", data=data).mock(
             return_value=httpx.Response(200, json={})
         )
 

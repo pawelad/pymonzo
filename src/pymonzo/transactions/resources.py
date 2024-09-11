@@ -62,9 +62,9 @@ class TransactionsResource(BaseResource):
             Annotated Monzo transaction.
         """
         endpoint = f"/transactions/{transaction_id}"
-        params = {f"metadata[{key}]": value for key, value in metadata.items()}
+        data = {f"metadata[{key}]": value for key, value in metadata.items()}
 
-        response = self._get_response(method="patch", endpoint=endpoint, params=params)
+        response = self._get_response(method="patch", endpoint=endpoint, data=data)
 
         transaction = MonzoTransaction(**response.json()["transaction"])
 

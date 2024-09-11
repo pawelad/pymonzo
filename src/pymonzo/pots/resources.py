@@ -136,12 +136,12 @@ class PotsResource(BaseResource):
             dedupe_id = token_urlsafe(16)
 
         endpoint = f"/pots/{pot_id}/deposit"
-        params = {
+        data = {
             "source_account_id": account_id,
             "amount": amount,
             "dedupe_id": dedupe_id,
         }
-        response = self._get_response(method="put", endpoint=endpoint, params=params)
+        response = self._get_response(method="put", endpoint=endpoint, data=data)
 
         pot = MonzoPot(**response.json())
 
@@ -188,12 +188,12 @@ class PotsResource(BaseResource):
             dedupe_id = token_urlsafe(16)
 
         endpoint = f"/pots/{pot_id}/withdraw"
-        params = {
+        data = {
             "destination_account_id": account_id,
             "amount": amount,
             "dedupe_id": dedupe_id,
         }
-        response = self._get_response(method="put", endpoint=endpoint, params=params)
+        response = self._get_response(method="put", endpoint=endpoint, data=data)
 
         pot = MonzoPot(**response.json())
 

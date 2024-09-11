@@ -109,13 +109,12 @@ class TestWebhooksResource:
         )
         mocked_get_default_account.return_value = account
 
-        mocked_route = respx_mock.post(
-            "/webhooks",
-            params={
-                "account_id": account.id,
-                "url": url,
-            },
-        ).mock(
+        data = {
+            "account_id": account.id,
+            "url": url,
+        }
+
+        mocked_route = respx_mock.post("/webhooks", data=data).mock(
             return_value=httpx.Response(
                 200,
                 json={"webhook": webhook.model_dump(mode="json")},
@@ -132,14 +131,12 @@ class TestWebhooksResource:
 
         # Explicitly passed account ID
         account_id = "TEST_ACCOUNT_ID"
+        data = {
+            "account_id": account_id,
+            "url": url,
+        }
 
-        mocked_route = respx_mock.post(
-            "/webhooks",
-            params={
-                "account_id": account_id,
-                "url": url,
-            },
-        ).mock(
+        mocked_route = respx_mock.post("/webhooks", data=data).mock(
             return_value=httpx.Response(
                 200,
                 json={"webhook": webhook.model_dump(mode="json")},
@@ -147,7 +144,8 @@ class TestWebhooksResource:
         )
 
         webhooks_register_response = webhooks_resource.register(
-            url=url, account_id=account_id
+            url=url,
+            account_id=account_id,
         )
 
         mocked_get_default_account.assert_not_called()
