@@ -8,9 +8,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## [v2.2.0](https://github.com/pawelad/pymonzo/releases/tag/v2.2.0) - 2024-09-11
 ### Added
-- Add `counterparty` field support to Monzo transactions.
+- Add `counterparty` field support to Monzo transactions
   (by [@csogilvie](https://github.com/csogilvie)
-  in [#34](https://github.com/pawelad/pymonzo/issues/34))
+  in [#34](https://github.com/pawelad/pymonzo/issues/34)).
 
 ### Changed
 - Stop being strict with certain Monzo enums and allow any string values.
@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog], and this project adheres to
 ### Fixed
 - Use 'form data' instead of 'query params' for relevant Monzo API endpoints
   (by [m-roberts](https://github.com/m-roberts)
-  in [#39](https://github.com/pawelad/pymonzo/pull/39))
+  in [#39](https://github.com/pawelad/pymonzo/pull/39)).
 
   Previously, these endpoints (incorrectly) sent request arguments through 'query
   params' and not 'form data':
@@ -33,14 +33,14 @@ The format is based on [Keep a Changelog], and this project adheres to
   - `PotsResource.withdraw()` (`PUT /pots/{pot_id}/withdraw`)
   - `TransactionsResource.annotate()` (`PATCH /transactions/{transaction_id}`)
   - `WebhooksResource.register()` (`POST /webhooks`)
-- Add (more) missing transaction decline reasons.
+- Add (more) missing transaction decline reasons
   (by [chris987p](https://github.com/chris987p)
-  in [#42](https://github.com/pawelad/pymonzo/pull/42))
-- Add (more) missing account types. (by [@m-roberts](https://github.com/m-roberts)
-  in [#38](https://github.com/pawelad/pymonzo/pull/38))
+  in [#42](https://github.com/pawelad/pymonzo/pull/42)).
+- Add (more) missing account types (by [@m-roberts](https://github.com/m-roberts)
+  in [#38](https://github.com/pawelad/pymonzo/pull/38)).
 - Fix listing transactions with `expand_merchants=True` when `suggested_tags` isn't
-  present. (by [@csogilvie](https://github.com/csogilvie)
-  in [#34](https://github.com/pawelad/pymonzo/issues/34))
+  present (by [@csogilvie](https://github.com/csogilvie)
+  in [#34](https://github.com/pawelad/pymonzo/issues/34)).
 - Allow transaction category to be any string. Monzo supports custom categories
   as part of their "Plus" plan.
 
