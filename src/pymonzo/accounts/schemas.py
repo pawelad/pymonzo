@@ -38,9 +38,9 @@ class MonzoAccountOwner(BaseModel):
     """
 
     # Undocumented in API docs
-    user_id: str
-    preferred_name: str
-    preferred_first_name: str
+    user_id: Optional[str] = None
+    preferred_name: Optional[str] = None
+    preferred_first_name: Optional[str] = None
 
 
 class MonzoAccount(BaseModel):
@@ -70,11 +70,17 @@ class MonzoAccount(BaseModel):
     created: datetime
 
     # Undocumented in Monzo API docs
-    closed: bool
-    type: Union[MonzoAccountType, str] = Field(union_mode="left_to_right")
-    currency: Union[MonzoAccountCurrency, str] = Field(union_mode="left_to_right")
-    country_code: str
-    owners: List[MonzoAccountOwner]
+    closed: Optional[bool] = None
+    type: Union[MonzoAccountType, str, None] = Field(
+        default=None,
+        union_mode="left_to_right",
+    )
+    currency: Union[MonzoAccountCurrency, str, None] = Field(
+        default=None,
+        union_mode="left_to_right",
+    )
+    country_code: Optional[str] = None
+    owners: Optional[List[MonzoAccountOwner]] = None
 
     # Only present in retail (non-prepaid) accounts
     account_number: Optional[str] = None
@@ -92,12 +98,14 @@ class MonzoAccount(BaseModel):
             grid.add_column(style="" if not self.closed else "dim")
             grid.add_row("ID:", self.id)
             grid.add_row("Description:", self.description)
-            grid.add_row("Currency:", self.currency)
+            if self.currency:
+                grid.add_row("Currency:", self.currency)
             if self.account_number:
                 grid.add_row("Account Number:", self.account_number)
             if self.sort_code:
                 grid.add_row("Sort Code:", "-".join(wrap(self.sort_code, 2)))
-            grid.add_row("Type:", self.type)
+            if self.type:
+                grid.add_row("Type:", self.type)
             grid.add_row("Closed:", "Yes" if self.closed else "No")
             grid.add_row("Created:", format_datetime(self.created))
 

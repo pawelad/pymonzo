@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+### Fixed
+- Never expect undocumented API fields to be present.
+
 ## [v2.2.0](https://github.com/pawelad/pymonzo/releases/tag/v2.2.0) - 2024-09-11
 ### Added
 - Add `counterparty` field support to Monzo transactions

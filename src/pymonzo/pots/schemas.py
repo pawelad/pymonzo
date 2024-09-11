@@ -64,17 +64,17 @@ class MonzoPot(BaseModel):
 
     # Undocumented in Monzo API docs
     goal_amount: Optional[int] = None
-    type: str
-    product_id: str
-    current_account_id: str
-    cover_image_url: str
-    isa_wrapper: str
-    round_up: bool
-    round_up_multiplier: Optional[int]
-    is_tax_pot: bool
-    locked: bool
-    available_for_bills: bool
-    has_virtual_cards: bool
+    type: Optional[str] = None
+    product_id: Optional[str] = None
+    current_account_id: Optional[str] = None
+    cover_image_url: Optional[str] = None
+    isa_wrapper: Optional[str] = None
+    round_up: Optional[bool] = None
+    round_up_multiplier: Optional[int] = None
+    is_tax_pot: Optional[bool] = None
+    locked: Optional[bool] = None
+    available_for_bills: Optional[bool] = None
+    has_virtual_cards: Optional[bool] = None
 
     if RICH_AVAILABLE:
 
@@ -94,7 +94,8 @@ class MonzoPot(BaseModel):
                 goal_amount = format_currency(self.goal_amount / 100, self.currency)
                 grid.add_row("Goal:", goal_amount)
             grid.add_row("Currency:", self.currency)
-            grid.add_row("Type:", self.type)
+            if self.type:
+                grid.add_row("Type:", self.type)
             grid.add_row("Deleted:", "Yes" if self.deleted else "No")
             if self.round_up:
                 grid.add_row("Round up:", "Yes" if self.round_up else "No")

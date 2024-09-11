@@ -1,5 +1,7 @@
 """Monzo API 'balance' related schemas."""
 
+from typing import Optional
+
 from pydantic import BaseModel
 
 # Optional `rich` support
@@ -45,10 +47,10 @@ class MonzoBalance(BaseModel):
     spend_today: int
 
     # Undocumented in Monzo API docs
-    balance_including_flexible_savings: int
-    local_currency: str
-    local_exchange_rate: float
-    local_spend: list
+    balance_including_flexible_savings: Optional[int] = None
+    local_currency: Optional[str] = None
+    local_exchange_rate: Optional[float] = None
+    local_spend: Optional[list] = None
 
     if RICH_AVAILABLE:
 
@@ -65,7 +67,9 @@ class MonzoBalance(BaseModel):
             grid.add_row("Total balance:", total_balance)
             grid.add_row("Currency:", self.currency)
             grid.add_row("Spend today:", spend_today)
-            grid.add_row("Local currency:", self.local_currency)
-            grid.add_row("Local exchange rate:", str(self.local_exchange_rate))
+            if self.local_currency:
+                grid.add_row("Local currency:", self.local_currency)
+            if self.local_exchange_rate:
+                grid.add_row("Local exchange rate:", str(self.local_exchange_rate))
 
             return grid

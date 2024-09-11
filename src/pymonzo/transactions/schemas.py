@@ -53,10 +53,10 @@ class MonzoTransactionMerchantAddress(BaseModel):
     region: str
 
     # Undocumented in API docs
-    formatted: str
-    short_formatted: str
-    zoom_level: int
-    approximate: bool
+    formatted: Optional[str] = None
+    short_formatted: Optional[str] = None
+    zoom_level: Optional[int] = None
+    approximate: Optional[bool] = None
 
 
 class MonzoTransactionMerchant(BaseModel):
@@ -91,10 +91,10 @@ class MonzoTransactionMerchant(BaseModel):
     address: MonzoTransactionMerchantAddress
 
     # Undocumented in API docs
-    online: bool
-    atm: bool
-    disable_feedback: bool
-    metadata: Dict[str, str]
+    online: Optional[bool] = None
+    atm: Optional[bool] = None
+    disable_feedback: Optional[bool] = None
+    metadata: Optional[Dict[str, str]] = None
     suggested_tags: Optional[str] = None
 
     # Visible in API docs, not present in the API
@@ -135,10 +135,12 @@ class MonzoTransactionCounterparty(BaseModel):
         account_number: The account number of the other party.
     """
 
-    user_id: str
-    name: str
-    sort_code: str
-    account_number: str
+    # Undocumented in API docs
+    user_id: Optional[str] = None
+    name: Optional[str] = None
+    preferred_name: Optional[str] = None
+    sort_code: Optional[str] = None
+    account_number: Optional[str] = None
 
     if RICH_AVAILABLE:
 
@@ -149,10 +151,14 @@ class MonzoTransactionCounterparty(BaseModel):
             grid.title_style = "bold yellow"
             grid.add_column(style="bold cyan")
             grid.add_column()
-            grid.add_row("ID:", self.user_id)
-            grid.add_row("Name:", self.name)
-            grid.add_row("Sort Code:", self.sort_code)
-            grid.add_row("Account Number:", self.account_number)
+            if self.user_id:
+                grid.add_row("ID:", self.user_id)
+            if self.name:
+                grid.add_row("Name:", self.name)
+            if self.sort_code:
+                grid.add_row("Sort Code:", self.sort_code)
+            if self.account_number:
+                grid.add_row("Account Number:", self.account_number)
 
             return grid
 
