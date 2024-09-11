@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Optional `rich` support
 try:
@@ -52,6 +52,8 @@ class MonzoPot(BaseModel):
         available_for_bills: Whether the pot is available for bills.
         has_virtual_cards: Whether the pot has linked virtual cards.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     id: str
     name: str

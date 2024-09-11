@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Optional `rich` support
 try:
@@ -40,6 +40,8 @@ class MonzoBalance(BaseModel):
         local_exchange_rate: Local exchange rate.
         local_spend: Local spend.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     balance: int
     total_balance: int

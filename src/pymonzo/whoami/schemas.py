@@ -1,6 +1,6 @@
 """Monzo API 'whoami' related schemas."""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Optional `rich` support
 try:
@@ -22,6 +22,8 @@ class MonzoWhoAmI(BaseModel):
         client_id: Client ID.
         user_id: User ID.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     authenticated: bool
     client_id: str

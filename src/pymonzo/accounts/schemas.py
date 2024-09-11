@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import List, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from pymonzo.accounts.enums import MonzoAccountCurrency, MonzoAccountType
 
@@ -37,6 +37,8 @@ class MonzoAccountOwner(BaseModel):
         preferred_first_name: First name preferred by the user.
     """
 
+    model_config = ConfigDict(extra="allow")
+
     # Undocumented in API docs
     user_id: Optional[str] = None
     preferred_name: Optional[str] = None
@@ -64,6 +66,8 @@ class MonzoAccount(BaseModel):
         sort_code: Account sort code.
         payment_details: Account payment details.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     id: str
     description: str

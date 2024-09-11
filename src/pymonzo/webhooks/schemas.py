@@ -1,6 +1,6 @@
 """Monzo API 'webhooks' related schemas."""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from pymonzo.transactions import MonzoTransactionMerchant
 
@@ -16,6 +16,8 @@ class MonzoWebhook(BaseModel):
         account_id: The account to receive notifications for.
         url: The URL we will send notifications to.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     id: str
     account_id: str
@@ -50,6 +52,8 @@ class MonzoWebhookTransactionEvent(BaseModel):
         merchant: Merchant information.
     """
 
+    model_config = ConfigDict(extra="allow")
+
     account_id: str
     amount: int
     created: str
@@ -72,6 +76,8 @@ class MonzoWebhookEvent(BaseModel):
         type: Webhook event type.
         data: Webhook event data.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     type: str
     data: MonzoWebhookTransactionEvent

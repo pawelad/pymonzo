@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog], and this project adheres to
 
 ## Unreleased
 
+### Changed
+- Make extra API schema fields accessible through Pydantic `model_extra` attribute.
+
 ### Fixed
 - Never expect undocumented API fields to be present.
 

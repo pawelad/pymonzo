@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, ConfigDict, HttpUrl
 
 
 class MonzoBasicFeedItem(BaseModel):
@@ -23,6 +23,8 @@ class MonzoBasicFeedItem(BaseModel):
         body_color: Hex value for the colour of the body text in the format #RRGGBB.
             Defaults to standard app colours.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     title: str
     image_url: HttpUrl

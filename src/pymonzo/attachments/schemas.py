@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class MonzoAttachment(BaseModel):
@@ -19,6 +19,8 @@ class MonzoAttachment(BaseModel):
         file_type: The content type of the attachment.
         created: The timestamp in UTC when the attachment was created.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     id: str
     user_id: str
@@ -38,6 +40,8 @@ class MonzoAttachmentResponse(BaseModel):
         file_url: The URL of the file once it has been uploaded.
         upload_url: The URL to `POST` the file to when uploading.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     file_url: str
     upload_url: str

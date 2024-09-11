@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Dict, Optional, Union
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from pymonzo.transactions.enums import (
     MonzoTransactionCategory,
@@ -81,6 +81,8 @@ class MonzoTransactionMerchant(BaseModel):
         address: Merchant address
         created: Merchant creation date.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     id: str
     group_id: str
@@ -196,6 +198,8 @@ class MonzoTransaction(BaseModel):
             transport, cash, bills, entertainment, shopping, holidays, groceries.
         decline_reason: This is only present on declined transactions.
     """
+
+    model_config = ConfigDict(extra="allow")
 
     amount: int
     created: datetime
