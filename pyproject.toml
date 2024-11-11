@@ -162,3 +162,4 @@ convention = "google"
 
 [tool.ruff.lint.flake8-pytest-style]
 fixture-parentheses = true
+mark-parentheses = true
