@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from secrets import token_urlsafe
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 from pymonzo.exceptions import CannotDetermineDefaultPot
 from pymonzo.pots.schemas import MonzoPot
@@ -17,7 +17,7 @@ class PotsResource(BaseResource):
         Monzo API docs: https://monzo.com/docs/#pots
     """
 
-    _cached_pots: Dict[str, List[MonzoPot]] = field(default_factory=dict)
+    _cached_pots: dict[str, list[MonzoPot]] = field(default_factory=dict)
 
     def get_default_pot(self, account_id: Optional[str] = None) -> MonzoPot:
         """If the user has only one (active) pot, treat it as the default pot.
@@ -59,7 +59,7 @@ class PotsResource(BaseResource):
         account_id: Optional[str] = None,
         *,
         refresh: bool = False,
-    ) -> List[MonzoPot]:
+    ) -> list[MonzoPot]:
         """Return a list of user's pots.
 
         It's often used when deciding whether to require explicit pot ID

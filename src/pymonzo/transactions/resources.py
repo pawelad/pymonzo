@@ -1,7 +1,7 @@
 """Monzo API 'transactions' resource."""
 
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Optional
 
 from pymonzo.resources import BaseResource
 from pymonzo.transactions.schemas import MonzoTransaction
@@ -46,7 +46,7 @@ class TransactionsResource(BaseResource):
     def annotate(
         self,
         transaction_id: str,
-        metadata: Dict[str, str],
+        metadata: dict[str, str],
     ) -> MonzoTransaction:
         """Annotate transaction with extra metadata.
 
@@ -78,7 +78,7 @@ class TransactionsResource(BaseResource):
         since: Optional[datetime] = None,
         before: Optional[datetime] = None,
         limit: Optional[int] = None,
-    ) -> List[MonzoTransaction]:
+    ) -> list[MonzoTransaction]:
         """Return a list of account transactions.
 
         You can only fetch all transactions within 5 minutes of authentication.

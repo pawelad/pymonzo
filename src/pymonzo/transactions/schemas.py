@@ -1,7 +1,7 @@
 """Monzo API 'transactions' related schemas."""
 
 from datetime import datetime
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -96,7 +96,7 @@ class MonzoTransactionMerchant(BaseModel):
     online: Optional[bool] = None
     atm: Optional[bool] = None
     disable_feedback: Optional[bool] = None
-    metadata: Optional[Dict[str, str]] = None
+    metadata: Optional[dict[str, str]] = None
     suggested_tags: Optional[str] = None
 
     # Visible in API docs, not present in the API
@@ -207,7 +207,7 @@ class MonzoTransaction(BaseModel):
     description: str
     id: str
     merchant: Union[MonzoTransactionMerchant, str, None]
-    metadata: Dict[str, str]
+    metadata: dict[str, str]
     notes: str
     is_load: bool
     settled: Optional[datetime]

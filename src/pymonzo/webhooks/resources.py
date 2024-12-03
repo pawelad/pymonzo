@@ -1,6 +1,6 @@
 """Monzo API 'webhooks' resource."""
 
-from typing import List, Optional
+from typing import Optional
 
 from pymonzo.resources import BaseResource
 from pymonzo.webhooks.schemas import MonzoWebhook
@@ -13,7 +13,7 @@ class WebhooksResource(BaseResource):
         Monzo API docs: https://docs.monzo.com/#webhooks
     """
 
-    def list(self, account_id: Optional[str] = None) -> List[MonzoWebhook]:
+    def list(self, account_id: Optional[str] = None) -> list[MonzoWebhook]:
         """List all webhooks.
 
         Note:

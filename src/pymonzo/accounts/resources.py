@@ -1,7 +1,6 @@
 """Monzo API 'accounts' resource."""
 
 from dataclasses import dataclass, field
-from typing import List
 
 from pymonzo.accounts.schemas import MonzoAccount
 from pymonzo.exceptions import CannotDetermineDefaultAccount
@@ -16,7 +15,7 @@ class AccountsResource(BaseResource):
         Monzo API docs: https://docs.monzo.com/#accounts
     """
 
-    _cached_accounts: List[MonzoAccount] = field(default_factory=list)
+    _cached_accounts: list[MonzoAccount] = field(default_factory=list)
 
     def get_default_account(self) -> MonzoAccount:
         """If the user has only one active account, treat it as the default account.
@@ -44,7 +43,7 @@ class AccountsResource(BaseResource):
             "You need to explicitly pass an 'account_id' argument."
         )
 
-    def list(self, *, refresh: bool = False) -> List[MonzoAccount]:
+    def list(self, *, refresh: bool = False) -> list[MonzoAccount]:
         """Return a list of user's Monzo accounts.
 
         It's often used when deciding whether to require explicit account ID

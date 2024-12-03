@@ -2,7 +2,7 @@
 
 import locale
 from datetime import datetime, timedelta
-from typing import Any, Callable, List, Tuple
+from typing import Any, Callable
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
@@ -89,8 +89,8 @@ class WSGIApp:
     def __call__(
         self,
         environ: dict,
-        start_response: Callable[[str, List[Tuple[str, str]]], None],
-    ) -> List[bytes]:
+        start_response: Callable[[str, list[tuple[str, str]]], None],
+    ) -> list[bytes]:
         """Implement WSGI interface and save the URL of the callback."""
         start_response("200 OK", [("Content-type", "text/plain; charset=utf-8")])
         self.last_request_uri = request_uri(environ)

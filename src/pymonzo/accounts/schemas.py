@@ -1,7 +1,7 @@
 """Monzo API 'accounts' related schemas."""
 
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -84,7 +84,7 @@ class MonzoAccount(BaseModel):
         union_mode="left_to_right",
     )
     country_code: Optional[str] = None
-    owners: Optional[List[MonzoAccountOwner]] = None
+    owners: Optional[list[MonzoAccountOwner]] = None
 
     # Only present in retail (non-prepaid) accounts
     account_number: Optional[str] = None

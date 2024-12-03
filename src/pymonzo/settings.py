@@ -5,7 +5,7 @@ import os
 import sys
 from functools import partial
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -26,7 +26,7 @@ class PyMonzoSettings(BaseSettings):
 
     model_config = SettingsConfigDict(env_prefix="pymonzo_")
 
-    token: Dict[str, Union[str, int]]
+    token: dict[str, Union[str, int]]
     client_id: Optional[str] = None
     client_secret: Optional[str] = None
 
