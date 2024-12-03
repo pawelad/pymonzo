@@ -5,16 +5,20 @@
 [![Codecov](https://img.shields.io/codecov/c/github/pawelad/pymonzo)][codecov pymonzo]
 [![License](https://img.shields.io/pypi/l/pymonzo)][license]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
-[![py.typed](https://img.shields.io/badge/py-typed-FFD43B)][rickroll]
+[![py.typed](https://img.shields.io/badge/py-typed-FFD43B)][py.typed]
 
 Modern Python API client for [Monzo] public [API][monzo api docs].
 
 - Works on Python 3.8+
 - Fully type annotated
-- Explicitly defined and validated API schemas (via [pydantic])
-- Easy authentication with automatic access token refreshing
-- Sensible defaults - don't specify account / pot ID if you only have one active
-- Optional [rich] support for pretty printing
+- Explicitly defined and validated API schemas (via [Pydantic])
+- Sensible defaults (don't specify account / pot ID if you only have one active)
+- Easy authentication (with automatic access token refreshing)
+- (Optional) [Rich] support for pretty printing
+
+For example usage, feel free to take a look at [pawelad/monz][github monz].
+
+---
 
 This project is not officially affiliated with [Monzo].
 
@@ -57,16 +61,17 @@ Released under [Mozilla Public License 2.0][license].
 [black]: https://github.com/psf/black
 [codecov pymonzo]: https://app.codecov.io/github/pawelad/pymonzo
 [contributing guide]: ./CONTRIBUTING.md
+[github monz]: https://github.com/pawelad/monz
 [github pymonzo]: https://github.com/pawelad/pymonzo
 [license]: ./LICENSE
 [monzo api docs]: https://docs.monzo.com/
 [monzo developer tools]: https://developers.monzo.com/
 [monzo]: https://monzo.com/
 [pawelad]: https://pawelad.me/
+[py.typed]: https://mortifex.xyz/py-typed
 [pydantic]: https://github.com/pydantic/pydantic
 [pypi pymonzo]: https://pypi.org/project/pymonzo/
 [pypi]: https://pypi.org/
 [rich]: https://github.com/Textualize/rich
-[rickroll]: https://www.youtube.com/watch?v=I6OXjnBIW-4&t=15s
 [rtfd pymonzo]: https://pymonzo.rtfd.io/
 [virtualenv]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
