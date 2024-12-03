@@ -28,7 +28,7 @@ dynamic = ["version"]
 
 dependencies = [
   "Authlib",
-  "httpx",
+  "httpx<0.28.0",  # https://github.com/lundberg/respx/issues/277
   "pydantic-settings",
   "pydantic>2",
   "typing_extensions; python_version<'3.11'",
