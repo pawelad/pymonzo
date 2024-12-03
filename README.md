@@ -9,7 +9,7 @@
 
 Modern Python API client for [Monzo] public [API][monzo api docs].
 
-- Works on Python 3.8+
+- Works on Python 3.9+
 - Fully type annotated
 - Explicitly defined and validated API schemas (via [Pydantic])
 - Sensible defaults (don't specify account / pot ID if you only have one active)

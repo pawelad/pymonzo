@@ -7,7 +7,7 @@ Please also note that this project is released with a [Contributor Code of Condu
 By participating in this project you agree to abide by its terms.
 
 ## Tools used
-**Language:** [Python 3.8+][python]  
+**Language:** [Python 3.9+][python]  
 **CI:** [GitHub Actions]  
 **Docs:** [mkdocs], [mkdocs-material], [mkdocstrings], [Read The Docs]  
 **Testing:** [pytest], [nox]  
