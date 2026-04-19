@@ -22,9 +22,7 @@ class MonzoAccountFactory(ModelFactory[MonzoAccount]):
     """Factory for `MonzoAccount` schema."""
 
 
-# TODO: What should be resources fixture scope?
-#   With `module`, `_cached_accounts` value persisted between functions / tests.
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def accounts_resource(monzo_api: MonzoAPI) -> AccountsResource:
     """Initialize `AccountsResource` resource with `monzo_api` fixture."""
     return AccountsResource(client=monzo_api)

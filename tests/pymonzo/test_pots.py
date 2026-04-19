@@ -19,7 +19,7 @@ class MonzoPotFactory(ModelFactory[MonzoPot]):
     """Factory for `MonzoPot` schema."""
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def pots_resource(monzo_api: MonzoAPI) -> PotsResource:
     """Initialize `PotsResource` resource with `monzo_api` fixture."""
     return PotsResource(client=monzo_api)
