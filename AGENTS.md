@@ -1,6 +1,8 @@
 # Guidelines for AI Agents
 
-Welcome! If you are an AI agent working on `pymonzo`, please follow these instructions:
+Welcome! If you are an AI agent working on `pymonzo`, please follow these instructions.
+
+For additional context about the project, refer to the [README.md](./README.md) and [CONTRIBUTING.md](./CONTRIBUTING.md) files.
 
 ## General Information
 - The project is written in Python 3.9+.
