@@ -73,3 +73,16 @@ class TestBaseResource:
             base_resource._get_response(method="get", endpoint="/http500")
 
         assert mocked_route.called
+
+    def test__get_response_json_decode_error(
+        self, respx_mock: respx.MockRouter, base_resource: BaseResource
+    ) -> None:
+        """JSONDecodeError in response body is handled."""
+        mocked_route = respx_mock.get("/non-json").mock(
+            return_value=httpx.Response(500, content=b"Not a JSON")
+        )
+
+        with pytest.raises(MonzoAPIError, match=r"Something went wrong: .*"):
+            base_resource._get_response(method="get", endpoint="/non-json")
+
+        assert mocked_route.called
