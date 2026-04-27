@@ -66,6 +66,20 @@ class MonzoAPI:
                 settings file couldn't be loaded.
 
         """
+        self._load_settings(access_token)
+        self._setup_session()
+        self._mount_resources()
+
+    def _load_settings(self, access_token: Optional[str] = None) -> None:
+        """Load settings either from an explicit token or from disk.
+
+        Arguments:
+            access_token: OAuth access token.
+
+        Raises:
+            NoSettingsFile: When the access token wasn't passed explicitly and the
+                settings file couldn't be loaded.
+        """
         if access_token:
             self._settings = PyMonzoSettings(
                 token={"access_token": access_token},
@@ -81,6 +95,8 @@ class MonzoAPI:
                     "or explicitly pass the `access_token`."
                 ) from e
 
+    def _setup_session(self) -> None:
+        """Initialize the OAuth2 session."""
         self.session = OAuth2Client(
             client_id=self._settings.client_id,
             client_secret=self._settings.client_secret,
@@ -92,6 +108,8 @@ class MonzoAPI:
             base_url=self.api_url,
         )
 
+    def _mount_resources(self) -> None:
+        """Mount all Monzo API resources."""
         # This is a shortcut to the underlying method
         self.whoami = WhoAmIResource(client=self).whoami
         """
