@@ -39,7 +39,7 @@ tests = [
   "coverage[toml]",
   "freezegun",
   "polyfactory",
-  "pytest",
+  "pytest<8",
   "pytest-mock",
   "pytest-recording",
   "python-dotenv",
