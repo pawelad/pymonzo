@@ -19,7 +19,7 @@ class PyMonzoSettings(BaseSettings):
     """pymonzo settings schema.
 
     Attributes:
-        token: OAuth token. For more information see [`pymonzo.MonzoAPI.authorize`][].
+        token: OAuth token. For more information see [`pymonzo.client.MonzoAPI.authorize`][].
         client_id: OAuth client ID.
         client_secret: OAuth client secret.
     """

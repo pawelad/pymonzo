@@ -30,7 +30,7 @@ class MonzoAPI:
     `Confidentiality` should be set to `Confidential` if you'd like to automatically
     refresh the access token when it expires.
 
-    You can now use `Client ID` and `Client secret` in [`pymonzo.MonzoAPI.authorize`][]
+    You can now use `Client ID` and `Client secret` in [`pymonzo.client.MonzoAPI.authorize`][]
     to finish the OAuth 2 'Authorization Code Flow' and get the API access token
     (which is by default saved to disk and refreshed when expired).
 
@@ -48,7 +48,7 @@ class MonzoAPI:
     def __init__(self, access_token: Optional[str] = None) -> None:
         """Initialize Monzo API client and mount all resources.
 
-        It expects [`pymonzo.MonzoAPI.authorize`][] to be called beforehand, so
+        It expects [`pymonzo.client.MonzoAPI.authorize`][] to be called beforehand, so
         it can load the local settings file containing the API access token. You
         can also explicitly pass the `access_token`, but it won't be able to
         automatically refresh it once it expires.
@@ -56,7 +56,7 @@ class MonzoAPI:
         Arguments:
             access_token: OAuth access token. You can obtain it (and by default, save
                 it to disk, so it can refresh automatically) by running
-                [`pymonzo.MonzoAPI.authorize`][]. Alternatively, you can get a
+                [`pymonzo.client.MonzoAPI.authorize`][]. Alternatively, you can get a
                 temporary access token from the [Monzo Developer Portal].
 
                 [Monzo Developer Portal]: https://developers.monzo.com/
@@ -96,7 +96,7 @@ class MonzoAPI:
         self.whoami = WhoAmIResource(client=self).whoami
         """
         Mounted Monzo `whoami` endpoint. For more information see
-        [`pymonzo.whoami.WhoAmIResource.whoami`][].
+        [`pymonzo.whoami.resources.WhoAmIResource.whoami`][].
         """
 
         self.accounts = AccountsResource(client=self)
