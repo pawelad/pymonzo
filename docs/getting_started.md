@@ -30,7 +30,7 @@ client as confidential if you want the access token to be refreshed automaticall
 (name, description and logo don't really matter).
 
 That should give you a client ID and client secret, which you need to pass to
-[`pymonzo.MonzoAPI.authorize`][] function:
+[`pymonzo.client.MonzoAPI.authorize`][] function:
 
 ```pycon
 >>> from pymonzo import MonzoAPI
