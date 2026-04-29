@@ -1,6 +1,7 @@
 """Monzo API 'accounts' resource."""
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from pymonzo.accounts.schemas import MonzoAccount
 from pymonzo.exceptions import CannotDetermineDefaultAccount
@@ -16,6 +17,7 @@ class AccountsResource(BaseResource):
     """
 
     _cached_accounts: list[MonzoAccount] = field(default_factory=list)
+    _cached_default_account: Optional[MonzoAccount] = None
 
     def get_default_account(self) -> MonzoAccount:
         """If the user has only one active account, treat it as the default account.
@@ -26,17 +28,22 @@ class AccountsResource(BaseResource):
         Raises:
             CannotDetermineDefaultAccount: If user has more than one active account.
         """
+        if self._cached_default_account:
+            return self._cached_default_account
+
         accounts = self.list()
 
         # If there is only one account, return it
         if len(accounts) == 1:
-            return accounts[0]
+            self._cached_default_account = accounts[0]
+            return self._cached_default_account
 
         # Otherwise check if there is only one active (non-closed) account
         active_accounts = [account for account in accounts if not account.closed]
 
         if len(active_accounts) == 1:
-            return active_accounts[0]
+            self._cached_default_account = active_accounts[0]
+            return self._cached_default_account
 
         raise CannotDetermineDefaultAccount(
             "Cannot determine default account. "
@@ -60,6 +67,8 @@ class AccountsResource(BaseResource):
         """
         if not refresh and self._cached_accounts:
             return self._cached_accounts
+
+        self._cached_default_account = None
 
         endpoint = "/accounts"
         response = self._get_response(method="get", endpoint=endpoint)

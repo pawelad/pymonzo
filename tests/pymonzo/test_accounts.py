@@ -70,6 +70,7 @@ class TestAccountsResource:
         assert default_account.closed is True
 
         # One account, one active
+        accounts_resource._cached_default_account = None
         mocked_accounts_list.return_value = [active_account1]
 
         default_account = accounts_resource.get_default_account()
@@ -82,6 +83,7 @@ class TestAccountsResource:
         assert default_account.closed is False
 
         # Two accounts, none active
+        accounts_resource._cached_default_account = None
         mocked_accounts_list.return_value = [closed_account1, closed_account2]
 
         with pytest.raises(CannotDetermineDefaultAccount):
@@ -91,6 +93,7 @@ class TestAccountsResource:
         mocked_accounts_list.reset_mock()
 
         # Two accounts, one active
+        accounts_resource._cached_default_account = None
         mocked_accounts_list.return_value = [closed_account1, active_account1]
 
         default_account = accounts_resource.get_default_account()
@@ -103,6 +106,7 @@ class TestAccountsResource:
         assert default_account.closed is False
 
         # Two accounts, two active
+        accounts_resource._cached_default_account = None
         mocked_accounts_list.return_value = [active_account1, active_account2]
 
         with pytest.raises(CannotDetermineDefaultAccount):
